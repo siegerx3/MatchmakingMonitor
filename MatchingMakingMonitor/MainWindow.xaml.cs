@@ -420,7 +420,8 @@ namespace MatchingMakingMonitor
                             {
                                 var playerGrid = new Grid
                                 {
-                                    Height = 44
+                                    Height = 44,
+                                    Background = new SolidColorBrush(GetPlayerBackground(p))
                                 };
 
                                 //create our columns
@@ -565,7 +566,8 @@ namespace MatchingMakingMonitor
                             {
                                 var playerGrid = new Grid
                                 {
-                                    Height = 44
+                                    Height = 44,
+                                    Background = new SolidColorBrush(GetPlayerBackground(p))
                                 };
 
                                 //create our columns
@@ -733,5 +735,152 @@ namespace MatchingMakingMonitor
                 return new List<ShipModel>();
             } //end catch
         } //end GetShips
+
+        private Color GetPlayerBackground(PlayerShipStats player)
+        {
+            //do we have battles before we begin?
+            if (player.Battles == 0)
+            {
+                //no battles so we assume they are bad
+                return Color.FromRgb(255, 209, 209);
+            } //end if
+
+            //we know there are battles so we can do our math now.
+            //what do their stats look like?
+            var playerTotal = 0;
+
+            var winRate = Math.Round((float) player.Wins/(float) player.Battles*100f, 2);
+            var avgFrags = Math.Round((float) player.Frags/(float) player.Battles, 2);
+            var avgXp = Math.Round((float) player.XpEarned/(float) player.Battles, 0);
+            var avgDamage = Math.Round((float) player.DamageDealt/(float) player.Battles, 0);
+
+            //how many battles do they have in this ship?
+            if (player.Battles > 100)
+            {
+                playerTotal += 20;
+            } //end fi
+            else if (player.Battles > 50)
+            {
+                playerTotal += 10;
+            } //end else if
+            else if (player.Battles > 20)
+            {
+                playerTotal += 5;
+            } //end else if
+
+            //win rate
+            if (winRate > 70.0f)
+            {
+                playerTotal += 20;
+            } //end if
+            else if (winRate > 50.0f)
+            {
+                playerTotal += 15;
+            } //end else if
+            else if (winRate > 40.0f)
+            {
+                playerTotal += 10;
+            } //end if
+            else if (winRate > 30.0f)
+            {
+                playerTotal += 5;
+            } //end else if
+
+            //avg frags?
+            if (avgFrags > 1.5f)
+            {
+                playerTotal += 20;
+            } //end if
+            else if (avgFrags > 1.0f)
+            {
+                playerTotal += 15;
+            } //end else if
+            else if (avgFrags > 0.75f)
+            {
+                playerTotal += 10;
+            } //end else if
+            else if (avgFrags > 0.5f)
+            {
+                playerTotal += 5;
+            } //end else if
+
+            //how about average xp
+            if (avgXp > 1000.0f)
+            {
+                playerTotal += 20;
+            } //end if
+            else if (avgXp > 800.0f)
+            {
+                playerTotal += 15;
+            } //end else if
+            else if (avgXp > 600.0f)
+            {
+                playerTotal += 10;
+            } //end else if
+            else if (avgXp > 300.0f)
+            {
+                playerTotal += 5;
+            } //end else if
+
+            //average damage
+            if (avgDamage > 75000.0f)
+            {
+                playerTotal += 20;
+            } //end if
+            else if(avgDamage > 60000.0f)
+            {
+                playerTotal += 15;
+            } //end else if
+            else if (avgDamage > 45000.0f)
+            {
+                playerTotal += 10;
+            } //end else if
+            else if (avgDamage > 25000.0f)
+            {
+                playerTotal += 5;
+            } //end else if
+
+            if (playerTotal > 80)
+            {
+                return Color.FromRgb(222, 255, 210);
+            } //end if
+
+            if (playerTotal > 70)
+            {
+                return Color.FromRgb(231, 255, 210);
+            } //en dif
+
+            if (playerTotal > 60)
+            {
+                return Color.FromRgb(242, 255, 210);
+            } //end if
+
+            if (playerTotal > 50)
+            {
+                return Color.FromRgb(247, 255, 210);
+            } //end if
+
+            if (playerTotal > 40)
+            {
+                return Color.FromRgb(255, 249, 210);
+            } //end if
+
+            if (playerTotal > 30)
+            {
+                return Color.FromRgb(255, 231, 210);
+            } //end if
+
+            if (playerTotal > 20)
+            {
+                return Color.FromRgb(255, 222, 210);
+            } //end if
+
+            if(playerTotal > 10)
+            {
+                return Color.FromRgb(255, 216, 210);
+            } //end if
+
+            return Color.FromRgb(255, 210, 210);
+        } //end GetPlayerBackground
     } //end class
 } //end namespace
