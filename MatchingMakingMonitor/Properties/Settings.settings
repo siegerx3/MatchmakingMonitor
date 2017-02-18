@@ -14,5 +14,14 @@
     <Setting Name="Region" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="AppIdEU" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">8c4616d4f59f9e915d214c514f7661f2</Value>
+    </Setting>
+    <Setting Name="AppIdRU" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">92669bcd3cb4978e78a387bdc2e7f8d6</Value>
+    </Setting>
+    <Setting Name="AppIdSEA" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">a7079ba49e5487b6936aed9176c13968</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

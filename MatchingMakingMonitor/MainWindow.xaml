@@ -15,7 +15,7 @@
     <Grid>
         <Rectangle Fill="#FF333333" Height="110" Stroke="Black" VerticalAlignment="Top"/>
 
-        <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="Images/64x64Icon.png"/>
+        <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="Images/64x64Icon.png" MouseDown="LogoClick" MouseEnter="LogoMouseEnter" MouseLeave="LogoMouseLeave"/>
         <TextBlock Margin="115,10,157,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White"><Run Text="Thank you for using the WoWReplays.com Matchmaking Monitor application.  Player stats are pulled live either from WoWReplays.com or Wargaming.net.  Player stats will be shown below when you enter into a battle.  REPLAYS MUST BE ENABLED!   Please ensure you have selected the proper install folder and region to ensure stat lookup is handled properly.  If you do not see stats appearing, ensure the proper region is selected."/><LineBreak/><Run/><LineBreak/><Run Text="If you do not see a players name appear their stats could not be retrieved or they are hidden from public view."/><LineBreak/><Run Text="If you encounter an error or have a suggestion please email me at Justin@Jammin411.com."/></TextBlock>
         <Label x:Name="LblRegion" Content="Region:" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="ComRegion" HorizontalAlignment="Left" Margin="64,119,0,0" VerticalAlignment="Top" Width="90" SelectionChanged="ComRegion_SelectionChanged">
@@ -25,7 +25,7 @@
             <ComboBoxItem Content="SEA"/>
         </ComboBox>
         <Label x:Name="LblInstallDirectory" Content="Installation Directory:&#xA;" HorizontalAlignment="Left" Margin="168,115,0,0" VerticalAlignment="Top" Height="26"/>
-        <Label x:Name="LblInstallDirectoryValue" Content="Checking Installation Directory...&#xA;" HorizontalAlignment="Left" Margin="295,115,0,0" VerticalAlignment="Top" Height="26" MouseDown="InstallDirectoryClick"/>
+        <TextBlock x:Name="TxtInstallDirectoryValue" HorizontalAlignment="Left" Margin="295,120,0,0" TextWrapping="Wrap" Text="Check Install Directory" VerticalAlignment="Top" MouseDown="InstallDirectoryClick" MouseEnter="InstallDirectoryMouseEnter" MouseLeave="InstallDirectoryMouseLeave"/>
         <Label x:Name="LblStatus" Content="Not Currently in Battle..." Margin="0,115,20,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <Grid>
             <Grid.ColumnDefinitions>

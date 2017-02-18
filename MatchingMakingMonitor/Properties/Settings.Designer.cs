@@ -67,5 +67,32 @@ namespace MatchingMakingMonitor.Properties {
                 this["Region"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8c4616d4f59f9e915d214c514f7661f2")]
+        public string AppIdEU {
+            get {
+                return ((string)(this["AppIdEU"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("92669bcd3cb4978e78a387bdc2e7f8d6")]
+        public string AppIdRU {
+            get {
+                return ((string)(this["AppIdRU"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("a7079ba49e5487b6936aed9176c13968")]
+        public string AppIdSEA {
+            get {
+                return ((string)(this["AppIdSEA"]));
+            }
+        }
     }
 }

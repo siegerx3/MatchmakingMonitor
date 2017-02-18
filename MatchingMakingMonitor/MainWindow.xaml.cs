@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using MatchingMakingMonitor.Models;
 using Newtonsoft.Json;
 using RestSharp;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace MatchingMakingMonitor
 {
@@ -26,6 +27,8 @@ namespace MatchingMakingMonitor
         public MainWindow()
         {
             InitializeComponent();
+
+            Log("Initializing Started");
 
             try
             {
@@ -43,83 +46,107 @@ namespace MatchingMakingMonitor
 
                 if (Directory.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays"))
                 {
-                    LblInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
-                    LblInstallDirectoryValue.Content = Properties.Settings.Default["InstallDirectory"].ToString();
+                    TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
+                    TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"].ToString();
                 } //end if
                 else
                 {
-                    LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-                    LblInstallDirectoryValue.Content = Properties.Settings.Default["InstallDirectory"] +
-                                                       " - Invalid Path or Replays not enabled! - Click here to update!";
+                    TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
+                    TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
+                                                    " - Invalid Path or Replays not enabled! - Click here to update!";
                 } //end else
             } //end try
-            catch (Exception)
+            catch (Exception ex)
             {
                 //ignore
-                LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-                LblInstallDirectoryValue.Content = Properties.Settings.Default["InstallDirectory"] +
-                                                   " - Invalid Path or Replays not enabled! - Click here to update!";
+                TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
+                TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
+                                                " - Invalid Path or Replays not enabled! - Click here to update!";
+
+                Log("Exception Occurred During Initialization:  " + ex.Message);
             } //end catch
-        }
+
+            Log("Initialization Complete");
+        } //end MainWindow
 
         private void InstallDirectoryClick(object sender, MouseButtonEventArgs e)
         {
+            Log("Install Directory Clicked");
+
             //the directory does not exist in the default location, ask the user to tell us where it is.
             var folderBrowser = new FolderBrowserDialog();
             var result = folderBrowser.ShowDialog();
+
+            Log("Showing Dialog");
 
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
             {
                 if (Directory.Exists(folderBrowser.SelectedPath + "/replays"))
                 {
-                    LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    LblInstallDirectoryValue.Content = folderBrowser.SelectedPath;
+                    TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
+                    TxtInstallDirectoryValue.Text = folderBrowser.SelectedPath;
 
                     Properties.Settings.Default["InstallDirectory"] = folderBrowser.SelectedPath;
                     Properties.Settings.Default.Save();
+
+                    Log("Valid Install Directory Chosen " + folderBrowser.SelectedPath);
                 } //end if
                 else
                 {
-                    LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-                    LblInstallDirectoryValue.Content = Properties.Settings.Default["InstallDirectory"] +
-                                                       " - Invalid Path or Replays not enabled! - Click here to update!";
+                    TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
+                    TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
+                                                    " - Invalid Path or Replays not enabled! - Click here to update!";
+
+                    Log("Invalid Install Directory Chosen " + folderBrowser.SelectedPath);
                 } //end else
             } //end if
             else if (result == System.Windows.Forms.DialogResult.Cancel)
             {
+                Log("Dialog was Cancelled by the User");
+
                 if (Directory.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays"))
                 {
-                    LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.LawnGreen);
-                    LblInstallDirectoryValue.Content = Properties.Settings.Default["InstallDirectory"].ToString();
+                    TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
+                    TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"].ToString();
+
+                    Log("Dialog was Cancelled by the User by path is valid");
                 } //end if
                 else
                 {
-                    LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-                    LblInstallDirectoryValue.Content = Properties.Settings.Default["InstallDirectory"] +
-                                                       " - Invalid Path or Replays not enabled! - Click here to update!";
+                    TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
+                    TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
+                                                    " - Invalid Path or Replays not enabled! - Click here to update!";
+
+                    Log("Dialog was Cancelled by the User and the path is still invalid");
                 } //end else
             } //end else if
             else
             {
-                LblInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-                LblInstallDirectoryValue.Content = "Please Choose a Valid Path!";
+                TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
+                TxtInstallDirectoryValue.Text = "Please Choose a Valid Path!";
+
+                Log("Dialog was closed by an unknown source");
             } //end else
         } //end InstallDirectoryClick
 
         private void ComRegion_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //update the players choice
-            Properties.Settings.Default["Region"] = ComRegion.SelectedItem.ToString();
+            Properties.Settings.Default["Region"] = ((ComboBoxItem) ComRegion.SelectedItem).Content.ToString();
             Properties.Settings.Default.Save();
+
+            Log("Region was changed to " + Properties.Settings.Default["Region"]);
         } //end ComRegion_SelectionChanged
 
         private async Task<List<PlayerShipStats>> FetchResults(ReplayModel replay, string region)
         {
+            Log("Fetching Results");
+
             return await Task.Run(() =>
             {
                 var retList = new List<PlayerShipStats>();
 
-                Parallel.ForEach(replay.vehicles, new ParallelOptions {MaxDegreeOfParallelism = 5}, p =>
+                Parallel.ForEach(replay.vehicles, new ParallelOptions {MaxDegreeOfParallelism = 1}, p =>
                 {
                     try
                     {
@@ -127,19 +154,23 @@ namespace MatchingMakingMonitor
                         RestClient client;
                         var appId = Properties.Settings.Default["AppId"].ToString();
 
-                        switch (region)
+                        switch (region.ToString())
                         {
                             case "EU":
                                 client = new RestClient("https://api.worldofwarships.eu");
+                                appId = Properties.Settings.Default["AppIdEU"].ToString();
                                 break;
                             case "SEA":
                                 client = new RestClient("https://api.worldofwarships.asia");
+                                appId = Properties.Settings.Default["AppIdSEA"].ToString();
                                 break;
                             case "RU":
                                 client = new RestClient("https://api.worldofwarships.ru");
+                                appId = Properties.Settings.Default["AppIdRU"].ToString();
                                 break;
                             default:
                                 client = new RestClient("https://api.worldofwarships.com");
+                                appId = Properties.Settings.Default["AppId"].ToString();
                                 break;
                         } //end switch
 
@@ -267,11 +298,14 @@ namespace MatchingMakingMonitor
                             retList.Add(stat);
                         } //end else
                     } //end try
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         //ignore
+                        Log("An Error Occurred While Fetching Players" + ex.Message);
                     } //end catch
                 });
+
+                Log("Fetched Players from Wargaming.  " + retList.Count() + " Players Successfully Found");
 
                 return retList;
             });
@@ -281,6 +315,8 @@ namespace MatchingMakingMonitor
         {
             LblStatus.Foreground = new SolidColorBrush(Colors.Black);
             LblStatus.Content = "Not Currently in Battle - Stats are from Last Battle";
+
+            Log("Clearing Results after Battle");
         } //end ClearResults
 
         private void UpdatePlayerRegion()
@@ -310,7 +346,7 @@ namespace MatchingMakingMonitor
             } //end switch
         } //edn UpdatePlayerRegion
 
-        private static bool IsNewReplay(ReplayModel newReplay)
+        private bool IsNewReplay(ReplayModel newReplay)
         {
             try
             {
@@ -325,6 +361,8 @@ namespace MatchingMakingMonitor
                         Properties.Settings.Default["LastReplay"] = newReplay.dateTime;
                         Properties.Settings.Default.Save();
 
+                        Log("Found a new replay");
+
                         return true;
                     } //end if
                 } //end if
@@ -334,39 +372,47 @@ namespace MatchingMakingMonitor
                     Properties.Settings.Default["LastReplay"] = newReplay.dateTime;
                     Properties.Settings.Default.Save();
 
+                    Log("Found a new replay");
+
                     //this is a new replay since the LastReplay is empty
                     return true;
                 } //end else
             } //end try
-            catch (Exception)
+            catch (Exception ex)
             {
                 //ignore
+                Log("Exception Occurred while checking for new Replay: " + ex.Message);
             } //end catch
 
             return false;
         } //end IsNewReplay
 
-        private static ReplayModel GetReplayDetails()
+        private ReplayModel GetReplayDetails()
         {
             using (
                 var sr =
                     new StreamReader(Properties.Settings.Default["InstallDirectory"] + "/replays/tempArenaInfo.json"))
             {
+                Log("Getting Replay Details");
+
                 return JsonConvert.DeserializeObject<ReplayModel>(sr.ReadToEnd());
             } //end using
         } //end GetReplayDetails
 
-        private static bool CurrentlyPlaying()
+        private bool CurrentlyPlaying()
         {
+            Log("Checking if the player is currently playing");
+
             return File.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays/tempArenaInfo.json");
         } //end CurrentlyPlaying
 
         private async void CheckTimer_Tick(object sender, EventArgs e)
         {
+            Log("Timer Ticked");
+
             if (CurrentlyPlaying())
             {
-                //sleep for a few seconds while the game writes the file we need.
-                System.Threading.Thread.Sleep(5000);
+                Log("Player is currently playing");
 
                 ReplayModel replayData = null;
 
@@ -379,23 +425,33 @@ namespace MatchingMakingMonitor
                     //this failed so we need to unset our property and try again in 10 seconds
                     Properties.Settings.Default["LastReplay"] = "";
                     Properties.Settings.Default.Save();
+
+                    Log("Exception Occurred While Retrieving Replay Data: " + ex.Message);
                 } //end catch
 
                 //we didn't fall into the catch so we have a valid json string here
                 //is this the same replay as before or did the player move on to another battle?
                 if (IsNewReplay(replayData) && replayData != null)
                 {
+                    Log("Retrieved Valid Replay Data: " + JsonConvert.SerializeObject(replayData));
+                    Log("New Replay and Valid Data Obtained");
+
                     //this is a new replay, let's go get the details
                     LblStatus.Foreground = new SolidColorBrush(Colors.Goldenrod);
                     LblStatus.Content = "Fetching Player Stats for Current Battle";
 
-                    var playerStats = await FetchResults(replayData, ComRegion.SelectedItem.ToString());
+                    var playerStats =
+                        await FetchResults(replayData, ((ComboBoxItem) ComRegion.SelectedItem).Content.ToString());
 
                     if (playerStats.Any())
                     {
+                        Log("Processing " + playerStats.Count + " Players");
+
                         //start by removing all previous controls
                         FriendlyGroup.Children.Clear();
                         EnemyGroup.Children.Clear();
+
+                        Log("Cleared Groups");
 
                         //re-add our labels
                         FriendlyGroup.Children.Add(new System.Windows.Controls.Label
@@ -410,12 +466,22 @@ namespace MatchingMakingMonitor
                             Foreground = new SolidColorBrush(Color.FromRgb(170, 7, 7))
                         });
 
+                        Log("Added Team Labels");
+
                         FriendlyGroup.Children.Add(new Separator());
                         EnemyGroup.Children.Add(new Separator());
 
+                        Log("Added Separators");
+
                         //start with the friendly team.
-                        foreach (var p in playerStats.Where(x => x.Relationship == 0 || x.Relationship == 1).OrderBy(x => x.ShipType).ThenByDescending(x => x.ShipTier))
+                        foreach (
+                            var p in
+                            playerStats.Where(x => x.Relationship == 0 || x.Relationship == 1)
+                                .OrderBy(x => x.ShipType)
+                                .ThenByDescending(x => x.ShipTier))
                         {
+                            Log("Processing Player: " + p.Nickname);
+
                             try
                             {
                                 var playerGrid = new Grid
@@ -467,10 +533,14 @@ namespace MatchingMakingMonitor
                                 //add our custom controls to the player group box
                                 var tempLabel = new System.Windows.Controls.Label
                                 {
-                                    Content = p.Nickname,
+                                    Content = p.Nickname + " | " + p.AccountId,
                                     FontWeight = FontWeights.Bold,
                                     FontSize = 9.0
                                 };
+
+                                tempLabel.MouseDown += PlayerDetailsMouseDown;
+                                tempLabel.MouseEnter += PlayerDetailsMouseEnter;
+                                tempLabel.MouseLeave += PlayerDetailsMouseLeave;
 
                                 Grid.SetRow(tempLabel, 0);
                                 Grid.SetColumn(tempLabel, 0);
@@ -548,20 +618,30 @@ namespace MatchingMakingMonitor
                                 playerGrid.Children.Add(tempLabel);
 
                                 FriendlyGroup.Children.Add(playerGrid);
-                                FriendlyGroup.Visibility = Visibility.Visible;
 
                                 //add a separator
                                 FriendlyGroup.Children.Add(new Separator());
                             } //end try
-                            catch (Exception)
+                            catch (Exception ex)
                             {
                                 //ignore
+                                Log("Exception Occurred Processing Player: " + ex.Message);
                             } //end catch
                         } //end foreach
 
+                        FriendlyGroup.Visibility = Visibility.Visible;
+                        Log("Friendly Group is Visible");
+                        Log("Entering Enemy Team Foreach");
+
                         //now the enemy team
-                        foreach (var p in playerStats.Where(x => x.Relationship == 2).OrderBy(x => x.ShipType).ThenByDescending(x => x.ShipTier))
+                        foreach (
+                            var p in
+                            playerStats.Where(x => x.Relationship == 2)
+                                .OrderBy(x => x.ShipType)
+                                .ThenByDescending(x => x.ShipTier))
                         {
+                            Log("Processing Player: " + p.Nickname);
+
                             try
                             {
                                 var playerGrid = new Grid
@@ -694,26 +774,34 @@ namespace MatchingMakingMonitor
                                 playerGrid.Children.Add(tempLabel);
 
                                 EnemyGroup.Children.Add(playerGrid);
-                                EnemyGroup.Visibility = Visibility.Visible;
+
 
                                 //add a separator
                                 EnemyGroup.Children.Add(new Separator());
                             } //end try
-                            catch (Exception)
+                            catch (Exception ex)
                             {
                                 //ignore
+                                Log("Exception Occurred Processing Player: " + ex.Message);
                             } //end catch
                         } //end foreach
                     } //end if
 
+                    EnemyGroup.Visibility = Visibility.Visible;
+                    Log("Enemy Group is Visible");
+
                     LblStatus.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
                     LblStatus.Content = @"Player Stats Succesfully Updated";
+
+                    Log("Updated Status Label");
                 } //end if
             } //end if
             else
             {
                 //player is not playing, clear the results
                 ClearResults();
+
+                Log("Cleared the Results");
             } //end else
         } //end Checktimer_Tick
 
@@ -732,6 +820,8 @@ namespace MatchingMakingMonitor
             } //end try
             catch (Exception ex)
             {
+                Log("Exception Occurred While Retrieving Ships:  " + ex.Message);
+
                 return new List<ShipModel>();
             } //end catch
         } //end GetShips
@@ -827,7 +917,7 @@ namespace MatchingMakingMonitor
             {
                 playerTotal += 20;
             } //end if
-            else if(avgDamage > 60000.0f)
+            else if (avgDamage > 60000.0f)
             {
                 playerTotal += 15;
             } //end else if
@@ -875,12 +965,113 @@ namespace MatchingMakingMonitor
                 return Color.FromRgb(255, 222, 210);
             } //end if
 
-            if(playerTotal > 10)
+            if (playerTotal > 10)
             {
                 return Color.FromRgb(255, 216, 210);
             } //end if
 
             return Color.FromRgb(255, 210, 210);
         } //end GetPlayerBackground
+
+        private void Log(string message)
+        {
+            try
+            {
+                using (var sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "/Log.txt", true))
+                {
+                    sw.WriteLine(DateTime.Now + " - " + message);
+                } //end using
+            } //end try
+            catch (Exception ex)
+            {
+                //ignore
+            } //end catch
+        } //end Log
+
+        private void PlayerDetailsMouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                var label = (System.Windows.Controls.Label) sender;
+                var playerName = label.Content.ToString().Split('|')[0].Replace(" ", "");
+                var accountId = label.Content.ToString().Split('|')[1].Replace(" ", "");
+
+                System.Diagnostics.Process.Start("https://" + Properties.Settings.Default.Region +
+                                                 ".warships.today/player/" + accountId + "/" + playerName);
+            } //end try
+            catch (Exception ex)
+            {
+                Log("Exception Thrown on Click Event for Player: " + ex.Message);
+            } //end catch
+        } //end PlayerDetailsMouseDown
+
+        private void PlayerDetailsMouseEnter(object sender, MouseEventArgs mouseEventArgs)
+        {
+            try
+            {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
+            } //end try
+            catch (Exception ex)
+            {
+                Log("Exception Thrown Changing Mouse Cursor: " + ex.Message);
+
+                Mouse.OverrideCursor = null;
+            } //end catch
+        } //end PlayerDetailsMouseEnter
+
+        private void PlayerDetailsMouseLeave(object sender, MouseEventArgs mouseEventArgs)
+        {
+            Mouse.OverrideCursor = null;
+        } //end PlayerDetailsMouseLeave
+
+        private void LogoClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("https://wowreplays.com");
+            } //end try
+            catch (Exception ex)
+            {
+                Log("Exception Throw on Logo Click: " + ex.Message);
+            } //end catch
+        } //end LogoClick
+
+        private void LogoMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
+            } //end try
+            catch (Exception ex)
+            {
+                Log("Exception Thrown Changing Mouse Cursor: " + ex.Message);
+
+                Mouse.OverrideCursor = null;
+            } //end catch
+        } //end LogoMouseEnter
+
+        private void LogoMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = null;
+        } //end LogoMouseLeave
+
+        private void InstallDirectoryMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
+            } //end try
+            catch (Exception ex)
+            {
+                Log("Exception Thrown Changing Mouse Cursor: " + ex.Message);
+
+                Mouse.OverrideCursor = null;
+            } //end catch
+        } //end InstallDirectoryMouseEnter
+
+        private void InstallDirectoryMouseLeave(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = null;
+        } //end InstallDirectoryMouseEnter
     } //end class
 } //end namespace
