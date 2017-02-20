@@ -8,7 +8,7 @@
         public int Relationship { get; set; }
         public string ShipName { get; set; }
         public string ShipType { get; set; }
-        public int ShipTier { get; set; }
+        public string ShipTier { get; set; }
         public int Distance { get; set; }
         public string LastBattle { get; set; }
         public int MaxFrags { get; set; }

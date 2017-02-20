@@ -146,7 +146,7 @@ namespace MatchingMakingMonitor
             {
                 var retList = new List<PlayerShipStats>();
 
-                Parallel.ForEach(replay.vehicles, new ParallelOptions {MaxDegreeOfParallelism = 1}, p =>
+                Parallel.ForEach(replay.vehicles, new ParallelOptions {MaxDegreeOfParallelism = 5}, p =>
                 {
                     try
                     {
@@ -175,8 +175,7 @@ namespace MatchingMakingMonitor
                         } //end switch
 
                         //start by getting the players accountId so we can grab their stats
-                        var request = new RestRequest("/wows/account/list/?application_id={appId}&search={username}",
-                            Method.GET);
+                        var request = new RestRequest("/wows/account/list/?application_id={appId}&search={username}", Method.GET);
                         request.AddUrlSegment("username", p.name);
                         request.AddUrlSegment("appId", appId);
 
@@ -193,7 +192,12 @@ namespace MatchingMakingMonitor
                                 var stat = new PlayerShipStats
                                 {
                                     ShipId = long.Parse(p.shipId.ToString()),
-                                    Battles = 0
+                                    ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
+                                    ShipType = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipType,
+                                    ShipTier = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.Tier,
+                                    Battles = 0,
+                                    Nickname = p.name,
+                                    Relationship = p.relation
                                 };
 
                                 retList.Add(stat);
@@ -224,9 +228,9 @@ namespace MatchingMakingMonitor
                                     var stat = new PlayerShipStats
                                     {
                                         ShipId = long.Parse(s.ship_id),
-                                        ShipName = _ships.FirstOrDefault(x => x.ShipId == s.ship_id).ShipName,
-                                        ShipType = _ships.FirstOrDefault(x => x.ShipId == s.ship_id).ShipType,
-                                        ShipTier = _ships.FirstOrDefault(x => x.ShipId == s.ship_id).Tier,
+                                        ShipName = _ships.FirstOrDefault(x => x.ShipId == s.ship_id)?.ShipName,
+                                        ShipType = _ships.FirstOrDefault(x => x.ShipId == s.ship_id)?.ShipType,
+                                        ShipTier = _ships.FirstOrDefault(x => x.ShipId == s.ship_id)?.Tier,
                                         AccountId = thisPlayer.account_id,
                                         Nickname = thisPlayer.nickname,
                                         Distance = s.distance,
@@ -283,6 +287,22 @@ namespace MatchingMakingMonitor
 
                                     retList.Add(stat);
                                 } //end if
+                                else
+                                {
+                                    //no stats, we need to show them anyways
+                                    var stat = new PlayerShipStats
+                                    {
+                                        ShipId = long.Parse(p.shipId.ToString()),
+                                        ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
+                                        ShipType = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipType,
+                                        ShipTier = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.Tier,
+                                        Battles = 0,
+                                        Nickname = p.name,
+                                        Relationship = p.relation
+                                    };
+
+                                    retList.Add(stat);
+                                } //end else
                             } //end else
                         } //end if
                         else
@@ -292,7 +312,12 @@ namespace MatchingMakingMonitor
                             var stat = new PlayerShipStats
                             {
                                 ShipId = long.Parse(p.shipId.ToString()),
-                                Battles = 0
+                                ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
+                                ShipType = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipType,
+                                ShipTier = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.Tier,
+                                Battles = 0,
+                                Nickname = p.name,
+                                Relationship = p.relation
                             };
 
                             retList.Add(stat);
@@ -302,6 +327,19 @@ namespace MatchingMakingMonitor
                     {
                         //ignore
                         Log("An Error Occurred While Fetching Players" + ex.Message);
+
+                        var stat = new PlayerShipStats
+                        {
+                            ShipId = long.Parse(p.shipId.ToString()),
+                            ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
+                            ShipType = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipType,
+                            ShipTier = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.Tier,
+                            Battles = 0,
+                            Nickname = p.name,
+                            Relationship = p.relation
+                        };
+
+                        retList.Add(stat);
                     } //end catch
                 });
 
@@ -440,8 +478,7 @@ namespace MatchingMakingMonitor
                     LblStatus.Foreground = new SolidColorBrush(Colors.Goldenrod);
                     LblStatus.Content = "Fetching Player Stats for Current Battle";
 
-                    var playerStats =
-                        await FetchResults(replayData, ((ComboBoxItem) ComRegion.SelectedItem).Content.ToString());
+                    var playerStats = await FetchResults(replayData, ((ComboBoxItem) ComRegion.SelectedItem).Content.ToString());
 
                     if (playerStats.Any())
                     {
@@ -474,153 +511,306 @@ namespace MatchingMakingMonitor
                         Log("Added Separators");
 
                         //start with the friendly team.
-                        foreach (
-                            var p in
-                            playerStats.Where(x => x.Relationship == 0 || x.Relationship == 1)
-                                .OrderBy(x => x.ShipType)
-                                .ThenByDescending(x => x.ShipTier))
+                        foreach (var p in playerStats.Where(x => x.Relationship == 0 || x.Relationship == 1).OrderBy(x => x.ShipType).ThenByDescending(x => x.ShipTier))
                         {
                             Log("Processing Player: " + p.Nickname);
 
                             try
                             {
-                                var playerGrid = new Grid
+                                if (p.AccountId == 0)
                                 {
-                                    Height = 44,
-                                    Background = new SolidColorBrush(GetPlayerBackground(p))
-                                };
+                                    var background = new SolidColorBrush(GetPlayerBackground(p));
 
-                                //create our columns
-                                var gridCol1 = new ColumnDefinition
+                                    var playerGrid = new Grid
+                                    {
+                                        Background = new SolidColorBrush(Color.FromRgb(245, 245, 245))
+                                    };
+
+                                    //create our columns
+                                    var gridCol1 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridCol2 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridCol3 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridCol4 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    playerGrid.ColumnDefinitions.Add(gridCol1);
+                                    playerGrid.ColumnDefinitions.Add(gridCol2);
+                                    playerGrid.ColumnDefinitions.Add(gridCol3);
+                                    playerGrid.ColumnDefinitions.Add(gridCol4);
+
+                                    //create our rows
+                                    var gridRow1 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridRow2 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    playerGrid.RowDefinitions.Add(gridRow1);
+                                    playerGrid.RowDefinitions.Add(gridRow2);
+
+                                    //add our custom controls to the player group box
+                                    var tempTextblock = new TextBlock
+                                    {
+                                        Text = p.Nickname + " | " + p.AccountId,
+                                        FontWeight = FontWeights.Bold,
+                                        FontSize = 12.0,
+                                        Foreground = background,
+                                        Padding = new Thickness(5)
+                                    };
+
+                                    tempTextblock.MouseDown += PlayerDetailsMouseDown;
+                                    tempTextblock.MouseEnter += PlayerDetailsMouseEnter;
+                                    tempTextblock.MouseLeave += PlayerDetailsMouseLeave;
+
+                                    Grid.SetRow(tempTextblock, 0);
+                                    Grid.SetColumn(tempTextblock, 0);
+                                    playerGrid.Children.Add(tempTextblock);
+
+                                    var tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"No Stats or Hidden",
+                                        FontSize = 12.0,
+                                        Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
+                                    };
+
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0
+                                    };
+
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = p.ShipName,
+                                        FontSize = 11.0
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 0);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    FriendlyGroup.Children.Add(playerGrid);
+
+                                    //add a separator
+                                    FriendlyGroup.Children.Add(new Separator());
+                                } //end if
+                                else
                                 {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    var background = new SolidColorBrush(GetPlayerBackground(p));
 
-                                var gridCol2 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    var playerGrid = new Grid
+                                    {
+                                        Background = new SolidColorBrush(Color.FromRgb(245, 245, 245))
+                                    };
 
-                                var gridCol3 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    //create our columns
+                                    var gridCol1 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                var gridCol4 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    var gridCol2 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                playerGrid.ColumnDefinitions.Add(gridCol1);
-                                playerGrid.ColumnDefinitions.Add(gridCol2);
-                                playerGrid.ColumnDefinitions.Add(gridCol3);
-                                playerGrid.ColumnDefinitions.Add(gridCol4);
+                                    var gridCol3 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                //create our rows
-                                var gridRow1 = new RowDefinition
-                                {
-                                    Height = new GridLength(22, GridUnitType.Pixel)
-                                };
+                                    var gridCol4 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                var gridRow2 = new RowDefinition
-                                {
-                                    Height = new GridLength(22, GridUnitType.Pixel)
-                                };
+                                    playerGrid.ColumnDefinitions.Add(gridCol1);
+                                    playerGrid.ColumnDefinitions.Add(gridCol2);
+                                    playerGrid.ColumnDefinitions.Add(gridCol3);
+                                    playerGrid.ColumnDefinitions.Add(gridCol4);
 
-                                playerGrid.RowDefinitions.Add(gridRow1);
-                                playerGrid.RowDefinitions.Add(gridRow2);
+                                    //create our rows
+                                    var gridRow1 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                //add our custom controls to the player group box
-                                var tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = p.Nickname + " | " + p.AccountId,
-                                    FontWeight = FontWeights.Bold,
-                                    FontSize = 9.0
-                                };
+                                    var gridRow2 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                tempLabel.MouseDown += PlayerDetailsMouseDown;
-                                tempLabel.MouseEnter += PlayerDetailsMouseEnter;
-                                tempLabel.MouseLeave += PlayerDetailsMouseLeave;
+                                    playerGrid.RowDefinitions.Add(gridRow1);
+                                    playerGrid.RowDefinitions.Add(gridRow2);
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 0);
-                                playerGrid.Children.Add(tempLabel);
+                                    //add our custom controls to the player group box
+                                    var tempTextblock = new TextBlock
+                                    {
+                                        Text = p.Nickname + " | " + p.AccountId,
+                                        FontWeight = FontWeights.Bold,
+                                        FontSize = 12.0,
+                                        Foreground = background,
+                                        Padding = new Thickness(5)
+                                    };
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Battles:  " + p.Battles,
-                                    FontSize = 9.0
-                                };
+                                    tempTextblock.MouseDown += PlayerDetailsMouseDown;
+                                    tempTextblock.MouseEnter += PlayerDetailsMouseEnter;
+                                    tempTextblock.MouseLeave += PlayerDetailsMouseLeave;
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 1);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempTextblock, 0);
+                                    Grid.SetColumn(tempTextblock, 0);
+                                    playerGrid.Children.Add(tempTextblock);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Wins:  " + p.Wins,
-                                    FontSize = 9.0
-                                };
+                                    var tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Battles:  " + p.Battles,
+                                        FontSize = 12.0,
+                                        Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
+                                    };
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 2);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Frags:  " + p.Frags,
-                                    FontSize = 9.0
-                                };
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Wins:  " + p.Wins,
+                                        FontSize = 12.0
+                                    };
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 3);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = p.ShipName,
-                                    FontSize = 9.0
-                                };
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Avg Dmg:  " + Math.Round((float)p.DamageDealt / (float)p.Battles, 0),
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
+                                    };
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 0);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Avg XP:  " + Math.Round((float) p.XpEarned/(float) p.Battles, 0),
-                                    FontSize = 9.0
-                                };
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = p.ShipName,
+                                        FontSize = 11.0
+                                    };
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 1);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 0);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content =
-                                        @"Win Rate:  " + Math.Round((float) p.Wins/(float) p.Battles*100f, 2) + @"%",
-                                    FontSize = 9.0
-                                };
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Avg XP:  " + Math.Round((float)p.XpEarned / (float)p.Battles, 0),
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
+                                    };
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 2);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Avg Frags:  " + Math.Round((float) p.Frags/(float) p.Battles, 2),
-                                    FontSize = 9.0
-                                };
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Win Rate:  " + Math.Round((float)p.Wins / (float)p.Battles * 100f, 2) + @"%",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
+                                    };
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 3);
-                                playerGrid.Children.Add(tempLabel);
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                FriendlyGroup.Children.Add(playerGrid);
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Avg Frags:  " + Math.Round((float)p.Frags / (float)p.Battles, 2),
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
+                                    };
 
-                                //add a separator
-                                FriendlyGroup.Children.Add(new Separator());
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    FriendlyGroup.Children.Add(playerGrid);
+
+                                    //add a separator
+                                    FriendlyGroup.Children.Add(new Separator());
+                                } //end else
                             } //end try
                             catch (Exception ex)
                             {
@@ -644,140 +834,300 @@ namespace MatchingMakingMonitor
 
                             try
                             {
-                                var playerGrid = new Grid
+                                if (p.AccountId == 0)
                                 {
-                                    Height = 44,
-                                    Background = new SolidColorBrush(GetPlayerBackground(p))
-                                };
+                                    var background = new SolidColorBrush(GetPlayerBackground(p));
 
-                                //create our columns
-                                var gridCol1 = new ColumnDefinition
+                                    var playerGrid = new Grid
+                                    {
+                                        Background = new SolidColorBrush(Color.FromRgb(245, 245, 245))
+                                    };
+
+                                    //create our columns
+                                    var gridCol1 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridCol2 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridCol3 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridCol4 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    playerGrid.ColumnDefinitions.Add(gridCol1);
+                                    playerGrid.ColumnDefinitions.Add(gridCol2);
+                                    playerGrid.ColumnDefinitions.Add(gridCol3);
+                                    playerGrid.ColumnDefinitions.Add(gridCol4);
+
+                                    //create our rows
+                                    var gridRow1 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    var gridRow2 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
+
+                                    playerGrid.RowDefinitions.Add(gridRow1);
+                                    playerGrid.RowDefinitions.Add(gridRow2);
+
+                                    //add our custom controls to the player group box
+                                    var tempTextblock = new TextBlock
+                                    {
+                                        Text = p.Nickname + " | " + p.AccountId,
+                                        FontWeight = FontWeights.Bold,
+                                        FontSize = 12.0,
+                                        Foreground = background,
+                                        Padding = new Thickness(5)
+                                    };
+
+                                    tempTextblock.MouseDown += PlayerDetailsMouseDown;
+                                    tempTextblock.MouseEnter += PlayerDetailsMouseEnter;
+                                    tempTextblock.MouseLeave += PlayerDetailsMouseLeave;
+
+                                    Grid.SetRow(tempTextblock, 0);
+                                    Grid.SetColumn(tempTextblock, 0);
+                                    playerGrid.Children.Add(tempTextblock);
+
+                                    var tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"No Stats or Hidden",
+                                        FontSize = 12.0,
+                                        Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
+                                    };
+
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0
+                                    };
+
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = p.ShipName,
+                                        FontSize = 11.0
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 0);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
+                                    };
+
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    EnemyGroup.Children.Add(playerGrid);
+
+                                    //add a separator
+                                    EnemyGroup.Children.Add(new Separator());
+                                } //end if
+                                else
                                 {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    var background = new SolidColorBrush(GetPlayerBackground(p));
 
-                                var gridCol2 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    var playerGrid = new Grid
+                                    {
+                                        Background = new SolidColorBrush(Color.FromRgb(245, 245, 245))
+                                    };
 
-                                var gridCol3 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    //create our columns
+                                    var gridCol1 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                var gridCol4 = new ColumnDefinition
-                                {
-                                    Width = new GridLength(1.0, GridUnitType.Star)
-                                };
+                                    var gridCol2 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                playerGrid.ColumnDefinitions.Add(gridCol1);
-                                playerGrid.ColumnDefinitions.Add(gridCol2);
-                                playerGrid.ColumnDefinitions.Add(gridCol3);
-                                playerGrid.ColumnDefinitions.Add(gridCol4);
+                                    var gridCol3 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                //create our rows
-                                var gridRow1 = new RowDefinition
-                                {
-                                    Height = new GridLength(22, GridUnitType.Pixel)
-                                };
+                                    var gridCol4 = new ColumnDefinition
+                                    {
+                                        Width = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                var gridRow2 = new RowDefinition
-                                {
-                                    Height = new GridLength(22, GridUnitType.Pixel)
-                                };
+                                    playerGrid.ColumnDefinitions.Add(gridCol1);
+                                    playerGrid.ColumnDefinitions.Add(gridCol2);
+                                    playerGrid.ColumnDefinitions.Add(gridCol3);
+                                    playerGrid.ColumnDefinitions.Add(gridCol4);
 
-                                playerGrid.RowDefinitions.Add(gridRow1);
-                                playerGrid.RowDefinitions.Add(gridRow2);
+                                    //create our rows
+                                    var gridRow1 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                //add our custom controls to the player group box
-                                var tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = p.Nickname,
-                                    FontWeight = FontWeights.Bold,
-                                    FontSize = 9.0
-                                };
+                                    var gridRow2 = new RowDefinition
+                                    {
+                                        Height = new GridLength(1.0, GridUnitType.Star)
+                                    };
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 0);
-                                playerGrid.Children.Add(tempLabel);
+                                    playerGrid.RowDefinitions.Add(gridRow1);
+                                    playerGrid.RowDefinitions.Add(gridRow2);
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Battles:  " + p.Battles,
-                                    FontSize = 9.0
-                                };
+                                    //add our custom controls to the player group box
+                                    var tempTextblock = new TextBlock
+                                    {
+                                        Text = p.Nickname + " | " + p.AccountId,
+                                        FontWeight = FontWeights.Bold,
+                                        FontSize = 12.0,
+                                        Foreground = background,
+                                        Padding = new Thickness(5)
+                                    };
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 1);
-                                playerGrid.Children.Add(tempLabel);
+                                    tempTextblock.MouseDown += PlayerDetailsMouseDown;
+                                    tempTextblock.MouseEnter += PlayerDetailsMouseEnter;
+                                    tempTextblock.MouseLeave += PlayerDetailsMouseLeave;
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Wins:  " + p.Wins,
-                                    FontSize = 9.0
-                                };
+                                    Grid.SetRow(tempTextblock, 0);
+                                    Grid.SetColumn(tempTextblock, 0);
+                                    playerGrid.Children.Add(tempTextblock);
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 2);
-                                playerGrid.Children.Add(tempLabel);
+                                    var tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Battles:  " + p.Battles,
+                                        FontSize = 12.0,
+                                        Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
+                                    };
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Frags:  " + p.Frags,
-                                    FontSize = 9.0
-                                };
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                Grid.SetRow(tempLabel, 0);
-                                Grid.SetColumn(tempLabel, 3);
-                                playerGrid.Children.Add(tempLabel);
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Wins:  " + p.Wins,
+                                        FontSize = 12.0
+                                    };
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = p.ShipName,
-                                    FontSize = 9.0
-                                };
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 0);
-                                playerGrid.Children.Add(tempLabel);
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Avg Dmg:  " + Math.Round((float)p.DamageDealt / (float)p.Battles, 0),
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
+                                    };
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Avg XP:  " + Math.Round((float) p.XpEarned/(float) p.Battles, 0),
-                                    FontSize = 9.0
-                                };
+                                    Grid.SetRow(tempLabel, 0);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 1);
-                                playerGrid.Children.Add(tempLabel);
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = p.ShipName,
+                                        FontSize = 11.0
+                                    };
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content =
-                                        @"Win Rate:  " + Math.Round((float) p.Wins/(float) p.Battles*100f, 2) + @"%",
-                                    FontSize = 9.0
-                                };
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 0);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 2);
-                                playerGrid.Children.Add(tempLabel);
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Avg XP:  " + Math.Round((float)p.XpEarned / (float)p.Battles, 0),
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
+                                    };
 
-                                tempLabel = new System.Windows.Controls.Label
-                                {
-                                    Content = @"Avg Frags:  " + Math.Round((float) p.Frags/(float) p.Battles, 2),
-                                    FontSize = 9.0
-                                };
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 1);
+                                    playerGrid.Children.Add(tempLabel);
 
-                                Grid.SetRow(tempLabel, 1);
-                                Grid.SetColumn(tempLabel, 3);
-                                playerGrid.Children.Add(tempLabel);
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Win Rate:  " + Math.Round((float)p.Wins / (float)p.Battles * 100f, 2) + @"%",
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
+                                    };
 
-                                EnemyGroup.Children.Add(playerGrid);
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 2);
+                                    playerGrid.Children.Add(tempLabel);
 
+                                    tempLabel = new System.Windows.Controls.Label
+                                    {
+                                        Content = @"Avg Frags:  " + Math.Round((float)p.Frags / (float)p.Battles, 2),
+                                        FontSize = 12.0,
+                                        Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
+                                    };
 
-                                //add a separator
-                                EnemyGroup.Children.Add(new Separator());
+                                    Grid.SetRow(tempLabel, 1);
+                                    Grid.SetColumn(tempLabel, 3);
+                                    playerGrid.Children.Add(tempLabel);
+
+                                    EnemyGroup.Children.Add(playerGrid);
+
+                                    //add a separator
+                                    EnemyGroup.Children.Add(new Separator());
+                                } //end else
                             } //end try
                             catch (Exception ex)
                             {
@@ -832,7 +1182,7 @@ namespace MatchingMakingMonitor
             if (player.Battles == 0)
             {
                 //no battles so we assume they are bad
-                return Color.FromRgb(255, 209, 209);
+                return Color.FromRgb(255, 0, 0);
             } //end if
 
             //we know there are battles so we can do our math now.
@@ -930,47 +1280,273 @@ namespace MatchingMakingMonitor
                 playerTotal += 5;
             } //end else if
 
+            if (playerTotal > 90)
+            {
+                return Color.FromRgb(184, 0, 169);
+            } //end if
+
             if (playerTotal > 80)
             {
-                return Color.FromRgb(222, 255, 210);
+                return Color.FromRgb(0, 148, 17);
             } //end if
 
             if (playerTotal > 70)
             {
-                return Color.FromRgb(231, 255, 210);
+                return Color.FromRgb(106, 188, 0);
             } //en dif
 
             if (playerTotal > 60)
             {
-                return Color.FromRgb(242, 255, 210);
+                return Color.FromRgb(155, 188, 0);
             } //end if
 
             if (playerTotal > 50)
             {
-                return Color.FromRgb(247, 255, 210);
+                return Color.FromRgb(188, 181, 0);
             } //end if
 
             if (playerTotal > 40)
             {
-                return Color.FromRgb(255, 249, 210);
+                return Color.FromRgb(255, 174, 0);
             } //end if
 
             if (playerTotal > 30)
             {
-                return Color.FromRgb(255, 231, 210);
+                return Color.FromRgb(255, 114, 0);
             } //end if
 
             if (playerTotal > 20)
             {
-                return Color.FromRgb(255, 222, 210);
+                return Color.FromRgb(255, 66, 0);
             } //end if
 
             if (playerTotal > 10)
             {
-                return Color.FromRgb(255, 216, 210);
+                return Color.FromRgb(255, 0, 0);
             } //end if
 
-            return Color.FromRgb(255, 210, 210);
+            return Color.FromRgb(255, 0, 0);
+        } //end GetPlayerBackground
+
+        private Color GetPlayerWinRateColor(PlayerShipStats player)
+        {
+            //do we have battles before we begin?
+            if (player.Battles == 0)
+            {
+                //no battles so we assume they are bad
+                return Color.FromRgb(255, 0, 0);
+            } //end if
+
+            var winRate = Math.Round((float)player.Wins / (float)player.Battles * 100f, 2);
+
+            if (winRate > 90)
+            {
+                return Color.FromRgb(184, 0, 169);
+            } //end if
+
+            if (winRate > 80)
+            {
+                return Color.FromRgb(0, 148, 17);
+            } //end if
+
+            if (winRate > 70)
+            {
+                return Color.FromRgb(106, 188, 0);
+            } //en dif
+
+            if (winRate > 60)
+            {
+                return Color.FromRgb(155, 188, 0);
+            } //end if
+
+            if (winRate > 50)
+            {
+                return Color.FromRgb(188, 181, 0);
+            } //end if
+
+            if (winRate > 40)
+            {
+                return Color.FromRgb(255, 174, 0);
+            } //end if
+
+            if (winRate > 30)
+            {
+                return Color.FromRgb(255, 114, 0);
+            } //end if
+
+            if (winRate > 20)
+            {
+                return Color.FromRgb(255, 66, 0);
+            } //end if
+
+            if (winRate > 10)
+            {
+                return Color.FromRgb(255, 0, 0);
+            } //end if
+
+            return Color.FromRgb(255, 0, 0);
+        } //end GetPlayerBackground
+
+        private Color GetPlayerAvgXpColor(PlayerShipStats player)
+        {
+            //do we have battles before we begin?
+            if (player.Battles == 0)
+            {
+                //no battles so we assume they are bad
+                return Color.FromRgb(255, 0, 0);
+            } //end if
+
+            var avgXp = Math.Round((float)player.XpEarned / (float)player.Battles, 0);
+
+            if (avgXp > 1500)
+            {
+                return Color.FromRgb(184, 0, 169);
+            } //end if
+
+            if (avgXp > 1200)
+            {
+                return Color.FromRgb(0, 148, 17);
+            } //end if
+
+            if (avgXp > 1000)
+            {
+                return Color.FromRgb(106, 188, 0);
+            } //en dif
+
+            if (avgXp > 900)
+            {
+                return Color.FromRgb(155, 188, 0);
+            } //end if
+
+            if (avgXp > 800)
+            {
+                return Color.FromRgb(188, 181, 0);
+            } //end if
+
+            if (avgXp > 600)
+            {
+                return Color.FromRgb(255, 174, 0);
+            } //end if
+
+            if (avgXp > 500)
+            {
+                return Color.FromRgb(255, 114, 0);
+            } //end if
+
+            if (avgXp > 400)
+            {
+                return Color.FromRgb(255, 66, 0);
+            } //end if
+
+            return Color.FromRgb(255, 0, 0);
+        } //end GetPlayerBackground
+
+        private Color GetPlayerAvgFragsColor(PlayerShipStats player)
+        {
+            //do we have battles before we begin?
+            if (player.Battles == 0)
+            {
+                //no battles so we assume they are bad
+                return Color.FromRgb(255, 0, 0);
+            } //end if
+
+            var avgFrags = Math.Round((float)player.Frags / (float)player.Battles, 2);
+
+            if (avgFrags > 1.5)
+            {
+                return Color.FromRgb(184, 0, 169);
+            } //end if
+
+            if (avgFrags > 1.3)
+            {
+                return Color.FromRgb(0, 148, 17);
+            } //end if
+
+            if (avgFrags > 1.1)
+            {
+                return Color.FromRgb(106, 188, 0);
+            } //en dif
+
+            if (avgFrags > 1.0)
+            {
+                return Color.FromRgb(155, 188, 0);
+            } //end if
+
+            if (avgFrags > 0.8)
+            {
+                return Color.FromRgb(188, 181, 0);
+            } //end if
+
+            if (avgFrags > 0.6)
+            {
+                return Color.FromRgb(255, 174, 0);
+            } //end if
+
+            if (avgFrags > .4)
+            {
+                return Color.FromRgb(255, 114, 0);
+            } //end if
+
+            if (avgFrags > .2)
+            {
+                return Color.FromRgb(255, 66, 0);
+            } //end if
+
+            return Color.FromRgb(255, 0, 0);
+        } //end GetPlayerBackground
+
+        private Color GetPlayerAvgDamageColor(PlayerShipStats player)
+        {
+            //do we have battles before we begin?
+            if (player.Battles == 0)
+            {
+                //no battles so we assume they are bad
+                return Color.FromRgb(255, 0, 0);
+            } //end if
+
+            var avgDamage = Math.Round((float)player.DamageDealt / (float)player.Battles, 0);
+
+            if (avgDamage > 75000)
+            {
+                return Color.FromRgb(184, 0, 169);
+            } //end if
+
+            if (avgDamage > 65000)
+            {
+                return Color.FromRgb(0, 148, 17);
+            } //end if
+
+            if (avgDamage > 55000)
+            {
+                return Color.FromRgb(106, 188, 0);
+            } //en dif
+
+            if (avgDamage > 45000)
+            {
+                return Color.FromRgb(155, 188, 0);
+            } //end if
+
+            if (avgDamage > 35000)
+            {
+                return Color.FromRgb(188, 181, 0);
+            } //end if
+
+            if (avgDamage > 25000)
+            {
+                return Color.FromRgb(255, 174, 0);
+            } //end if
+
+            if (avgDamage > 15000)
+            {
+                return Color.FromRgb(255, 114, 0);
+            } //end if
+
+            if (avgDamage > 10000)
+            {
+                return Color.FromRgb(255, 66, 0);
+            } //end if
+
+            return Color.FromRgb(255, 0, 0);
         } //end GetPlayerBackground
 
         private void Log(string message)
@@ -992,9 +1568,9 @@ namespace MatchingMakingMonitor
         {
             try
             {
-                var label = (System.Windows.Controls.Label) sender;
-                var playerName = label.Content.ToString().Split('|')[0].Replace(" ", "");
-                var accountId = label.Content.ToString().Split('|')[1].Replace(" ", "");
+                var label = (TextBlock) sender;
+                var playerName = label.Text.Split('|')[0].Replace(" ", "");
+                var accountId = label.Text.Split('|')[1].Replace(" ", "");
 
                 System.Diagnostics.Process.Start("https://" + Properties.Settings.Default.Region +
                                                  ".warships.today/player/" + accountId + "/" + playerName);
