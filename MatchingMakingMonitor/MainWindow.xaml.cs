@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,7 +79,7 @@ namespace MatchingMakingMonitor
 
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
             {
-                if (Directory.Exists(folderBrowser.SelectedPath + "/replays"))
+                if (Directory.Exists(folderBrowser.SelectedPath + "/replays") && File.Exists(folderBrowser.SelectedPath + "/WorldOfWarships.exe"))
                 {
                     TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
                     TxtInstallDirectoryValue.Text = folderBrowser.SelectedPath;
@@ -94,8 +92,7 @@ namespace MatchingMakingMonitor
                 else
                 {
                     TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-                    TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
-                                                    " - Invalid Path or Replays not enabled! - Click here to update!";
+                    TxtInstallDirectoryValue.Text = folderBrowser.SelectedPath + " - Invalid Path or Replays not enabled! - Click here to update!";
 
                     Log("Invalid Install Directory Chosen " + folderBrowser.SelectedPath);
                 } //end else
@@ -104,7 +101,7 @@ namespace MatchingMakingMonitor
             {
                 Log("Dialog was Cancelled by the User");
 
-                if (Directory.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays"))
+                if (Directory.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays") && File.Exists(folderBrowser.SelectedPath + "/WorldOfWarships.exe"))
                 {
                     TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
                     TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"].ToString();
