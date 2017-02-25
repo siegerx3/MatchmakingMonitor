@@ -94,5 +94,113 @@ namespace MatchingMakingMonitor.Properties {
                 return ((string)(this["AppIdSEA"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("184,0,169")]
+        public string Overall9 {
+            get {
+                return ((string)(this["Overall9"]));
+            }
+            set {
+                this["Overall9"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,148,17")]
+        public string Overall8 {
+            get {
+                return ((string)(this["Overall8"]));
+            }
+            set {
+                this["Overall8"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("106,188,0")]
+        public string Overall7 {
+            get {
+                return ((string)(this["Overall7"]));
+            }
+            set {
+                this["Overall7"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("155,188,0")]
+        public string Overall6 {
+            get {
+                return ((string)(this["Overall6"]));
+            }
+            set {
+                this["Overall6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("188,181,0")]
+        public string Overall5 {
+            get {
+                return ((string)(this["Overall5"]));
+            }
+            set {
+                this["Overall5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255,174,0")]
+        public string Overall4 {
+            get {
+                return ((string)(this["Overall4"]));
+            }
+            set {
+                this["Overall4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255,114,0")]
+        public string Overall3 {
+            get {
+                return ((string)(this["Overall3"]));
+            }
+            set {
+                this["Overall3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255,66,0")]
+        public string Overall2 {
+            get {
+                return ((string)(this["Overall2"]));
+            }
+            set {
+                this["Overall2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255, 0, 0")]
+        public string Overall1 {
+            get {
+                return ((string)(this["Overall1"]));
+            }
+            set {
+                this["Overall1"] = value;
+            }
+        }
     }
 }

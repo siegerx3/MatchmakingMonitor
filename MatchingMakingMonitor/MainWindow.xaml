@@ -13,31 +13,32 @@
         Height="768"
         MinWidth="1280">
     <Grid>
-        <Rectangle Fill="#FF333333" Height="110" Stroke="Black" VerticalAlignment="Top"/>
+        <Rectangle Fill="#FF333333" Height="47" Stroke="Black" VerticalAlignment="Top"/>
 
-        <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="Images/64x64Icon.png" MouseDown="LogoClick" MouseEnter="LogoMouseEnter" MouseLeave="LogoMouseLeave"/>
-        <TextBlock Margin="115,10,157,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White"><Run Text="Thank you for using the WoWReplays.com Matchmaking Monitor application.  Player stats are pulled live either from WoWReplays.com or Wargaming.net.  Player stats will be shown below when you enter into a battle.  REPLAYS MUST BE ENABLED!   Please ensure you have selected the proper install folder and region to ensure stat lookup is handled properly.  If you do not see stats appearing, ensure the proper region is selected."/><LineBreak/><Run/><LineBreak/><Run Text="If you do not see a players name appear their stats could not be retrieved or they are hidden from public view."/><LineBreak/><Run Text="If you encounter an error or have a suggestion please email me at Justin@Jammin411.com."/></TextBlock>
-        <Label x:Name="LblRegion" Content="Region:" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="ComRegion" HorizontalAlignment="Left" Margin="64,119,0,0" VerticalAlignment="Top" Width="90" SelectionChanged="ComRegion_SelectionChanged">
+        <Image HorizontalAlignment="Left" Height="32" Margin="10,9,0,0" VerticalAlignment="Top" Width="32" Source="Images/32x32Icon.png" MouseDown="LogoClick" MouseEnter="LogoMouseEnter" MouseLeave="LogoMouseLeave" RenderTransformOrigin="1,0.094"/>
+        <Image x:Name="ImgSettings" Margin="0,9,10,0" Source="Images/gearIcon.png" MouseDown="OpenSettingsWindow" Height="32" VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+        <Label x:Name="LblRegion" Content="Region:" HorizontalAlignment="Left" Margin="2,46,0,0" VerticalAlignment="Top" Height="31"/>
+        <ComboBox x:Name="ComRegion" HorizontalAlignment="Left" Margin="56,51,0,0" VerticalAlignment="Top" Width="90" SelectionChanged="ComRegion_SelectionChanged" Height="26">
             <ComboBoxItem Content="NA"/>
             <ComboBoxItem Content="EU"/>
             <ComboBoxItem Content="RU"/>
             <ComboBoxItem Content="SEA"/>
         </ComboBox>
-        <Label x:Name="LblInstallDirectory" Content="Installation Directory:&#xA;" HorizontalAlignment="Left" Margin="168,115,0,0" VerticalAlignment="Top" Height="26"/>
-        <TextBlock x:Name="TxtInstallDirectoryValue" HorizontalAlignment="Left" Margin="295,120,0,0" TextWrapping="Wrap" Text="Check Install Directory" VerticalAlignment="Top" MouseDown="InstallDirectoryClick" MouseEnter="InstallDirectoryMouseEnter" MouseLeave="InstallDirectoryMouseLeave"/>
-        <Label x:Name="LblStatus" Content="Not Currently in Battle..." Margin="0,115,20,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <Label x:Name="LblInstallDirectory" Content="Installation Directory:&#xA;" HorizontalAlignment="Left" Margin="160,46,0,0" VerticalAlignment="Top" Height="31"/>
+        <TextBlock x:Name="TxtInstallDirectoryValue" HorizontalAlignment="Left" Margin="287,52,0,0" TextWrapping="Wrap" Text="Check Install Directory" VerticalAlignment="Top" MouseDown="InstallDirectoryClick" MouseEnter="InstallDirectoryMouseEnter" MouseLeave="InstallDirectoryMouseLeave" Height="19"/>
+        <Label x:Name="LblStatus" Content="Not Currently in Battle..." Margin="0,47,10,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ScrollViewer Margin="0,177,0,0" Grid.Column="0">
+            <ScrollViewer Margin="0,82,0,0" Grid.Column="0">
                 <StackPanel x:Name="FriendlyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true"/>
             </ScrollViewer>
-            <ScrollViewer Margin="0,177,0,0" Grid.Column="1">
+            <ScrollViewer Margin="0,82,0,0" Grid.Column="1">
                 <StackPanel x:Name="EnemyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="True"/>
             </ScrollViewer>
         </Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="56,10,0,0" TextWrapping="Wrap" Text="WoWReplays.com" VerticalAlignment="Top" Foreground="White" FontSize="18"/>
     </Grid>
 </Window>

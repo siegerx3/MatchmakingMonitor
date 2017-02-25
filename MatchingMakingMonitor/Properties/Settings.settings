@@ -23,5 +23,32 @@
     <Setting Name="AppIdSEA" Type="System.String" Scope="Application">
       <Value Profile="(Default)">a7079ba49e5487b6936aed9176c13968</Value>
     </Setting>
+    <Setting Name="Overall9" Type="System.String" Scope="User">
+      <Value Profile="(Default)">184,0,169</Value>
+    </Setting>
+    <Setting Name="Overall8" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0,148,17</Value>
+    </Setting>
+    <Setting Name="Overall7" Type="System.String" Scope="User">
+      <Value Profile="(Default)">106,188,0</Value>
+    </Setting>
+    <Setting Name="Overall6" Type="System.String" Scope="User">
+      <Value Profile="(Default)">155,188,0</Value>
+    </Setting>
+    <Setting Name="Overall5" Type="System.String" Scope="User">
+      <Value Profile="(Default)">188,181,0</Value>
+    </Setting>
+    <Setting Name="Overall4" Type="System.String" Scope="User">
+      <Value Profile="(Default)">255,174,0</Value>
+    </Setting>
+    <Setting Name="Overall3" Type="System.String" Scope="User">
+      <Value Profile="(Default)">255,114,0</Value>
+    </Setting>
+    <Setting Name="Overall2" Type="System.String" Scope="User">
+      <Value Profile="(Default)">255,66,0</Value>
+    </Setting>
+    <Setting Name="Overall1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">255, 0, 0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

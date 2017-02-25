@@ -1175,11 +1175,17 @@ namespace MatchingMakingMonitor
 
         private Color GetPlayerBackground(PlayerShipStats player)
         {
+            var splitInts = new List<byte>();
+
             //do we have battles before we begin?
             if (player.Battles == 0)
             {
                 //no battles so we assume they are bad
-                return Color.FromRgb(255, 0, 0);
+                splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             //we know there are battles so we can do our math now.
@@ -1279,271 +1285,465 @@ namespace MatchingMakingMonitor
 
             if (playerTotal > 90)
             {
-                return Color.FromRgb(184, 0, 169);
+                splitInts = Properties.Settings.Default.Overall9.Split(',')
+                    .Select(x => byte.Parse(x))
+                    .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (playerTotal > 80)
             {
-                return Color.FromRgb(0, 148, 17);
+                splitInts = Properties.Settings.Default.Overall8.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (playerTotal > 70)
             {
-                return Color.FromRgb(106, 188, 0);
+                splitInts = Properties.Settings.Default.Overall7.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //en dif
 
             if (playerTotal > 60)
             {
-                return Color.FromRgb(155, 188, 0);
+                splitInts = Properties.Settings.Default.Overall6.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (playerTotal > 50)
             {
-                return Color.FromRgb(188, 181, 0);
+                splitInts = Properties.Settings.Default.Overall5.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (playerTotal > 40)
             {
-                return Color.FromRgb(255, 174, 0);
+                splitInts = Properties.Settings.Default.Overall4.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (playerTotal > 30)
             {
-                return Color.FromRgb(255, 114, 0);
+                splitInts = Properties.Settings.Default.Overall3.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (playerTotal > 20)
             {
-                return Color.FromRgb(255, 66, 0);
+                splitInts = Properties.Settings.Default.Overall2.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            if (playerTotal > 10)
-            {
-                return Color.FromRgb(255, 0, 0);
-            } //end if
+            splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
 
-            return Color.FromRgb(255, 0, 0);
+            return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
         } //end GetPlayerBackground
 
         private Color GetPlayerWinRateColor(PlayerShipStats player)
         {
+            var splitInts = new List<byte>();
+
             //do we have battles before we begin?
             if (player.Battles == 0)
             {
                 //no battles so we assume they are bad
-                return Color.FromRgb(255, 0, 0);
+                splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             var winRate = Math.Round((float)player.Wins / (float)player.Battles * 100f, 2);
 
             if (winRate > 90)
             {
-                return Color.FromRgb(184, 0, 169);
+                splitInts = Properties.Settings.Default.Overall9.Split(',')
+                    .Select(x => byte.Parse(x))
+                    .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (winRate > 80)
             {
-                return Color.FromRgb(0, 148, 17);
+                splitInts = Properties.Settings.Default.Overall8.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (winRate > 70)
             {
-                return Color.FromRgb(106, 188, 0);
+                splitInts = Properties.Settings.Default.Overall7.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //en dif
 
             if (winRate > 60)
             {
-                return Color.FromRgb(155, 188, 0);
+                splitInts = Properties.Settings.Default.Overall6.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (winRate > 50)
             {
-                return Color.FromRgb(188, 181, 0);
+                splitInts = Properties.Settings.Default.Overall5.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (winRate > 40)
             {
-                return Color.FromRgb(255, 174, 0);
+                splitInts = Properties.Settings.Default.Overall4.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (winRate > 30)
             {
-                return Color.FromRgb(255, 114, 0);
+                splitInts = Properties.Settings.Default.Overall3.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (winRate > 20)
             {
-                return Color.FromRgb(255, 66, 0);
+                splitInts = Properties.Settings.Default.Overall2.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            if (winRate > 10)
-            {
-                return Color.FromRgb(255, 0, 0);
-            } //end if
+            splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
 
-            return Color.FromRgb(255, 0, 0);
+            return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
         } //end GetPlayerBackground
 
         private Color GetPlayerAvgXpColor(PlayerShipStats player)
         {
+            var splitInts = new List<byte>();
+
             //do we have battles before we begin?
             if (player.Battles == 0)
             {
                 //no battles so we assume they are bad
-                return Color.FromRgb(255, 0, 0);
+                splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             var avgXp = Math.Round((float)player.XpEarned / (float)player.Battles, 0);
 
             if (avgXp > 1500)
             {
-                return Color.FromRgb(184, 0, 169);
+                splitInts = Properties.Settings.Default.Overall9.Split(',')
+                    .Select(x => byte.Parse(x))
+                    .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgXp > 1200)
             {
-                return Color.FromRgb(0, 148, 17);
+                splitInts = Properties.Settings.Default.Overall8.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgXp > 1000)
             {
-                return Color.FromRgb(106, 188, 0);
+                splitInts = Properties.Settings.Default.Overall7.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //en dif
 
             if (avgXp > 900)
             {
-                return Color.FromRgb(155, 188, 0);
+                splitInts = Properties.Settings.Default.Overall6.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgXp > 800)
             {
-                return Color.FromRgb(188, 181, 0);
+                splitInts = Properties.Settings.Default.Overall5.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgXp > 600)
             {
-                return Color.FromRgb(255, 174, 0);
+                splitInts = Properties.Settings.Default.Overall4.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgXp > 500)
             {
-                return Color.FromRgb(255, 114, 0);
+                splitInts = Properties.Settings.Default.Overall3.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgXp > 400)
             {
-                return Color.FromRgb(255, 66, 0);
+                splitInts = Properties.Settings.Default.Overall2.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            return Color.FromRgb(255, 0, 0);
+            splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+            return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
         } //end GetPlayerBackground
 
         private Color GetPlayerAvgFragsColor(PlayerShipStats player)
         {
+            var splitInts = new List<byte>();
+
             //do we have battles before we begin?
             if (player.Battles == 0)
             {
                 //no battles so we assume they are bad
-                return Color.FromRgb(255, 0, 0);
+                splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             var avgFrags = Math.Round((float)player.Frags / (float)player.Battles, 2);
 
             if (avgFrags > 1.5)
             {
-                return Color.FromRgb(184, 0, 169);
+                splitInts = Properties.Settings.Default.Overall9.Split(',')
+                    .Select(x => byte.Parse(x))
+                    .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgFrags > 1.3)
             {
-                return Color.FromRgb(0, 148, 17);
+                splitInts = Properties.Settings.Default.Overall8.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgFrags > 1.1)
             {
-                return Color.FromRgb(106, 188, 0);
+                splitInts = Properties.Settings.Default.Overall7.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //en dif
 
             if (avgFrags > 1.0)
             {
-                return Color.FromRgb(155, 188, 0);
+                splitInts = Properties.Settings.Default.Overall6.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgFrags > 0.8)
             {
-                return Color.FromRgb(188, 181, 0);
+                splitInts = Properties.Settings.Default.Overall5.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgFrags > 0.6)
             {
-                return Color.FromRgb(255, 174, 0);
+                splitInts = Properties.Settings.Default.Overall4.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            if (avgFrags > .4)
+            if (avgFrags > 0.4)
             {
-                return Color.FromRgb(255, 114, 0);
+                splitInts = Properties.Settings.Default.Overall3.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            if (avgFrags > .2)
+            if (avgFrags > 0.2)
             {
-                return Color.FromRgb(255, 66, 0);
+                splitInts = Properties.Settings.Default.Overall2.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            return Color.FromRgb(255, 0, 0);
+            splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+            return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
         } //end GetPlayerBackground
 
         private Color GetPlayerAvgDamageColor(PlayerShipStats player)
         {
+            var splitInts = new List<byte>();
+
             //do we have battles before we begin?
             if (player.Battles == 0)
             {
                 //no battles so we assume they are bad
-                return Color.FromRgb(255, 0, 0);
+                splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             var avgDamage = Math.Round((float)player.DamageDealt / (float)player.Battles, 0);
 
             if (avgDamage > 75000)
             {
-                return Color.FromRgb(184, 0, 169);
+                splitInts = Properties.Settings.Default.Overall9.Split(',')
+                    .Select(x => byte.Parse(x))
+                    .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgDamage > 65000)
             {
-                return Color.FromRgb(0, 148, 17);
+                splitInts = Properties.Settings.Default.Overall8.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgDamage > 55000)
             {
-                return Color.FromRgb(106, 188, 0);
+                splitInts = Properties.Settings.Default.Overall7.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //en dif
 
             if (avgDamage > 45000)
             {
-                return Color.FromRgb(155, 188, 0);
+                splitInts = Properties.Settings.Default.Overall6.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgDamage > 35000)
             {
-                return Color.FromRgb(188, 181, 0);
+                splitInts = Properties.Settings.Default.Overall5.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgDamage > 25000)
             {
-                return Color.FromRgb(255, 174, 0);
+                splitInts = Properties.Settings.Default.Overall4.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgDamage > 15000)
             {
-                return Color.FromRgb(255, 114, 0);
+                splitInts = Properties.Settings.Default.Overall3.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
             if (avgDamage > 10000)
             {
-                return Color.FromRgb(255, 66, 0);
+                splitInts = Properties.Settings.Default.Overall2.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+                return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
             } //end if
 
-            return Color.FromRgb(255, 0, 0);
+            splitInts = Properties.Settings.Default.Overall1.Split(',')
+                       .Select(x => byte.Parse(x))
+                       .ToList();
+
+            return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
         } //end GetPlayerBackground
 
         private void Log(string message)
@@ -1646,5 +1846,11 @@ namespace MatchingMakingMonitor
         {
             Mouse.OverrideCursor = null;
         } //end InstallDirectoryMouseEnter
+
+        private void OpenSettingsWindow(object sender, MouseButtonEventArgs e)
+        {
+            var settingsWindow = new Settings();
+            settingsWindow.Show();
+        } //end OpenSettingsWindow
     } //end class
 } //end namespace
