@@ -97,7 +97,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("184,0,169")]
+        [global::System.Configuration.DefaultSettingValueAttribute("64,16,112")]
         public string Overall9 {
             get {
                 return ((string)(this["Overall9"]));
@@ -109,7 +109,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,148,17")]
+        [global::System.Configuration.DefaultSettingValueAttribute("121,61,182")]
         public string Overall8 {
             get {
                 return ((string)(this["Overall8"]));
@@ -121,7 +121,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("106,188,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("57,114,198")]
         public string Overall7 {
             get {
                 return ((string)(this["Overall7"]));
@@ -133,7 +133,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("155,188,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("64,153,191")]
         public string Overall6 {
             get {
                 return ((string)(this["Overall6"]));
@@ -145,7 +145,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("188,181,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("77,115,38")]
         public string Overall5 {
             get {
                 return ((string)(this["Overall5"]));
@@ -157,7 +157,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255,174,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("204,184,0")]
         public string Overall4 {
             get {
                 return ((string)(this["Overall4"]));
@@ -169,7 +169,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255,114,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("204,122,0")]
         public string Overall3 {
             get {
                 return ((string)(this["Overall3"]));
@@ -181,7 +181,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255,66,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("205,51,51")]
         public string Overall2 {
             get {
                 return ((string)(this["Overall2"]));
@@ -193,13 +193,25 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255, 0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("147,13,13")]
         public string Overall1 {
             get {
                 return ((string)(this["Overall1"]));
             }
             set {
                 this["Overall1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int FontSize {
+            get {
+                return ((int)(this["FontSize"]));
+            }
+            set {
+                this["FontSize"] = value;
             }
         }
     }

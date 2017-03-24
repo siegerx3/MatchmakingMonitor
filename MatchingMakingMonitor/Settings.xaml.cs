@@ -71,6 +71,9 @@ namespace MatchingMakingMonitor
                     .ToList();
 
                 CpOverall1.SelectedColor = Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
+
+                //set the font size box
+                SetFontSize();
             } //end try
             catch (Exception ex)
             {
@@ -238,6 +241,37 @@ namespace MatchingMakingMonitor
             } //end catch
         } //end CpOverall1_OnSelectedColorChanged
 
+        private void SetFontSize()
+        {
+            switch (Properties.Settings.Default.FontSize)
+            {
+                case 8:
+                    ComboTextSize.SelectedIndex = 0;
+                    break;
+                case 9:
+                    ComboTextSize.SelectedIndex = 1;
+                    break;
+                case 10:
+                    ComboTextSize.SelectedIndex = 2;
+                    break;
+                case 11:
+                    ComboTextSize.SelectedIndex = 3;
+                    break;
+                case 12:
+                    ComboTextSize.SelectedIndex = 4;
+                    break;
+                case 13:
+                    ComboTextSize.SelectedIndex = 5;
+                    break;
+                case 14:
+                    ComboTextSize.SelectedIndex = 6;
+                    break;
+                default:
+                    ComboTextSize.SelectedIndex = 4;
+                    break;
+            } //end switch
+        } //end SetFontSize
+
         private void Log(string message)
         {
             try
@@ -252,5 +286,11 @@ namespace MatchingMakingMonitor
                 //ignore
             } //end catch
         } //end Log
-    }
-}
+
+        private void ComboTextSize_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Properties.Settings.Default.FontSize = Convert.ToInt32(((ComboBoxItem)ComboTextSize.SelectedItem).Content.ToString());
+            Properties.Settings.Default.Save();
+        } //end ComboTextSize_OnSelectionChanged
+    } //end class
+} //end namespace

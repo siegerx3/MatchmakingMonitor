@@ -202,17 +202,13 @@ namespace MatchingMakingMonitor
                             else
                             {
                                 //we have a valid player to search, otherwise set this player to no stats
-                                request =
-                                    new RestRequest(
-                                        "/wows/ships/stats/?application_id={appId}&account_id={accountId}&ship_id={shipId}",
-                                        Method.GET);
+                                request = new RestRequest("/wows/ships/stats/?application_id={appId}&account_id={accountId}&ship_id={shipId}", Method.GET);
                                 request.AddUrlSegment("appId", appId);
                                 request.AddUrlSegment("accountId", thisPlayer.account_id.ToString());
                                 request.AddUrlSegment("shipId", p.shipId.ToString());
 
                                 var statResponse = client.Execute(request);
-                                var jsonString = statResponse.Content.Replace("\"" + thisPlayer.account_id + "\":",
-                                    "\"Ships\":");
+                                var jsonString = statResponse.Content.Replace("\"" + thisPlayer.account_id + "\":", "\"Ships\":");
 
                                 //now that we have their actual stats we can process them into a model
                                 var ship = JsonConvert.DeserializeObject<PlayerStatsByShip>(jsonString);
@@ -491,13 +487,15 @@ namespace MatchingMakingMonitor
                         FriendlyGroup.Children.Add(new System.Windows.Controls.Label
                         {
                             Content = "Friendly Team",
-                            Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19))
+                            Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19)),
+                            FontSize = Properties.Settings.Default.FontSize
                         });
 
                         EnemyGroup.Children.Add(new System.Windows.Controls.Label
                         {
                             Content = "Enemy Team",
-                            Foreground = new SolidColorBrush(Color.FromRgb(170, 7, 7))
+                            Foreground = new SolidColorBrush(Color.FromRgb(170, 7, 7)),
+                            FontSize = Properties.Settings.Default.FontSize
                         });
 
                         Log("Added Team Labels");
@@ -568,7 +566,7 @@ namespace MatchingMakingMonitor
                                     {
                                         Text = p.Nickname + " | " + p.AccountId,
                                         FontWeight = FontWeights.Bold,
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = background,
                                         Padding = new Thickness(5)
                                     };
@@ -584,7 +582,7 @@ namespace MatchingMakingMonitor
                                     var tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"No Stats or Hidden",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
                                     };
 
@@ -595,7 +593,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 0);
@@ -605,7 +603,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
                                     };
 
@@ -616,7 +614,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = p.ShipName,
-                                        FontSize = 11.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 1);
@@ -626,7 +624,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
                                     };
 
@@ -637,7 +635,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
                                     };
 
@@ -648,7 +646,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
                                     };
 
@@ -715,7 +713,7 @@ namespace MatchingMakingMonitor
                                     {
                                         Text = p.Nickname + " | " + p.AccountId,
                                         FontWeight = FontWeights.Bold,
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = background,
                                         Padding = new Thickness(5)
                                     };
@@ -731,7 +729,7 @@ namespace MatchingMakingMonitor
                                     var tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Battles:  " + p.Battles,
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
                                     };
 
@@ -742,7 +740,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Wins:  " + p.Wins,
-                                        FontSize = 12.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 0);
@@ -752,7 +750,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Avg Dmg:  " + Math.Round((float)p.DamageDealt / (float)p.Battles, 0),
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
                                     };
 
@@ -763,7 +761,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = p.ShipName,
-                                        FontSize = 11.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 1);
@@ -773,7 +771,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Avg XP:  " + Math.Round((float)p.XpEarned / (float)p.Battles, 0),
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
                                     };
 
@@ -784,7 +782,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Win Rate:  " + Math.Round((float)p.Wins / (float)p.Battles * 100f, 2) + @"%",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
                                     };
 
@@ -795,7 +793,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Avg Frags:  " + Math.Round((float)p.Frags / (float)p.Battles, 2),
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
                                     };
 
@@ -885,7 +883,7 @@ namespace MatchingMakingMonitor
                                     {
                                         Text = p.Nickname + " | " + p.AccountId,
                                         FontWeight = FontWeights.Bold,
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = background,
                                         Padding = new Thickness(5)
                                     };
@@ -901,7 +899,7 @@ namespace MatchingMakingMonitor
                                     var tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"No Stats or Hidden",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
                                     };
 
@@ -912,7 +910,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 0);
@@ -922,7 +920,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
                                     };
 
@@ -933,7 +931,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = p.ShipName,
-                                        FontSize = 11.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 1);
@@ -943,7 +941,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
                                     };
 
@@ -954,7 +952,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
                                     };
 
@@ -965,7 +963,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
                                     };
 
@@ -1032,7 +1030,7 @@ namespace MatchingMakingMonitor
                                     {
                                         Text = p.Nickname + " | " + p.AccountId,
                                         FontWeight = FontWeights.Bold,
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = background,
                                         Padding = new Thickness(5)
                                     };
@@ -1048,7 +1046,7 @@ namespace MatchingMakingMonitor
                                     var tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Battles:  " + p.Battles,
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = p.Battles > 100 ? new SolidColorBrush(Colors.DarkGreen) : new SolidColorBrush(Colors.Black)
                                     };
 
@@ -1059,7 +1057,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Wins:  " + p.Wins,
-                                        FontSize = 12.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 0);
@@ -1069,7 +1067,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Avg Dmg:  " + Math.Round((float)p.DamageDealt / (float)p.Battles, 0),
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgDamageColor(p))
                                     };
 
@@ -1080,7 +1078,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = p.ShipName,
-                                        FontSize = 11.0
+                                        FontSize = Properties.Settings.Default.FontSize
                                     };
 
                                     Grid.SetRow(tempLabel, 1);
@@ -1090,7 +1088,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Avg XP:  " + Math.Round((float)p.XpEarned / (float)p.Battles, 0),
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgXpColor(p))
                                     };
 
@@ -1101,7 +1099,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Win Rate:  " + Math.Round((float)p.Wins / (float)p.Battles * 100f, 2) + @"%",
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerWinRateColor(p))
                                     };
 
@@ -1112,7 +1110,7 @@ namespace MatchingMakingMonitor
                                     tempLabel = new System.Windows.Controls.Label
                                     {
                                         Content = @"Avg Frags:  " + Math.Round((float)p.Frags / (float)p.Battles, 2),
-                                        FontSize = 12.0,
+                                        FontSize = Properties.Settings.Default.FontSize,
                                         Foreground = new SolidColorBrush(GetPlayerAvgFragsColor(p))
                                     };
 

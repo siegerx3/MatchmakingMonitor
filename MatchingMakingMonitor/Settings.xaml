@@ -6,33 +6,53 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:MatchingMakingMonitor"
         mc:Ignorable="d"
-        Title="Settings" Height="400" Width="400">
-    <Grid>
+        Title="Settings" Height="452.459" Width="400">
+    <Grid Height="417" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="FriendlyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true" Grid.Column="0">
-            <TextBlock Text="System Colors" />
+        <StackPanel x:Name="ColorPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true" Grid.Column="0">
+            <TextBlock Text="Super-unicum" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall9" SelectedColorChanged="CpOverall9_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Unicum" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall8" SelectedColorChanged="CpOverall8_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Great" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall7" SelectedColorChanged="CpOverall7_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Very Good" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall6" SelectedColorChanged="CpOverall6_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Good" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall5" SelectedColorChanged="CpOverall5_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Average" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall4" SelectedColorChanged="CpOverall4_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Below Average" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall3" SelectedColorChanged="CpOverall3_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Bad" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall2" SelectedColorChanged="CpOverall2_OnSelectedColorChanged"></xctk:ColorPicker>
+            <TextBlock Text="Very Bad" />
             <Separator></Separator>
             <xctk:ColorPicker Name="CpOverall1" SelectedColorChanged="CpOverall1_OnSelectedColorChanged"></xctk:ColorPicker>
         </StackPanel>
-        <TextBlock Text="The top picker is for exceptional players while the bottom is for the worst of the worst.  Adjust to your liking!" Grid.Column="1" TextWrapping="Wrap" Margin="10,10,10,224" />
+        <StackPanel x:Name="TextPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true" Grid.Column="1">
+            <TextBlock Text="Text Size" Margin="10,0,0,0" />
+            <ComboBox x:Name="ComboTextSize" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,0,0,0" SelectionChanged="ComboTextSize_OnSelectionChanged">
+                <ComboBoxItem Content="8"/>
+                <ComboBoxItem Content="9"/>
+                <ComboBoxItem Content="10"/>
+                <ComboBoxItem Content="11"/>
+                <ComboBoxItem Content="12"/>
+                <ComboBoxItem Content="13"/>
+                <ComboBoxItem Content="14"/>
+            </ComboBox>
+        </StackPanel>
+
     </Grid>
 </Window>
