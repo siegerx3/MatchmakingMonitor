@@ -5,7 +5,7 @@
     <Setting Name="InstallDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Games\World_of_Warships</Value>
     </Setting>
-    <Setting Name="AppId" Type="System.String" Scope="Application">
+    <Setting Name="AppIdNA" Type="System.String" Scope="Application">
       <Value Profile="(Default)">04c8800d343d496e7ae9c94ba6e51a0b</Value>
     </Setting>
     <Setting Name="LastReplay" Type="System.String" Scope="User">
@@ -55,6 +55,18 @@
     </Setting>
     <Setting Name="Token" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="BaseUrlNA" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://api.worldofwarships.com</Value>
+    </Setting>
+    <Setting Name="BaseUrlEU" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://api.worldofwarships.eu</Value>
+    </Setting>
+    <Setting Name="BaseUrlRU" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://api.worldofwarships.ru</Value>
+    </Setting>
+    <Setting Name="BaseUrlSEA" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://api.worldofwarships.asia</Value>
     </Setting>
   </Settings>
 </SettingsFile>

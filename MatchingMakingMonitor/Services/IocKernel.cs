@@ -20,6 +20,9 @@ namespace MatchingMakingMonitor.Services
 
 				kernel.Bind<LoggingService>().To<LoggingService>().InSingletonScope();
 				kernel.Bind<SocketIOService>().To<SocketIOService>().InSingletonScope();
+				kernel.Bind<WatcherService>().To<WatcherService>().InSingletonScope();
+				kernel.Bind<StatsService>().To<StatsService>().InSingletonScope();
+				kernel.Bind<ApiService>().To<ApiService>().InSingletonScope();
 				kernel.Bind<Settings>().To<Settings>().InSingletonScope();
 			}
 		}

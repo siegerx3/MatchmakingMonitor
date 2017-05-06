@@ -24,7 +24,7 @@ namespace MatchingMakingMonitor
 	{
 		private readonly List<ShipModel> _ships;
 		private SocketIOService socketIOService;
-		private List<PlayerShipStats> lastFetchedStats;
+		private List<DisplayPlayer> lastFetchedStats;
 
 
 		public MainWindow(SocketIOService socketIOService)
@@ -40,12 +40,6 @@ namespace MatchingMakingMonitor
 				//get our list of ships for later use
 				_ships = GetShips();
 
-				//start our timer
-				var checkTimer = new System.Windows.Threading.DispatcherTimer();
-				checkTimer.Tick += CheckTimer_Tick;
-				checkTimer.Interval = new TimeSpan(0, 0, 10);
-				checkTimer.Start();
-
 				socketIOService.Hub.OnStatsRequested.Subscribe(_ =>
 				{
 					if (this.lastFetchedStats != null)
@@ -59,109 +53,23 @@ namespace MatchingMakingMonitor
 					ConnectionText.Content = state.ToString();
 				});
 
-				//set the players region
-				UpdatePlayerRegion();
 
-				if (Directory.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays"))
-				{
-					TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
-					TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"].ToString();
-				} //end if
-				else
-				{
-					TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-					TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
-																					" - Invalid Path or Replays not enabled! - Click here to update!";
-				} //end else
 			} //end try
 			catch (Exception ex)
 			{
-				//ignore
-				TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-				TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
-																				" - Invalid Path or Replays not enabled! - Click here to update!";
-
 				Log("Exception Occurred During Initialization:  " + ex.Message);
 			} //end catch
 
 			Log("Initialization Complete");
 		} //end MainWindow
 
-		private void InstallDirectoryClick(object sender, MouseButtonEventArgs e)
-		{
-			Log("Install Directory Clicked");
-
-			//the directory does not exist in the default location, ask the user to tell us where it is.
-			var folderBrowser = new FolderBrowserDialog();
-			var result = folderBrowser.ShowDialog();
-
-			Log("Showing Dialog");
-
-			if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
-			{
-				if (Directory.Exists(folderBrowser.SelectedPath + "/replays") && File.Exists(folderBrowser.SelectedPath + "/WorldOfWarships.exe"))
-				{
-					TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
-					TxtInstallDirectoryValue.Text = folderBrowser.SelectedPath;
-
-					Properties.Settings.Default["InstallDirectory"] = folderBrowser.SelectedPath;
-					Properties.Settings.Default.Save();
-
-					Log("Valid Install Directory Chosen " + folderBrowser.SelectedPath);
-				} //end if
-				else
-				{
-					TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-					TxtInstallDirectoryValue.Text = folderBrowser.SelectedPath + " - Invalid Path or Replays not enabled! - Click here to update!";
-
-					Log("Invalid Install Directory Chosen " + folderBrowser.SelectedPath);
-				} //end else
-			} //end if
-			else if (result == System.Windows.Forms.DialogResult.Cancel)
-			{
-				Log("Dialog was Cancelled by the User");
-
-				if (Directory.Exists(Properties.Settings.Default["InstallDirectory"] + "/replays") && File.Exists(folderBrowser.SelectedPath + "/WorldOfWarships.exe"))
-				{
-					TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Color.FromRgb(17, 143, 19));
-					TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"].ToString();
-
-					Log("Dialog was Cancelled by the User by path is valid");
-				} //end if
-				else
-				{
-					TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-					TxtInstallDirectoryValue.Text = Properties.Settings.Default["InstallDirectory"] +
-																					" - Invalid Path or Replays not enabled! - Click here to update!";
-
-					Log("Dialog was Cancelled by the User and the path is still invalid");
-				} //end else
-			} //end else if
-			else
-			{
-				TxtInstallDirectoryValue.Foreground = new SolidColorBrush(Colors.OrangeRed);
-				TxtInstallDirectoryValue.Text = "Please Choose a Valid Path!";
-
-				Log("Dialog was closed by an unknown source");
-			} //end else
-		} //end InstallDirectoryClick
-
-		private void ComRegion_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			//update the players choice
-			Properties.Settings.Default["Region"] = ((ComboBoxItem)ComRegion.SelectedItem).Content.ToString();
-			Properties.Settings.Default.Save();
-
-			Log("Region was changed to " + Properties.Settings.Default["Region"]);
-		} //end ComRegion_SelectionChanged
-
-		private async Task<List<PlayerShipStats>> FetchResults(ReplayModel replay, string region)
+		private async Task<List<DisplayPlayer>> FetchResults(ReplayModel replay, string region)
 		{
 			Log("Fetching Results");
 
 			return await Task.Run(() =>
 			{
-				var retList = new List<PlayerShipStats>();
+				var retList = new List<DisplayPlayer>();
 
 				Parallel.ForEach(replay.vehicles, new ParallelOptions { MaxDegreeOfParallelism = 5 }, p =>
 					{
@@ -206,7 +114,7 @@ namespace MatchingMakingMonitor
 								if (thisPlayer == null)
 								{
 									//we didn't find this player set stats to 0
-									var stat = new PlayerShipStats
+									var stat = new DisplayPlayer
 									{
 										ShipId = long.Parse(p.shipId.ToString()),
 										ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
@@ -238,7 +146,7 @@ namespace MatchingMakingMonitor
 										var s = ship.data.Ships.FirstOrDefault();
 
 										//we have their stats, pack it into a model
-										var stat = new PlayerShipStats
+										var stat = new DisplayPlayer
 										{
 											ShipId = long.Parse(s.ship_id),
 											ShipName = _ships.FirstOrDefault(x => x.ShipId == s.ship_id)?.ShipName,
@@ -303,7 +211,7 @@ namespace MatchingMakingMonitor
 									else
 									{
 										//no stats, we need to show them anyways
-										var stat = new PlayerShipStats
+										var stat = new DisplayPlayer
 										{
 											ShipId = long.Parse(p.shipId.ToString()),
 											ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
@@ -322,7 +230,7 @@ namespace MatchingMakingMonitor
 							{
 								//no stats
 								//we didn't find this player set stats to 0
-								var stat = new PlayerShipStats
+								var stat = new DisplayPlayer
 								{
 									ShipId = long.Parse(p.shipId.ToString()),
 									ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
@@ -341,7 +249,7 @@ namespace MatchingMakingMonitor
 							//ignore
 							Log("An Error Occurred While Fetching Players" + ex.Message);
 
-							var stat = new PlayerShipStats
+							var stat = new DisplayPlayer
 							{
 								ShipId = long.Parse(p.shipId.ToString()),
 								ShipName = _ships.FirstOrDefault(x => x.ShipId == p.shipId.ToString())?.ShipName,
@@ -370,33 +278,6 @@ namespace MatchingMakingMonitor
 			Log("Clearing Results after Battle");
 		} //end ClearResults
 
-		private void UpdatePlayerRegion()
-		{
-			switch (Properties.Settings.Default["Region"].ToString())
-			{
-				case "NA":
-					ComRegion.SelectedIndex = 0;
-
-					break;
-				case "EU":
-					ComRegion.SelectedIndex = 1;
-
-					break;
-				case "RU":
-					ComRegion.SelectedIndex = 2;
-
-					break;
-				case "SEA":
-					ComRegion.SelectedIndex = 3;
-
-					break;
-				default:
-					ComRegion.SelectedIndex = 0;
-
-					break;
-			} //end switch
-		} //edn UpdatePlayerRegion
-
 		private bool IsNewReplay(ReplayModel newReplay)
 		{
 			try
@@ -406,7 +287,8 @@ namespace MatchingMakingMonitor
 					var oldReplay = Properties.Settings.Default["LastReplay"].ToString();
 
 					//it's not empty, so we can compare them now.
-					if (oldReplay != newReplay.dateTime)
+					//if (oldReplay != newReplay.dateTime)
+					if(1 == 2)
 					{
 						//this is a new replay, update our settings
 						Properties.Settings.Default["LastReplay"] = newReplay.dateTime;
@@ -1197,7 +1079,7 @@ namespace MatchingMakingMonitor
 			} //end catch
 		} //end GetShips
 
-		private Color GetPlayerBackground(PlayerShipStats player)
+		private Color GetPlayerBackground(DisplayPlayer player)
 		{
 			var splitInts = new List<byte>();
 
@@ -1386,7 +1268,7 @@ namespace MatchingMakingMonitor
 			return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
 		} //end GetPlayerBackground
 
-		private Color GetPlayerWinRateColor(PlayerShipStats player)
+		private Color GetPlayerWinRateColor(DisplayPlayer player)
 		{
 			var splitInts = new List<byte>();
 
@@ -1482,7 +1364,7 @@ namespace MatchingMakingMonitor
 			return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
 		} //end GetPlayerBackground
 
-		private Color GetPlayerAvgXpColor(PlayerShipStats player)
+		private Color GetPlayerAvgXpColor(DisplayPlayer player)
 		{
 			var splitInts = new List<byte>();
 
@@ -1578,7 +1460,7 @@ namespace MatchingMakingMonitor
 			return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
 		} //end GetPlayerBackground
 
-		private Color GetPlayerAvgFragsColor(PlayerShipStats player)
+		private Color GetPlayerAvgFragsColor(DisplayPlayer player)
 		{
 			var splitInts = new List<byte>();
 
@@ -1674,7 +1556,7 @@ namespace MatchingMakingMonitor
 			return Color.FromRgb(splitInts[0], splitInts[1], splitInts[2]);
 		} //end GetPlayerBackground
 
-		private Color GetPlayerAvgDamageColor(PlayerShipStats player)
+		private Color GetPlayerAvgDamageColor(DisplayPlayer player)
 		{
 			var splitInts = new List<byte>();
 
@@ -1820,56 +1702,6 @@ namespace MatchingMakingMonitor
 		{
 			Mouse.OverrideCursor = null;
 		} //end PlayerDetailsMouseLeave
-
-		private void LogoClick(object sender, MouseButtonEventArgs e)
-		{
-			try
-			{
-				System.Diagnostics.Process.Start("https://wowreplays.com");
-			} //end try
-			catch (Exception ex)
-			{
-				Log("Exception Throw on Logo Click: " + ex.Message);
-			} //end catch
-		} //end LogoClick
-
-		private void LogoMouseEnter(object sender, MouseEventArgs e)
-		{
-			try
-			{
-				Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
-			} //end try
-			catch (Exception ex)
-			{
-				Log("Exception Thrown Changing Mouse Cursor: " + ex.Message);
-
-				Mouse.OverrideCursor = null;
-			} //end catch
-		} //end LogoMouseEnter
-
-		private void LogoMouseLeave(object sender, MouseEventArgs e)
-		{
-			Mouse.OverrideCursor = null;
-		} //end LogoMouseLeave
-
-		private void InstallDirectoryMouseEnter(object sender, MouseEventArgs e)
-		{
-			try
-			{
-				Mouse.OverrideCursor = System.Windows.Input.Cursors.Hand;
-			} //end try
-			catch (Exception ex)
-			{
-				Log("Exception Thrown Changing Mouse Cursor: " + ex.Message);
-
-				Mouse.OverrideCursor = null;
-			} //end catch
-		} //end InstallDirectoryMouseEnter
-
-		private void InstallDirectoryMouseLeave(object sender, MouseEventArgs e)
-		{
-			Mouse.OverrideCursor = null;
-		} //end InstallDirectoryMouseEnter
 
 		private void OpenQrCodeWindow(object sender, MouseButtonEventArgs e)
 		{

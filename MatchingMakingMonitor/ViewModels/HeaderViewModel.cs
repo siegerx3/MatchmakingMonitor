@@ -1,4 +1,5 @@
 ﻿using MatchingMakingMonitor.Services;
+using MatchingMakingMonitor.SocketIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +13,38 @@ namespace MatchingMakingMonitor.ViewModels
 		public RelayCommand LogoClickCommand { get; set; }
 		public RelayCommand SettingsCommand { get; set; }
 
+		private string connectionState;
+
+		public string ConnectionState
+		{
+			get { return connectionState; }
+			set
+			{
+				connectionState = value;
+				FirePropertyChanged();
+			}
+		}
+
+
 		private LoggingService loggingService;
+		private SocketIOService socketIOService;
 		public HeaderViewModel()
 		{
 
 		}
 
-		public HeaderViewModel(LoggingService loggingService)
+		public HeaderViewModel(LoggingService loggingService, SocketIOService socketIOService)
 		{
 			this.loggingService = loggingService;
+			this.socketIOService = socketIOService;
+
 			this.LogoClickCommand = new RelayCommand(logoClick);
 			this.SettingsCommand = new RelayCommand(settingsClick);
+
+			this.socketIOService.StateChanged.Subscribe(state =>
+			{
+				ConnectionState = state.ToString();
+			});
 		}
 
 		private void logoClick()

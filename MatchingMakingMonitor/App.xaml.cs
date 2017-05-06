@@ -29,14 +29,15 @@ namespace MatchingMakingMonitor
 			Current.MainWindow.Show();
 
 			socketIOService = IoCKernel.Get<SocketIOService>();
-			//socketIOService.Connect();
-			//socketIOService.StateChanged.Where(s => s == ConnectionState.Connected).Subscribe(_ =>
-			//{
-			//	if (!string.IsNullOrEmpty(MatchingMakingMonitor.Properties.Settings.Default.Token))
-			//	{
-			//		socketIOService.Hub.SetToken(MatchingMakingMonitor.Properties.Settings.Default.Token);
-			//	}
-			//});
+			var ss = IoCKernel.Get<StatsService>();
+			socketIOService.Connect();
+			socketIOService.StateChanged.Where(s => s == ConnectionState.Connected).Subscribe(_ =>
+			{
+				if (!string.IsNullOrEmpty(MatchingMakingMonitor.Properties.Settings.Default.Token))
+				{
+					socketIOService.Hub.SetToken(MatchingMakingMonitor.Properties.Settings.Default.Token);
+				}
+			});
 			base.OnStartup(e);
 		}
 

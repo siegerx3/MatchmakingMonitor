@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net45\System.Reactive.Core.dll</HintPath>
     </Reference>
@@ -117,9 +118,12 @@
     <Compile Include="QrCodeWindow.xaml.cs">
       <DependentUpon>QrCodeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\ApiService.cs" />
     <Compile Include="Services\IocKernel.cs" />
     <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Services\Settings.cs" />
+    <Compile Include="Services\StatsService.cs" />
+    <Compile Include="Services\WatcherService.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -156,7 +160,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlayerShipStats.cs" />
+    <Compile Include="Models\DisplayPlayer.cs" />
     <Compile Include="Models\PlayerStatsByShip.cs" />
     <Compile Include="Models\ReplayModel.cs" />
     <Compile Include="Models\ShipModel.cs" />

@@ -38,9 +38,9 @@ namespace MatchingMakingMonitor.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("04c8800d343d496e7ae9c94ba6e51a0b")]
-        public string AppId {
+        public string AppIdNA {
             get {
-                return ((string)(this["AppId"]));
+                return ((string)(this["AppIdNA"]));
             }
         }
         
@@ -224,6 +224,42 @@ namespace MatchingMakingMonitor.Properties {
             }
             set {
                 this["Token"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api.worldofwarships.com")]
+        public string BaseUrlNA {
+            get {
+                return ((string)(this["BaseUrlNA"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api.worldofwarships.eu")]
+        public string BaseUrlEU {
+            get {
+                return ((string)(this["BaseUrlEU"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api.worldofwarships.ru")]
+        public string BaseUrlRU {
+            get {
+                return ((string)(this["BaseUrlRU"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api.worldofwarships.asia")]
+        public string BaseUrlSEA {
+            get {
+                return ((string)(this["BaseUrlSEA"]));
             }
         }
     }

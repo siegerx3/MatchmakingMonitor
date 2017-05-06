@@ -15,48 +15,63 @@
         MinWidth="1280"
 				DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
 	<Grid>
-		<DockPanel Name="Header" Background="#FF333333" Height="47" VerticalAlignment="Top" 
+		<StackPanel VerticalAlignment="Top" Orientation="Vertical">
+			<DockPanel Name="Header" Background="#FF333333" Height="47"
 							 DataContext="{Binding HeaderViewModel, Source={StaticResource ViewModelLocator}}">
-			<Button Command="{Binding LogoClickCommand}" Cursor="Hand">
-				<Button.Template>
-					<ControlTemplate TargetType="Button">
-						<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-							<Image HorizontalAlignment="Left" VerticalAlignment="Center"  Height="32" Margin="10,0,0,0" Width="32" Source="Images/32x32Icon.png" RenderTransformOrigin="1,0.094"/>
-							<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,-2,0,0" TextWrapping="Wrap" Text="WoWReplays.com" Foreground="White" FontSize="18"/>
-						</StackPanel>
-					</ControlTemplate>
-				</Button.Template>
-			</Button>
+				<Button Command="{Binding LogoClickCommand}" Cursor="Hand">
+					<Button.Template>
+						<ControlTemplate TargetType="Button">
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image HorizontalAlignment="Left" VerticalAlignment="Center"  Height="32" Margin="10,0,0,0" Width="32" Source="Images/32x32Icon.png" RenderTransformOrigin="1,0.094"/>
+								<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,-2,0,0" TextWrapping="Wrap" Text="WoWReplays.com" Foreground="White" FontSize="18"/>
+							</StackPanel>
+						</ControlTemplate>
+					</Button.Template>
+				</Button>
 
-			<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" >
-				<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
-					<Image x:Name="ConnectionIcon" Margin="0,0,0,0" Source="Images/connectionIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30" Cursor="Hand"/>
-					<Label x:Name="ConnectionText" Content="Not Connected" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="13"  VerticalAlignment="Center" Height="32" Foreground="White" />
+				<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" >
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
+						<Image x:Name="ConnectionIcon" Margin="0,0,0,0" Source="Images/connectionIcon.png" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
+						<Label x:Name="ConnectionText" Content="{Binding ConnectionState}" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="13"  VerticalAlignment="Center" Height="32" Foreground="White" />
+					</StackPanel>
+
+					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+						<Image x:Name="QrCode" Margin="0,0,10,0" Source="Images/qrcodeIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+						<Button Command="{Binding SettingsCommand}">
+							<Button.Template>
+								<ControlTemplate>
+									<Image x:Name="ImgSettings" Source="Images/gearIcon.png" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+								</ControlTemplate>
+							</Button.Template>
+						</Button>
+					</StackPanel>
 				</StackPanel>
-				
-				<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-					<Image x:Name="QrCode" Margin="0,0,10,0" Source="Images/qrcodeIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
-					<Button Command="{Binding SettingsCommand}">
+			</DockPanel>
+			<DockPanel DataContext="{Binding SubHeaderViewModel, Source={StaticResource ViewModelLocator}}" Height="31">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+					<Label x:Name="LblRegion" Content="Region:" Margin="0,-3,0,0" VerticalAlignment="Center" Height="26" />
+					<ComboBox x:Name="ComRegion" VerticalAlignment="Center" Width="90" Height="26" 
+										ItemsSource="{Binding Regions}"
+										SelectedValue="{Binding Region}"
+										IsEnabled="{Binding EnableUI}">
+					</ComboBox>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock x:Name="LblInstallDirectory" Text="Installation Directory:&#xA;" Margin="20,0,0,0" VerticalAlignment="Center" Height="19"/>
+					<Button Command="{Binding PathClickCommand}" Cursor="Hand" Margin="10,0,0,0" IsEnabled="{Binding EnableUI}">
 						<Button.Template>
-							<ControlTemplate>
-								<Image x:Name="ImgSettings" Source="Images/gearIcon.png" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+							<ControlTemplate TargetType="Button">
+								<TextBlock x:Name="TxtInstallDirectoryValue" Text="{Binding InstallDirectoryText}" Foreground="{Binding InstallDirectoryColor}" VerticalAlignment="Center" Height="19"/>
 							</ControlTemplate>
 						</Button.Template>
 					</Button>
 				</StackPanel>
-			</StackPanel>
-		</DockPanel>
-		
-		<Label x:Name="LblRegion" Content="Region:" HorizontalAlignment="Left" Margin="2,46,0,0" VerticalAlignment="Top" Height="31"/>
-		<ComboBox x:Name="ComRegion" HorizontalAlignment="Left" Margin="56,51,0,0" VerticalAlignment="Top" Width="90" SelectionChanged="ComRegion_SelectionChanged" Height="26">
-			<ComboBoxItem Content="NA"/>
-			<ComboBoxItem Content="EU"/>
-			<ComboBoxItem Content="RU"/>
-			<ComboBoxItem Content="SEA"/>
-		</ComboBox>
-		<Label x:Name="LblInstallDirectory" Content="Installation Directory:&#xA;" HorizontalAlignment="Left" Margin="160,46,0,0" VerticalAlignment="Top" Height="31"/>
-		<TextBlock x:Name="TxtInstallDirectoryValue" HorizontalAlignment="Left" Margin="287,52,0,0" TextWrapping="Wrap" Text="Check Install Directory" VerticalAlignment="Top" MouseDown="InstallDirectoryClick" MouseEnter="InstallDirectoryMouseEnter" MouseLeave="InstallDirectoryMouseLeave" Height="19"/>
-		<Label x:Name="LblStatus" Content="Not Currently in Battle..." Margin="0,47,10,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+					<Label Foreground="{Binding StatusColor}" x:Name="LblStatus" Content="{Binding StatusText}" Margin="0,0,10,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+					<ProgressBar Width="100" Height="20" IsIndeterminate="True" Visibility="{Binding ShowProgress}"></ProgressBar>
+				</StackPanel>
+			</DockPanel>
+		</StackPanel>
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
