@@ -61,6 +61,18 @@ namespace MatchingMakingMonitor.ViewModels
 			}
 		}
 
+		public StatsViewModel StatsViewModel
+		{
+			get
+			{
+				if (IsInDesignMode())
+				{
+					return new StatsViewModel();
+				}
+				return IoCKernel.Get<StatsViewModel>();
+			}
+		}
+
 		private bool IsInDesignMode()
 		{
 			return DesignerProperties.GetIsInDesignMode(dummy);

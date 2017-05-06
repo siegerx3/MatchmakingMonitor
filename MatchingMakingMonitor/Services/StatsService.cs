@@ -8,13 +8,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MatchingMakingMonitor.Services
 {
 	public class StatsService
 	{
-		private ReplayModel currentReplay;
+		private Replay currentReplay;
 		private string currentRegion;
+		private static string[] colors = new string[9] { "Overall9", "Overall8", "Overall7", "Overall6", "Overall5", "Overall4", "Overall3", "Overall2", "Overall1" };
 
 		private LoggingService loggingService;
 		private WatcherService watcherService;
@@ -24,6 +26,9 @@ namespace MatchingMakingMonitor.Services
 		private BehaviorSubject<StatsStatus> statsStatusChangedSubject;
 		public IObservable<StatsStatus> StatsStatusChanged => statsStatusChangedSubject.AsObservable();
 
+		private BehaviorSubject<List<DisplayPlayer>> statsSubject;
+		public IObservable<List<DisplayPlayer>> Stats => statsSubject.Where(s => s != null).AsObservable();
+
 		public StatsService(LoggingService loggingService, Settings settings, WatcherService watcherService, ApiService apiService)
 		{
 			this.loggingService = loggingService;
@@ -32,6 +37,7 @@ namespace MatchingMakingMonitor.Services
 			this.settings = settings;
 
 			this.statsStatusChangedSubject = new BehaviorSubject<StatsStatus>(StatsStatus.Waiting);
+			this.statsSubject = new BehaviorSubject<List<DisplayPlayer>>(null);
 
 			this.watcherService.MatchFound.Subscribe(path =>
 			{
@@ -44,12 +50,12 @@ namespace MatchingMakingMonitor.Services
 
 		private async Task statsFound(string path)
 		{
-			ReplayModel replay = null;
+			Replay replay = null;
 			using (var sr = new StreamReader(path))
 			{
 				try
 				{
-					replay = await Task.Run(async () => { return JsonConvert.DeserializeObject<ReplayModel>(await sr.ReadToEndAsync()); });
+					replay = await Task.Run(async () => { return JsonConvert.DeserializeObject<Replay>(await sr.ReadToEndAsync()); });
 				}
 				catch (Exception e)
 				{
@@ -64,10 +70,21 @@ namespace MatchingMakingMonitor.Services
 					currentReplay = replay;
 					currentRegion = region;
 					statsStatusChangedSubject.OnNext(StatsStatus.Fetching);
-					var stats = await apiService.Stats(currentReplay);
-					if (stats.Count() > 6)
+					var players = await apiService.Players(currentReplay);
+					if (players.Count() > 6)
 					{
-						statsStatusChangedSubject.OnNext(StatsStatus.Fetched);
+						try
+						{
+							var stats = await computeDisplayPlayer(players);
+							statsStatusChangedSubject.OnNext(StatsStatus.Fetched);
+							statsSubject.OnNext(stats);
+						}
+						catch (Exception e)
+						{
+							loggingService.Log("Exception occured when computing display player. " + e.Message);
+							statsStatusChangedSubject.OnNext(StatsStatus.Waiting);
+						}
+
 					}
 					else
 					{
@@ -75,6 +92,17 @@ namespace MatchingMakingMonitor.Services
 					}
 				}
 			}
+		}
+
+		private async Task<List<DisplayPlayer>> computeDisplayPlayer(IEnumerable<PlayerShip> players)
+		{
+			var brushes = colors.Select(name =>
+			{
+				var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(settings.Get<string>(name)));
+				brush.Freeze();
+				return brush;
+			}).ToArray();
+			return await Task.Run(() => players.Select(p => new DisplayPlayer(p, brushes)).ToList());
 		}
 	}
 

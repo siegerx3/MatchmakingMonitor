@@ -1,66 +1,102 @@
-﻿namespace MatchingMakingMonitor.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+
+namespace MatchingMakingMonitor.Models
 {
-    public class DisplayPlayer
-    {
-        public long ShipId { get; set; }
-        public long AccountId { get; set; }
-        public string Nickname { get; set; }
-        public int Relationship { get; set; }
-        public string ShipName { get; set; }
-        public string ShipType { get; set; }
-        public string ShipTier { get; set; }
-        public int Distance { get; set; }
-        public string LastBattle { get; set; }
-        public int MaxFrags { get; set; }
-        public int DamageToBuildings { get; set; }
-        public int SuppressionCount { get; set; }
-        public int MaxDamageScouting { get; set; }
-        public int ArtAgro { get; set; }
-        public int ShipSpotted { get; set; }
-        public int MaxDamageToBuildings { get; set; }
-        public int TorpedoAgro { get; set; }
-        public int MaxShipsSpotted { get; set; }
-        public int TeamCapturePoints { get; set; }
-        public int DamageScouting { get; set; }
-        public int MaxTotalAgro { get; set; }
-        public int MaxSuppressionCount { get; set; }
-        public int TeamDroppedCapPoints { get; set; }
-        public int BattlesSince512 { get; set; }
-        public int Frags { get; set; }
-        public int CapturePoints { get; set; }
-        public int Draws { get; set; }
-        public int Wins { get; set; }
-        public int Losses { get; set; }
-        public int MaxXp { get; set; }
-        public int PlanesKilled { get; set; }
-        public int MaxPlanesKilled { get; set; }
-        public int TorpMaxFrags { get; set; }
-        public int TorpFrags { get; set; }
-        public int TorpShots { get; set; }
-        public int TorpHits { get; set; }
-        public int Battles { get; set; }
-        public int MaxDamage { get; set; }
-        public long DamageDealt { get; set; }
-        public int AircraftMaxFrags { get; set; }
-        public int AircraftFrags { get; set; }
-        public int RamMaxFrags { get; set; }
-        public int RamFrags { get; set; }
-        public int MainBatteryMaxFrags { get; set; }
-        public int MainBatteryFrags { get; set; }
-        public int MainBatteryHits { get; set; }
-        public int MainBatteryShots { get; set; }
-        public int SecondaryMaxFrags { get; set; }
-        public int SecondaryFrags { get; set; }
-        public long SecondaryHits { get; set; }
-        public long SecondaryShots { get; set; }
-        public int SurvivedWins { get; set; }
-        public int XpEarned { get; set; }
-        public int SurvivedBattles { get; set; }
-        public int DroppedCapPoints { get; set; }
-        public string LastUpdatedWG { get; set; }
-        public int TotalBattles { get; set; }
-        public bool IsPrivate { get; set; }
-        public int ShipRating { get; set; }
-        public int Passiveness { get; set; }
-    } //end class
-} //end namespace
+	public class DisplayPlayer
+	{
+		public PlayerShip Player { get; set; }
+
+		public SolidColorBrush Background { get; private set; }
+		public SolidColorBrush ColorName { get; private set; } = Brushes.Black;
+		public SolidColorBrush ColorWinRate { get; private set; } = Brushes.Black;
+		public SolidColorBrush ColorAvgXp { get; private set; } = Brushes.Black;
+		public SolidColorBrush ColorAvgFrags { get; private set; } = Brushes.Black;
+		public SolidColorBrush ColorAvgDamage { get; private set; } = Brushes.Black;
+
+		public string TextBattles => $"Battles: {Player.Battles}";
+		public string TextWins => $"Wins: {Player.Wins}";
+		public string TextWinRate => $"WinRate: {WinRate}%";
+		public string TextAvgXp => $"Avg XP: {AvgXp}";
+		public string TextAvgFrags => $"Avg Frags: {AvgFrags}";
+		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
+
+		public string Name => Player?.Nickname;
+		public string ShipName => Player?.ShipName;
+		public string AccountId => Player?.AccountId.ToString();
+
+		public double WinRate { get; private set; }
+		public double AvgXp { get; private set; }
+		public double AvgFrags { get; private set; }
+		public double AvgDamage { get; private set; }
+
+		public Visibility StatsVisibility
+		{
+			get
+			{
+				return Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
+			}
+		}
+
+		public Visibility TextVisibility
+		{
+			get
+			{
+				return !Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
+			}
+		}
+
+		private SolidColorBrush[] brushes;
+
+		public DisplayPlayer(PlayerShip player, SolidColorBrush[] brushes) : this()
+		{
+			this.Player = player;
+			this.brushes = brushes;
+			WinRate = Math.Round(player.Wins / player.Battles * 100, 2);
+			AvgFrags = Math.Round(player.Frags / player.Battles, 2);
+			AvgXp = Math.Round(player.XpEarned / player.Battles, 0);
+			AvgDamage = Math.Round(player.DamageDealt / player.Battles, 0);
+			ColorAvgDamage = getAvgDamageColor();
+		}
+
+		public DisplayPlayer()
+		{
+			var color = ColorName.CloneCurrentValue();
+			color.Opacity = 0.2;
+			color.Freeze();
+			Background = color;
+		}
+
+		public static DisplayPlayer MockPlayer(bool privateOrHidden = false)
+		{
+			return new DisplayPlayer()
+			{
+				Player = new PlayerShip() { Nickname = "Test", AccountId = 12323325, ShipName = "ShipName", IsPrivateOrHidden = privateOrHidden },
+				WinRate = 40,
+				AvgFrags = 5,
+				AvgXp = 1234,
+				AvgDamage = 123242,
+			};
+		}
+
+		private static int[] dmgBoundaries = new int[9] { 75000, 65000, 55000, 45000, 35000, 25000, 15000, 10000, 0 };
+		#region NameColor
+		private SolidColorBrush getAvgDamageColor()
+		{
+			for (int i = 0; i < dmgBoundaries.Length; i++)
+			{
+				if (AvgDamage >= dmgBoundaries[i])
+				{
+					return brushes[i];
+				}
+			}
+			return Brushes.Black;
+		}
+		#endregion
+	}
+}

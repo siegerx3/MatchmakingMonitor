@@ -14,7 +14,7 @@
         Height="768"
         MinWidth="1280"
 				DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
-	<Grid>
+	<StackPanel Orientation="Vertical">
 		<StackPanel VerticalAlignment="Top" Orientation="Vertical">
 			<DockPanel Name="Header" Background="#FF333333" Height="47"
 							 DataContext="{Binding HeaderViewModel, Source={StaticResource ViewModelLocator}}">
@@ -36,7 +36,7 @@
 					</StackPanel>
 
 					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-						<Image x:Name="QrCode" Margin="0,0,10,0" Source="Images/qrcodeIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+						<!--<Image x:Name="QrCode" Margin="0,0,10,0" Source="Images/qrcodeIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>-->
 						<Button Command="{Binding SettingsCommand}">
 							<Button.Template>
 								<ControlTemplate>
@@ -49,7 +49,7 @@
 			</DockPanel>
 			<DockPanel DataContext="{Binding SubHeaderViewModel, Source={StaticResource ViewModelLocator}}" Height="31">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
-					<Label x:Name="LblRegion" Content="Region:" Margin="0,-3,0,0" VerticalAlignment="Center" Height="26" />
+					<TextBlock x:Name="LblRegion" Text="Region:" Margin="0,0,10,0" VerticalAlignment="Center" />
 					<ComboBox x:Name="ComRegion" VerticalAlignment="Center" Width="90" Height="26" 
 										ItemsSource="{Binding Regions}"
 										SelectedValue="{Binding Region}"
@@ -68,21 +68,61 @@
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
 					<Label Foreground="{Binding StatusColor}" x:Name="LblStatus" Content="{Binding StatusText}" Margin="0,0,10,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-					<ProgressBar Width="100" Height="20" IsIndeterminate="True" Visibility="{Binding ShowProgress}"></ProgressBar>
+					<ProgressBar Width="100" Height="15" IsIndeterminate="True" Visibility="{Binding ShowProgress}"></ProgressBar>
 				</StackPanel>
 			</DockPanel>
 		</StackPanel>
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"></ColumnDefinition>
-				<ColumnDefinition Width="1*"></ColumnDefinition>
-			</Grid.ColumnDefinitions>
-			<ScrollViewer Margin="0,82,0,0" Grid.Column="0">
-				<StackPanel x:Name="FriendlyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true"/>
-			</ScrollViewer>
-			<ScrollViewer Margin="0,82,0,0" Grid.Column="1">
-				<StackPanel x:Name="EnemyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="True"/>
-			</ScrollViewer>
-		</Grid>
-	</Grid>
+
+		<StackPanel DataContext="{Binding StatsViewModel, Source={StaticResource ViewModelLocator}}">
+			<StackPanel.Resources>
+				<ResourceDictionary>
+					<DataTemplate x:Key="PlayerTemplate">
+						<Grid Margin="5,5" Background="{Binding Background}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="25*"></ColumnDefinition>
+								<ColumnDefinition Width="25*"></ColumnDefinition>
+								<ColumnDefinition Width="25*"></ColumnDefinition>
+								<ColumnDefinition Width="25*"></ColumnDefinition>
+							</Grid.ColumnDefinitions>
+							<StackPanel Grid.Column="0" Orientation="Vertical">
+								<TextBlock Margin="5" FontWeight="Bold" Foreground="{Binding ColorName}" Text="{Binding Name}"/>
+								<TextBlock Margin="5" Foreground="Black" Text="{Binding ShipName}" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
+								<TextBlock Margin="5" Foreground="{Binding ColorBattles}" Text="{Binding TextBattles}" />
+								<TextBlock Margin="5" Foreground="{Binding ColorAvgXp}" Text="{Binding TextAvgXp}" />
+							</StackPanel>
+							<StackPanel Grid.Column="2" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
+								<TextBlock Margin="5" Foreground="{Binding ColorWins}" Text="{Binding TextWins}" />
+								<TextBlock Margin="5" Foreground="{Binding ColorWinRate}" Text="{Binding TextWinRate}" />
+							</StackPanel>
+							<StackPanel Grid.Column="3" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
+								<TextBlock Margin="5" Foreground="{Binding ColorAvgDamage}" Text="{Binding TextAvgDamage}" />
+								<TextBlock Margin="5" Foreground="{Binding ColorAvgFrags}" Text="{Binding TextAvgFrags}" />
+							</StackPanel>
+							<DockPanel Grid.Column="1" Visibility="{Binding TextVisibility}">
+								<TextBlock Margin="5" VerticalAlignment="Center" Foreground="{Binding ColorAvgDamage}" Text="No stats or hidden" />
+							</DockPanel>
+						</Grid>
+					</DataTemplate>
+				</ResourceDictionary>
+			</StackPanel.Resources>
+			<Grid Visibility="{Binding ListVisible}" Margin="10,0,10,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="50*"></ColumnDefinition>
+					<ColumnDefinition Width="50*"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<StackPanel Grid.Column="0">
+					<TextBlock>Friendly</TextBlock>
+					<ItemsControl ItemsSource="{Binding FriendlyPlayers}" ItemTemplate="{StaticResource PlayerTemplate}">
+					</ItemsControl>
+				</StackPanel>
+				<StackPanel Grid.Column="1">
+					<TextBlock>Enemy</TextBlock>
+					<ItemsControl ItemsSource="{Binding EnemyPlayers}" ItemTemplate="{StaticResource PlayerTemplate}">
+					</ItemsControl>
+				</StackPanel>
+			</Grid>
+		</StackPanel>
+	</StackPanel>
 </Window>

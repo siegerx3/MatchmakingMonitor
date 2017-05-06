@@ -23,13 +23,9 @@ namespace MatchingMakingMonitor
 			IoCKernel.Init();
 			ConfigureMainWindow();
 
-			//window.DataContext = new MainWindowViewModel();
-			//window.Header.DataContext = new HeaderViewModel();
-
 			Current.MainWindow.Show();
 
 			socketIOService = IoCKernel.Get<SocketIOService>();
-			var ss = IoCKernel.Get<StatsService>();
 			socketIOService.Connect();
 			socketIOService.StateChanged.Where(s => s == ConnectionState.Connected).Subscribe(_ =>
 			{

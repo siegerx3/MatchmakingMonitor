@@ -14,7 +14,7 @@ namespace MatchingMakingMonitor.Models
 		public Int64 shipId { get; set; }
 	} //end class
 
-	public class ReplayModel
+	public class Replay
 	{
 		public string clientVersionFromXml { get; set; }
 		public int gameMode { get; set; }

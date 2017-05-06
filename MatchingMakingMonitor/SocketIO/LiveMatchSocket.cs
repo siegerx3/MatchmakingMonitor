@@ -33,7 +33,7 @@ namespace MatchingMakingMonitor.SocketIO
 			socket.Emit("setToken", token);
 		}
 
-		public void SendStats(List<DisplayPlayer> stats)
+		public void SendStats(List<PlayerShip> stats)
 		{
 			socket.Emit("sendStats", JsonConvert.SerializeObject(stats));
 		}

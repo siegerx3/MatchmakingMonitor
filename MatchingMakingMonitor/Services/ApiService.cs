@@ -16,8 +16,8 @@ namespace MatchingMakingMonitor.Services
 		private Settings settings;
 		private LoggingService loggingService;
 
-		private List<ShipModel> fallbackShips;
-		public IReadOnlyList<ShipModel> FallbackShips => fallbackShips.AsReadOnly();
+		private List<ShipInfo> shipInfos;
+		public IReadOnlyList<ShipInfo> ShipInfos => shipInfos.AsReadOnly();
 
 		private HttpClient httpClient;
 		public ApiService(LoggingService loggingService, Settings settings)
@@ -45,36 +45,42 @@ namespace MatchingMakingMonitor.Services
 				if (result.StatusCode == HttpStatusCode.OK)
 				{
 					var shipsJson = await result.Content.ReadAsStringAsync();
-					fallbackShips = await Task.Run(() => JsonConvert.DeserializeObject<List<ShipModel>>(shipsJson));
+					shipInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<ShipInfo>>(shipsJson));
 				}
 			} //end try
 			catch (Exception ex)
 			{
 				loggingService.Log("Exception Occurred While Retrieving Ships:  " + ex.Message);
-				fallbackShips = new List<ShipModel>();
+				shipInfos = new List<ShipInfo>();
 			} //end catch
 		}
 
-		public async Task<IEnumerable<PlayerStatsByShip>> Stats(ReplayModel replay)
+		public async Task<IEnumerable<PlayerShip>> Players(Replay replay)
 		{
 			try
 			{
+				while (shipInfos == null)
+				{
+					await Task.Delay(1000);
+				}
 				var baseUrl = settings.Get<string>("BaseUrl" + settings.Get<string>("Region"));
 				httpClient = new HttpClient();
 				httpClient.BaseAddress = new Uri(baseUrl);
 
 				var tasks = replay.vehicles.Select(v => getAsync(v)).ToList();
 				var list = await Task.WhenAll(tasks);
-				return list.Where(s => s != null && s.data != null && s.data.Ships != null && s.data.Ships.Any());
+				return list.Where(p => p != null);
 			}
 			catch (Exception e)
 			{
-				return new List<PlayerStatsByShip>();
+				return new List<PlayerShip>();
 			}
 		}
 
-		private async Task<PlayerStatsByShip> getAsync(Vehicle vehicle)
+		private async Task<PlayerShip> getAsync(Vehicle vehicle)
 		{
+			var shipInfo = ShipInfos.SingleOrDefault(s => s.ShipId == vehicle.shipId);
+
 			var playerResponse = await httpClient.GetAsync($"wows/account/list/?application_id={applicationId}&search={vehicle.name}");
 			if (playerResponse.StatusCode == HttpStatusCode.OK)
 			{
@@ -89,11 +95,21 @@ namespace MatchingMakingMonitor.Services
 					{
 						var shipJson = await shipResponse.Content.ReadAsStringAsync();
 						shipJson = shipJson.Replace("\"" + player.account_id + "\":", "\"Ships\":");
-						return await Task.Run(() => JsonConvert.DeserializeObject<PlayerStatsByShip>(shipJson));
+						var stats = await Task.Run(() => JsonConvert.DeserializeObject<PlayerStats>(shipJson));
+						if (stats != null && stats.data != null && stats.data.Ships != null && stats.data.Ships.Any())
+						{
+							var ship = stats.data.Ships.First();
+							return new PlayerShip(ship, player, shipInfo, vehicle.relation);
+						}
 					}
 				}
 			}
-			return new PlayerStatsByShip();
+			return new PlayerShip(shipInfo)
+			{
+				Nickname = vehicle.name,
+				Relation = vehicle.relation,
+				IsPrivateOrHidden = true
+			};
 		}
 	}
 }

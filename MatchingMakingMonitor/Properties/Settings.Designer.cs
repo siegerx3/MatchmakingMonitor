@@ -46,19 +46,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastReplay {
-            get {
-                return ((string)(this["LastReplay"]));
-            }
-            set {
-                this["LastReplay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("NA")]
         public string Region {
             get {
                 return ((string)(this["Region"]));
