@@ -37,8 +37,8 @@
     <ApplicationIcon>Images\favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
@@ -146,6 +146,13 @@
     <Resource Include="Images\64x64Icon.png" />
     <Resource Include="Images\96x96Icon.png" />
     <Resource Include="Images\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Socket\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\connectionIcon.png" />
+    <Resource Include="Images\qrcodeIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

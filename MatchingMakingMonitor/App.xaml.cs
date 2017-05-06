@@ -8,10 +8,17 @@ using System.Windows;
 
 namespace MatchingMakingMonitor
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
+	/// <summary>
+	/// Interaction logic for App.xaml
+	/// </summary>
+	public partial class App : Application
+	{
+		protected override void OnStartup(StartupEventArgs e)
+		{
+			
+			var window = new MainWindow();
+
+			base.OnStartup(e);
+		}
+	}
 }
