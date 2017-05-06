@@ -12,7 +12,7 @@ namespace MatchingMakingMonitor.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -97,7 +97,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("64,16,112")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#401070")]
         public string Overall9 {
             get {
                 return ((string)(this["Overall9"]));
@@ -109,7 +109,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("121,61,182")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#793db6")]
         public string Overall8 {
             get {
                 return ((string)(this["Overall8"]));
@@ -121,7 +121,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("57,114,198")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#3972c6")]
         public string Overall7 {
             get {
                 return ((string)(this["Overall7"]));
@@ -133,7 +133,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("64,153,191")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#4099bf")]
         public string Overall6 {
             get {
                 return ((string)(this["Overall6"]));
@@ -145,7 +145,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("77,115,38")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#4d7326")]
         public string Overall5 {
             get {
                 return ((string)(this["Overall5"]));
@@ -157,7 +157,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("204,184,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#ccb800")]
         public string Overall4 {
             get {
                 return ((string)(this["Overall4"]));
@@ -169,7 +169,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("204,122,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#cc7a00")]
         public string Overall3 {
             get {
                 return ((string)(this["Overall3"]));
@@ -181,7 +181,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("205,51,51")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#cd3333")]
         public string Overall2 {
             get {
                 return ((string)(this["Overall2"]));
@@ -193,7 +193,7 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("147,13,13")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#930d0d")]
         public string Overall1 {
             get {
                 return ((string)(this["Overall1"]));
@@ -212,6 +212,18 @@ namespace MatchingMakingMonitor.Properties {
             }
             set {
                 this["FontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Token {
+            get {
+                return ((string)(this["Token"]));
+            }
+            set {
+                this["Token"] = value;
             }
         }
     }

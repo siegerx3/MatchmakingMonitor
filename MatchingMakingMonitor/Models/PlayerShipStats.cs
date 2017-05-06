@@ -1,6 +1,6 @@
 ﻿namespace MatchingMakingMonitor.Models
 {
-    class PlayerShipStats
+    public class PlayerShipStats
     {
         public long ShipId { get; set; }
         public long AccountId { get; set; }

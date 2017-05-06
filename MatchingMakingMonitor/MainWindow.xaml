@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatchingMakingMonitor"
+				xmlns:VM="clr-namespace:MatchingMakingMonitor.ViewModels"
         mc:Ignorable="d"
         Title="WoWReplays Matchmaking Monitor" 
         WindowStartupLocation="Manual" 
@@ -11,34 +12,62 @@
         Icon="Images/favicon.ico" 
         Width="1280" 
         Height="768"
-        MinWidth="1280">
-    <Grid>
-        <Rectangle Fill="#FF333333" Height="47" Stroke="Black" VerticalAlignment="Top"/>
+        MinWidth="1280"
+				DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
+	<Grid>
+		<DockPanel Name="Header" Background="#FF333333" Height="47" VerticalAlignment="Top" 
+							 DataContext="{Binding HeaderViewModel, Source={StaticResource ViewModelLocator}}">
+			<Button Command="{Binding LogoClickCommand}" Cursor="Hand">
+				<Button.Template>
+					<ControlTemplate TargetType="Button">
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+							<Image HorizontalAlignment="Left" VerticalAlignment="Center"  Height="32" Margin="10,0,0,0" Width="32" Source="Images/32x32Icon.png" RenderTransformOrigin="1,0.094"/>
+							<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,-2,0,0" TextWrapping="Wrap" Text="WoWReplays.com" Foreground="White" FontSize="18"/>
+						</StackPanel>
+					</ControlTemplate>
+				</Button.Template>
+			</Button>
 
-        <Image HorizontalAlignment="Left" Height="32" Margin="10,9,0,0" VerticalAlignment="Top" Width="32" Source="Images/32x32Icon.png" MouseDown="LogoClick" MouseEnter="LogoMouseEnter" MouseLeave="LogoMouseLeave" RenderTransformOrigin="1,0.094"/>
-        <Image x:Name="ImgSettings" Margin="0,9,10,0" Source="Images/gearIcon.png" MouseDown="OpenSettingsWindow" Height="32" VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
-        <Label x:Name="LblRegion" Content="Region:" HorizontalAlignment="Left" Margin="2,46,0,0" VerticalAlignment="Top" Height="31"/>
-        <ComboBox x:Name="ComRegion" HorizontalAlignment="Left" Margin="56,51,0,0" VerticalAlignment="Top" Width="90" SelectionChanged="ComRegion_SelectionChanged" Height="26">
-            <ComboBoxItem Content="NA"/>
-            <ComboBoxItem Content="EU"/>
-            <ComboBoxItem Content="RU"/>
-            <ComboBoxItem Content="SEA"/>
-        </ComboBox>
-        <Label x:Name="LblInstallDirectory" Content="Installation Directory:&#xA;" HorizontalAlignment="Left" Margin="160,46,0,0" VerticalAlignment="Top" Height="31"/>
-        <TextBlock x:Name="TxtInstallDirectoryValue" HorizontalAlignment="Left" Margin="287,52,0,0" TextWrapping="Wrap" Text="Check Install Directory" VerticalAlignment="Top" MouseDown="InstallDirectoryClick" MouseEnter="InstallDirectoryMouseEnter" MouseLeave="InstallDirectoryMouseLeave" Height="19"/>
-        <Label x:Name="LblStatus" Content="Not Currently in Battle..." Margin="0,47,10,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <ScrollViewer Margin="0,82,0,0" Grid.Column="0">
-                <StackPanel x:Name="FriendlyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true"/>
-            </ScrollViewer>
-            <ScrollViewer Margin="0,82,0,0" Grid.Column="1">
-                <StackPanel x:Name="EnemyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="True"/>
-            </ScrollViewer>
-        </Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="56,10,0,0" TextWrapping="Wrap" Text="WoWReplays.com" VerticalAlignment="Top" Foreground="White" FontSize="18"/>
-    </Grid>
+			<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" >
+				<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
+					<Image x:Name="ConnectionIcon" Margin="0,0,0,0" Source="Images/connectionIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30" Cursor="Hand"/>
+					<Label x:Name="ConnectionText" Content="Not Connected" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="13"  VerticalAlignment="Center" Height="32" Foreground="White" />
+				</StackPanel>
+				
+				<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+					<Image x:Name="QrCode" Margin="0,0,10,0" Source="Images/qrcodeIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+					<Button Command="{Binding SettingsCommand}">
+						<Button.Template>
+							<ControlTemplate>
+								<Image x:Name="ImgSettings" Source="Images/gearIcon.png" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>
+							</ControlTemplate>
+						</Button.Template>
+					</Button>
+				</StackPanel>
+			</StackPanel>
+		</DockPanel>
+		
+		<Label x:Name="LblRegion" Content="Region:" HorizontalAlignment="Left" Margin="2,46,0,0" VerticalAlignment="Top" Height="31"/>
+		<ComboBox x:Name="ComRegion" HorizontalAlignment="Left" Margin="56,51,0,0" VerticalAlignment="Top" Width="90" SelectionChanged="ComRegion_SelectionChanged" Height="26">
+			<ComboBoxItem Content="NA"/>
+			<ComboBoxItem Content="EU"/>
+			<ComboBoxItem Content="RU"/>
+			<ComboBoxItem Content="SEA"/>
+		</ComboBox>
+		<Label x:Name="LblInstallDirectory" Content="Installation Directory:&#xA;" HorizontalAlignment="Left" Margin="160,46,0,0" VerticalAlignment="Top" Height="31"/>
+		<TextBlock x:Name="TxtInstallDirectoryValue" HorizontalAlignment="Left" Margin="287,52,0,0" TextWrapping="Wrap" Text="Check Install Directory" VerticalAlignment="Top" MouseDown="InstallDirectoryClick" MouseEnter="InstallDirectoryMouseEnter" MouseLeave="InstallDirectoryMouseLeave" Height="19"/>
+		<Label x:Name="LblStatus" Content="Not Currently in Battle..." Margin="0,47,10,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<ScrollViewer Margin="0,82,0,0" Grid.Column="0">
+				<StackPanel x:Name="FriendlyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true"/>
+			</ScrollViewer>
+			<ScrollViewer Margin="0,82,0,0" Grid.Column="1">
+				<StackPanel x:Name="EnemyGroup" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="True"/>
+			</ScrollViewer>
+		</Grid>
+	</Grid>
 </Window>

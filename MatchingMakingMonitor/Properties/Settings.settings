@@ -24,34 +24,37 @@
       <Value Profile="(Default)">a7079ba49e5487b6936aed9176c13968</Value>
     </Setting>
     <Setting Name="Overall9" Type="System.String" Scope="User">
-      <Value Profile="(Default)">64,16,112</Value>
+      <Value Profile="(Default)">#401070</Value>
     </Setting>
     <Setting Name="Overall8" Type="System.String" Scope="User">
-      <Value Profile="(Default)">121,61,182</Value>
+      <Value Profile="(Default)">#793db6</Value>
     </Setting>
     <Setting Name="Overall7" Type="System.String" Scope="User">
-      <Value Profile="(Default)">57,114,198</Value>
+      <Value Profile="(Default)">#3972c6</Value>
     </Setting>
     <Setting Name="Overall6" Type="System.String" Scope="User">
-      <Value Profile="(Default)">64,153,191</Value>
+      <Value Profile="(Default)">#4099bf</Value>
     </Setting>
     <Setting Name="Overall5" Type="System.String" Scope="User">
-      <Value Profile="(Default)">77,115,38</Value>
+      <Value Profile="(Default)">#4d7326</Value>
     </Setting>
     <Setting Name="Overall4" Type="System.String" Scope="User">
-      <Value Profile="(Default)">204,184,0</Value>
+      <Value Profile="(Default)">#ccb800</Value>
     </Setting>
     <Setting Name="Overall3" Type="System.String" Scope="User">
-      <Value Profile="(Default)">204,122,0</Value>
+      <Value Profile="(Default)">#cc7a00</Value>
     </Setting>
     <Setting Name="Overall2" Type="System.String" Scope="User">
-      <Value Profile="(Default)">205,51,51</Value>
+      <Value Profile="(Default)">#cd3333</Value>
     </Setting>
     <Setting Name="Overall1" Type="System.String" Scope="User">
-      <Value Profile="(Default)">147,13,13</Value>
+      <Value Profile="(Default)">#930d0d</Value>
     </Setting>
     <Setting Name="FontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="Token" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

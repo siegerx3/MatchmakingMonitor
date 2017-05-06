@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WowsAio.SocketIO
+namespace MatchingMakingMonitor.SocketIO
 {
 	public class SocketIOService
 	{

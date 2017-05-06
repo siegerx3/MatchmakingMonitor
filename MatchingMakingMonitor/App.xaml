@@ -1,9 +1,14 @@
 ﻿<Application x:Class="MatchingMakingMonitor.App"
+						 x:Name="App"
+						 ShutdownMode="OnMainWindowClose"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MatchingMakingMonitor"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+						 xmlns:vm="clr-namespace:MatchingMakingMonitor.ViewModels"
+						 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+	<Application.Resources>
+		<vm:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
+	</Application.Resources>
 </Application>
