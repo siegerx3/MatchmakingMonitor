@@ -86,108 +86,108 @@ namespace MatchingMakingMonitor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#401070")]
-        public string Overall9 {
+        public string Color9 {
             get {
-                return ((string)(this["Overall9"]));
+                return ((string)(this["Color9"]));
             }
             set {
-                this["Overall9"] = value;
+                this["Color9"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#793db6")]
-        public string Overall8 {
+        public string Color8 {
             get {
-                return ((string)(this["Overall8"]));
+                return ((string)(this["Color8"]));
             }
             set {
-                this["Overall8"] = value;
+                this["Color8"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#3972c6")]
-        public string Overall7 {
+        public string Color7 {
             get {
-                return ((string)(this["Overall7"]));
+                return ((string)(this["Color7"]));
             }
             set {
-                this["Overall7"] = value;
+                this["Color7"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#4099bf")]
-        public string Overall6 {
+        public string Color6 {
             get {
-                return ((string)(this["Overall6"]));
+                return ((string)(this["Color6"]));
             }
             set {
-                this["Overall6"] = value;
+                this["Color6"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#4d7326")]
-        public string Overall5 {
+        public string Color5 {
             get {
-                return ((string)(this["Overall5"]));
+                return ((string)(this["Color5"]));
             }
             set {
-                this["Overall5"] = value;
+                this["Color5"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#ccb800")]
-        public string Overall4 {
+        public string Color4 {
             get {
-                return ((string)(this["Overall4"]));
+                return ((string)(this["Color4"]));
             }
             set {
-                this["Overall4"] = value;
+                this["Color4"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#cc7a00")]
-        public string Overall3 {
+        public string Color3 {
             get {
-                return ((string)(this["Overall3"]));
+                return ((string)(this["Color3"]));
             }
             set {
-                this["Overall3"] = value;
+                this["Color3"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#cd3333")]
-        public string Overall2 {
+        public string Color2 {
             get {
-                return ((string)(this["Overall2"]));
+                return ((string)(this["Color2"]));
             }
             set {
-                this["Overall2"] = value;
+                this["Color2"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#930d0d")]
-        public string Overall1 {
+        public string Color1 {
             get {
-                return ((string)(this["Overall1"]));
+                return ((string)(this["Color1"]));
             }
             set {
-                this["Overall1"] = value;
+                this["Color1"] = value;
             }
         }
         
@@ -253,13 +253,61 @@ namespace MatchingMakingMonitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("150; 100; 80; 60; 40; 30; 20; 10; 0")]
+        public string BattleLimits {
             get {
-                return ((string)(this["Setting"]));
+                return ((string)(this["BattleLimits"]));
             }
             set {
-                this["Setting"] = value;
+                this["BattleLimits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90; 80; 70; 60; 50; 40; 30; 20; 0")]
+        public string WinLimits {
+            get {
+                return ((string)(this["WinLimits"]));
+            }
+            set {
+                this["WinLimits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1,5; 1,3; 1,1; 1,0; 0,8; 0,6; 0,4; 0,2; 0")]
+        public string FragsLimits {
+            get {
+                return ((string)(this["FragsLimits"]));
+            }
+            set {
+                this["FragsLimits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1500; 1200; 1000; 900; 800; 600; 500; 400; 0")]
+        public string XpLimits {
+            get {
+                return ((string)(this["XpLimits"]));
+            }
+            set {
+                this["XpLimits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("75000; 65000; 55000; 45000; 35000; 25000; 15000; 10000; 0")]
+        public string DmgLimits {
+            get {
+                return ((string)(this["DmgLimits"]));
+            }
+            set {
+                this["DmgLimits"] = value;
             }
         }
     }

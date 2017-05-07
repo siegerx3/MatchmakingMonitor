@@ -116,6 +116,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\DisplayPlayerStats.cs" />
+    <Compile Include="Models\MobileDisplayPlayerStats.cs" />
+    <Compile Include="Models\MobileSettings.cs" />
     <Compile Include="QrCodeWindow.xaml.cs">
       <DependentUpon>QrCodeWindow.xaml</DependentUpon>
     </Compile>
@@ -125,6 +127,7 @@
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\StatsService.cs" />
     <Compile Include="Services\WatcherService.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

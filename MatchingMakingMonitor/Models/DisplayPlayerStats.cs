@@ -2,6 +2,7 @@
 using MatchingMakingMonitor.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using System.Windows.Media;
 
 namespace MatchingMakingMonitor.Models
 {
-	public class DisplayPlayerStats: BaseViewBinding
+	public class DisplayPlayerStats : BaseViewBinding
 	{
 		public PlayerShip Player { get; set; }
 
@@ -101,7 +102,7 @@ namespace MatchingMakingMonitor.Models
 				FirePropertyChanged();
 			}
 		}
-		
+
 		public string TextBattles => $"Battles: {Player.Battles}";
 		public string TextWins => $"Wins: {Player.Wins}";
 		public string TextWinRate => $"WinRate: {WinRate}%";
@@ -109,8 +110,6 @@ namespace MatchingMakingMonitor.Models
 		public string TextAvgFrags => $"Avg Frags: {AvgFrags}";
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
 		public string TextName => $"{Player?.Nickname} | {AccountId}";
-
-		public int FontSize => settings.FontSize;
 
 		public string[] CommandParams => new string[] { AccountId, Player.Nickname };
 
@@ -122,7 +121,15 @@ namespace MatchingMakingMonitor.Models
 		public double AvgFrags { get; private set; }
 		public double AvgDamage { get; private set; }
 
-		public Visibility StatsVisibility
+		private int colorNameKey;
+		private int colorWinRateKey;
+		private int colorAvgFragsKey;
+		private int colorAvgXpKey;
+		private int colorAvgDamageKey;
+		private int colorBattlesKey;
+
+
+		public Visibility Visibility
 		{
 			get
 			{
@@ -138,11 +145,11 @@ namespace MatchingMakingMonitor.Models
 			}
 		}
 
-		private Settings settings;
+		public Settings Settings { get; set; }
 		public DisplayPlayerStats(Settings settings, PlayerShip player) : this()
 		{
 			Player = player;
-			this.settings = settings;
+			this.Settings = settings;
 			WinRate = Math.Round(player.Wins / player.Battles * 100, 2);
 			AvgFrags = Math.Round(player.Frags / player.Battles, 2);
 			AvgXp = Math.Round(player.XpEarned / player.Battles, 0);
@@ -170,17 +177,17 @@ namespace MatchingMakingMonitor.Models
 
 		public void ComputeUi()
 		{
-			double totalRating = 0;
+			double totalRating = (9 * 1) + (9 * 1.1) + (9 * 0.8) + (9 * 0.9);
 			if (!Player.IsPrivateOrHidden)
 			{
-				ColorWinRate = getColor(WinRate, winBoundaries, totalRating, 1, out totalRating);
-				ColorAvgFrags = getColor(AvgFrags, fragsBoundaries, totalRating, 1.1, out totalRating);
-				ColorAvgXp = getColor(AvgXp, xpBoundaries, totalRating, 0.8, out totalRating);
-				ColorAvgDamage = getColor(AvgDamage, dmgBoundaries, totalRating, 0.9, out totalRating);
-				ColorBattles = getColor(Player.Battles, battleBoundaries, totalRating, 1.2, out totalRating);
+				//ColorWinRate = getColor(WinRate, winLimits, totalRating, 1, out totalRating, out colorWinRateKey);
+				//ColorAvgFrags = getColor(AvgFrags, fragsLimits, totalRating, 1.1, out totalRating, out colorAvgFragsKey);
+				//ColorAvgXp = getColor(AvgXp, xpLimits, totalRating, 0.8, out totalRating, out colorAvgXpKey);
+				//ColorAvgDamage = getColor(AvgDamage, dmgLimits, totalRating, 0.9, out totalRating, out colorAvgDamageKey);
+				ColorBattles = getColor(Player.Battles, Settings.BattleLimits, totalRating, 1.2, out totalRating, out colorBattlesKey);
 
-				var totalRatingInt = (int)Math.Floor((double)(totalRating / 5));
-				ColorName = settings.Brushes[totalRatingInt - 1];
+				colorNameKey = (int)Math.Floor((double)(totalRating / 5));
+				ColorName = Settings.Brushes[colorNameKey - 1];
 			}
 
 			var color = ColorName.CloneCurrentValue();
@@ -192,31 +199,60 @@ namespace MatchingMakingMonitor.Models
 		}
 
 		#region Colors
-		private static double[] dmgBoundaries = new double[9] { 75000, 65000, 55000, 45000, 35000, 25000, 15000, 10000, 0 };
-		private static double[] xpBoundaries = new double[9] { 1500, 1200, 1000, 900, 800, 600, 500, 400, 0 };
-		private static double[] fragsBoundaries = new double[9] { 1.5, 1.3, 1.1, 1.0, 0.8, 0.6, 0.4, 0.2, 0 };
-		private static double[] winBoundaries = new double[9] { 90, 80, 70, 60, 50, 40, 30, 20, 0 };
-		private static double[] battleBoundaries = new double[9] { 150, 100, 80, 60, 40, 30, 20, 10, 0 };
+		private static double[] dmgLimits = new double[9] { 75000, 65000, 55000, 45000, 35000, 25000, 15000, 10000, 0 };
+		private static double[] xpLimits = new double[9] { 1500, 1200, 1000, 900, 800, 600, 500, 400, 0 };
+		private static double[] fragsLimits = new double[9] { 1.5, 1.3, 1.1, 1.0, 0.8, 0.6, 0.4, 0.2, 0 };
+		private static double[] winLimits = new double[9] { 90, 80, 70, 60, 50, 40, 30, 20, 0 };
+		//private static double[] battleLimits = new double[9] { 150, 100, 80, 60, 40, 30, 20, 10, 0 };
 
-		private SolidColorBrush getColor(double value, double[] boundaries)
+		private SolidColorBrush getColor(double value, ObservableCollection<double> limits)
 		{
 			double dummy = 0;
-			return getColor(value, boundaries, dummy, 1, out dummy);
+			int dummyInt = 0;
+			return getColor(value, limits, dummy, 1, out dummy, out dummyInt);
 		}
 
-		private SolidColorBrush getColor(double value, double[] boundaries, double oldTotal, double multiplier, out double total)
+		private SolidColorBrush getColor(double value, ObservableCollection<double> limits, double oldTotal, double multiplier, out double total, out int key)
 		{
-			for (int i = 0; i < boundaries.Length; i++)
+			for (int i = 0; i < limits.Count; i++)
 			{
-				if (value >= boundaries[i])
+				if (value >= limits[i])
 				{
-					total = oldTotal + ((i + 1) * multiplier);
-					return settings.Brushes[i];
+					key = i + 1;
+					total = oldTotal + (key * multiplier);
+					return Settings.Brushes[i];
 				}
 			}
 			total = oldTotal + (9 * multiplier);
+			key = 9;
 			return Brushes.Black;
 		}
 		#endregion
+
+		public MobileDisplayPlayerStats ToMobile()
+		{
+			return new MobileDisplayPlayerStats()
+			{
+				Relation = Player.Relation,
+				PrivateOrHidden = Player.IsPrivateOrHidden,
+				DisplayName = TextName,
+				Name = Player.Nickname,
+				AccountId = AccountId,
+				ShipName = ShipName,
+				Battles = Player.Battles,
+				Wins = Player.Wins,
+				WinRate = WinRate,
+				AvgXp = AvgXp,
+				AvgFrags = AvgFrags,
+				AvgDamage = AvgDamage,
+
+				ColorNameKey = colorNameKey,
+				ColorWinRateKey = colorWinRateKey,
+				ColorAvgFragsKey = colorAvgFragsKey,
+				ColorAvgXpKey = colorAvgXpKey,
+				ColorAvgDamageKey = colorAvgDamageKey,
+				ColorBattlesKey = colorBattlesKey,
+			};
+		}
 	}
 }

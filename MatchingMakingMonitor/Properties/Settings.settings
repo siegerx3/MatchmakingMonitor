@@ -20,31 +20,31 @@
     <Setting Name="AppIdSEA" Type="System.String" Scope="Application">
       <Value Profile="(Default)">a7079ba49e5487b6936aed9176c13968</Value>
     </Setting>
-    <Setting Name="Overall9" Type="System.String" Scope="User">
+    <Setting Name="Color9" Type="System.String" Scope="User">
       <Value Profile="(Default)">#401070</Value>
     </Setting>
-    <Setting Name="Overall8" Type="System.String" Scope="User">
+    <Setting Name="Color8" Type="System.String" Scope="User">
       <Value Profile="(Default)">#793db6</Value>
     </Setting>
-    <Setting Name="Overall7" Type="System.String" Scope="User">
+    <Setting Name="Color7" Type="System.String" Scope="User">
       <Value Profile="(Default)">#3972c6</Value>
     </Setting>
-    <Setting Name="Overall6" Type="System.String" Scope="User">
+    <Setting Name="Color6" Type="System.String" Scope="User">
       <Value Profile="(Default)">#4099bf</Value>
     </Setting>
-    <Setting Name="Overall5" Type="System.String" Scope="User">
+    <Setting Name="Color5" Type="System.String" Scope="User">
       <Value Profile="(Default)">#4d7326</Value>
     </Setting>
-    <Setting Name="Overall4" Type="System.String" Scope="User">
+    <Setting Name="Color4" Type="System.String" Scope="User">
       <Value Profile="(Default)">#ccb800</Value>
     </Setting>
-    <Setting Name="Overall3" Type="System.String" Scope="User">
+    <Setting Name="Color3" Type="System.String" Scope="User">
       <Value Profile="(Default)">#cc7a00</Value>
     </Setting>
-    <Setting Name="Overall2" Type="System.String" Scope="User">
+    <Setting Name="Color2" Type="System.String" Scope="User">
       <Value Profile="(Default)">#cd3333</Value>
     </Setting>
-    <Setting Name="Overall1" Type="System.String" Scope="User">
+    <Setting Name="Color1" Type="System.String" Scope="User">
       <Value Profile="(Default)">#930d0d</Value>
     </Setting>
     <Setting Name="FontSize" Type="System.Int32" Scope="User">
@@ -64,6 +64,21 @@
     </Setting>
     <Setting Name="BaseUrlSEA" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://api.worldofwarships.asia</Value>
+    </Setting>
+    <Setting Name="BattleLimits" Type="System.String" Scope="User">
+      <Value Profile="(Default)">150; 100; 80; 60; 40; 30; 20; 10; 0</Value>
+    </Setting>
+    <Setting Name="WinLimits" Type="System.String" Scope="User">
+      <Value Profile="(Default)">90; 80; 70; 60; 50; 40; 30; 20; 0</Value>
+    </Setting>
+    <Setting Name="FragsLimits" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1,5; 1,3; 1,1; 1,0; 0,8; 0,6; 0,4; 0,2; 0</Value>
+    </Setting>
+    <Setting Name="XpLimits" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1500; 1200; 1000; 900; 800; 600; 500; 400; 0</Value>
+    </Setting>
+    <Setting Name="DmgLimits" Type="System.String" Scope="User">
+      <Value Profile="(Default)">75000; 65000; 55000; 45000; 35000; 25000; 15000; 10000; 0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

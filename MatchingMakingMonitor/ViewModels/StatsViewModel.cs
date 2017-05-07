@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
 using System.Windows;
+using System.Threading;
 
 namespace MatchingMakingMonitor.ViewModels
 {
@@ -80,19 +82,18 @@ namespace MatchingMakingMonitor.ViewModels
 				});
 			});
 
-			this.settings.UiPropertyChanged.Subscribe(async key =>
+			this.settings.UiPropertiesChanged.Subscribe(async key =>
 			{
-				loggingService.Info("UiPropertyChanged" + key);
 				if (stats != null)
 				{
-					await Task.Run(() =>
+					FontSize = this.settings.FontSize;
+					foreach (var player in stats)
 					{
-						FontSize = this.settings.FontSize;
-						foreach (var player in stats)
+						await Task.Run(() =>
 						{
 							player.ComputeUi();
-						}
-					});
+						});
+					}
 				}
 			});
 		}

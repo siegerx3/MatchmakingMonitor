@@ -6,51 +6,119 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:MatchingMakingMonitor"
         mc:Ignorable="d"
-        Title="Settings" Height="460" Width="400"
+				Icon="Images/favicon.ico" 
+        Title="Settings" Height="460" Width="720"
 				DataContext="{Binding SettingsViewModel, Source={StaticResource ViewModelLocator}}">
-	<Grid Height="417" VerticalAlignment="Top">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*"></ColumnDefinition>
-			<ColumnDefinition Width="1*"></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-		<StackPanel x:Name="ColorPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true" Grid.Column="0">
-			<TextBlock Text="Super-unicum" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall9" SelectedColor="{Binding Overall9}"></xctk:ColorPicker>
-			<TextBlock Text="Unicum" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall8" SelectedColor="{Binding Overall8}"></xctk:ColorPicker>
-			<TextBlock Text="Great" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall7" SelectedColor="{Binding Overall7}"></xctk:ColorPicker>
-			<TextBlock Text="Very Good" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall6" SelectedColor="{Binding Overall6}"></xctk:ColorPicker>
-			<TextBlock Text="Good" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall5" SelectedColor="{Binding Overall5}"></xctk:ColorPicker>
-			<TextBlock Text="Average" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall4" SelectedColor="{Binding Overall4}"></xctk:ColorPicker>
-			<TextBlock Text="Below Average" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall3" SelectedColor="{Binding Overall3}"></xctk:ColorPicker>
-			<TextBlock Text="Bad" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall2" SelectedColor="{Binding Overall2}"></xctk:ColorPicker>
-			<TextBlock Text="Very Bad" />
-			<Separator></Separator>
-			<xctk:ColorPicker Name="CpOverall1" SelectedColor="{Binding Overall1}"></xctk:ColorPicker>
-		</StackPanel>
-		<StackPanel x:Name="TextPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true" Grid.Column="1">
-			<TextBlock Text="Text Size" Margin="10,0,0,0" />
-			<ComboBox x:Name="ComboTextSizes" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,0,0,0"
+	<StackPanel Orientation="Vertical" Margin="10">
+		<StackPanel x:Name="TextPanel" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true" Grid.Column="1">
+			<TextBlock Text="Text Size" />
+			<ComboBox x:Name="ComboTextSizes" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
 								ItemsSource="{Binding FontSizes}"
-								SelectedValue="{Binding FontSize}"
+								SelectedValue="{Binding Settings.FontSize}"
 								>
 			</ComboBox>
-			
 		</StackPanel>
+		<Grid Name="SettingsGrid" VerticalAlignment="Top" Margin="0,10,0,10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="19"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<!--#region Row 0-->
+			<TextBlock Grid.Column="1" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Super-unicum"  />
+			<TextBlock Grid.Column="2" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Unicum"  />
+			<TextBlock Grid.Column="3" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Great"  />
+			<TextBlock Grid.Column="4" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Very good"  />
+			<TextBlock Grid.Column="5" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Good"  />
+			<TextBlock Grid.Column="6" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Average"  />
+			<TextBlock Grid.Column="7" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Below average"  />
+			<TextBlock Grid.Column="8" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Bad"  />
+			<TextBlock Grid.Column="9" Grid.Row="0" FontSize="9" HorizontalAlignment="Center" Text="Very bad"  />
+			<!--#endregion-->
+			<!--#region Row 1-->
+			<TextBlock Grid.Column="0" Grid.Row="1" FontWeight="Bold" Text="Colors" VerticalAlignment="Center"></TextBlock>
+			<StackPanel Grid.Column="1" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color9}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="2" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color8}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="3" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color7}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="4" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color6}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="5" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color5}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="6" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color4}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="7" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color3}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="8" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color2}"></xctk:ColorPicker>
+			</StackPanel>
+			<StackPanel Grid.Column="9" Grid.Row="1" Margin="5">
+				<xctk:ColorPicker SelectedColor="{Binding Settings.Color1}"></xctk:ColorPicker>
+			</StackPanel>
+			<!--#endregion-->
+			<!--#region Row 3-->
+			<TextBlock Grid.Column="0" Grid.Row="2" FontSize="10" FontWeight="Bold" Text="Battle limits" VerticalAlignment="Center"></TextBlock>
+			<TextBox Grid.Column="1" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[0], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit1"></TextBox>
+			<TextBox Grid.Column="2" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[1], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit2"></TextBox>
+			<TextBox Grid.Column="3" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[2], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit3"></TextBox>
+			<TextBox Grid.Column="4" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[3], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit4"></TextBox>
+			<TextBox Grid.Column="5" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[4], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit5"></TextBox>
+			<TextBox Grid.Column="6" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[5], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit6"></TextBox>
+			<TextBox Grid.Column="7" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[6], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit7"></TextBox>
+			<TextBox Grid.Column="8" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[7], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit8"></TextBox>
+			<TextBox Grid.Column="9" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Settings.BattleLimits[8], UpdateSourceTrigger=PropertyChanged}" Name="BattleLimit9"></TextBox>
+			<!--#endregion-->
+
+			<!--#region Row 4-->
+			<TextBlock Grid.Column="0" Grid.Row="3" FontSize="9" FontWeight="Bold" Text="Winrate limits" VerticalAlignment="Center"></TextBlock>
+			<TextBox Grid.Column="1" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[0], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit1"></TextBox>
+			<TextBox Grid.Column="2" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[1], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit2"></TextBox>
+			<TextBox Grid.Column="3" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[2], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit3"></TextBox>
+			<TextBox Grid.Column="4" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[3], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit4"></TextBox>
+			<TextBox Grid.Column="5" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[4], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit5"></TextBox>
+			<TextBox Grid.Column="6" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[5], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit6"></TextBox>
+			<TextBox Grid.Column="7" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[6], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit7"></TextBox>
+			<TextBox Grid.Column="8" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[7], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit8"></TextBox>
+			<TextBox Grid.Column="9" Grid.Row="3" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.WinLimits[8], UpdateSourceTrigger=PropertyChanged}" Name="WinLimit9"></TextBox>
+			<!--#endregion-->
+
+			<!--#region Row 5-->
+			<TextBlock Grid.Column="0" Grid.Row="4" FontSize="9" FontWeight="Bold" Text="Avg Frags limits" VerticalAlignment="Center"></TextBlock>
+			<TextBox Grid.Column="1" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[0], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit1"></TextBox>
+			<TextBox Grid.Column="2" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[1], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit2"></TextBox>
+			<TextBox Grid.Column="3" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[2], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit3"></TextBox>
+			<TextBox Grid.Column="4" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[3], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit4"></TextBox>
+			<TextBox Grid.Column="5" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[4], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit5"></TextBox>
+			<TextBox Grid.Column="6" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[5], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit6"></TextBox>
+			<TextBox Grid.Column="7" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[6], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit7"></TextBox>
+			<TextBox Grid.Column="8" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[7], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit8"></TextBox>
+			<TextBox Grid.Column="9" Grid.Row="4" Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Settings.FragsLimit[8], UpdateSourceTrigger=PropertyChanged}" Name="FragsLimit9"></TextBox>
+			<!--#endregion-->
+		</Grid>
 		<Button VerticalAlignment="Bottom" Content="Reset settings" Command="{Binding ResetCommand}"></Button>
-	</Grid>
+	</StackPanel>
 </Window>

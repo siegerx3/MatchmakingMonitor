@@ -74,7 +74,7 @@
 			</DockPanel>
 		</StackPanel>
 
-		<StackPanel Name="Stats" DataContext="{Binding StatsViewModel, Source={StaticResource ViewModelLocator}}">
+		<StackPanel Name="Stats" DataContext="{Binding StatsViewModel, Source={StaticResource ViewModelLocator}}" >
 			<StackPanel.Resources>
 				<ResourceDictionary>
 					<DataTemplate x:Key="PlayerTemplate">
@@ -91,28 +91,28 @@
 												<ColumnDefinition Width="25*"></ColumnDefinition>
 											</Grid.ColumnDefinitions>
 											<StackPanel Grid.Column="0" Orientation="Vertical">
-												<TextBlock Margin="5" FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" 
+												<TextBlock Margin="5" FontSize="{Binding Settings.FontSize}" 
 																	 FontWeight="Bold" Foreground="{Binding ColorName}" Text="{Binding TextName}"/>
-												<TextBlock Margin="5" FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" 
+												<TextBlock Margin="5" FontSize="{Binding Settings.FontSize}" 
 																	 Foreground="Black" Text="{Binding ShipName}" />
 											</StackPanel>
-											<StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
+											<StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding Visibility}">
 												<TextBlock Margin="5" Foreground="{Binding ColorBattles}" Text="{Binding TextBattles}"
-																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+																	 FontSize="{Binding Settings.FontSize}" />
 												<TextBlock Margin="5" Foreground="{Binding ColorAvgXp}" Text="{Binding TextAvgXp}"
-																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+																	 FontSize="{Binding Settings.FontSize}" />
 											</StackPanel>
-											<StackPanel Grid.Column="2" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
+											<StackPanel Grid.Column="2" Orientation="Vertical" Visibility="{Binding Visibility}">
 												<TextBlock Margin="5" Foreground="{Binding ColorWins}" Text="{Binding TextWins}" 
-																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+																	 FontSize="{Binding Settings.FontSize}" />
 												<TextBlock Margin="5" Foreground="{Binding ColorWinRate}" Text="{Binding TextWinRate}"
-																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+																	 FontSize="{Binding Settings.FontSize}" />
 											</StackPanel>
-											<StackPanel Grid.Column="3" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
+											<StackPanel Grid.Column="3" Orientation="Vertical" Visibility="{Binding Visibility}">
 												<TextBlock Margin="5" Foreground="{Binding ColorAvgDamage}" Text="{Binding TextAvgDamage}" 
-																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+																	 FontSize="{Binding Settings.FontSize}" />
 												<TextBlock Margin="5" Foreground="{Binding ColorAvgFrags}" Text="{Binding TextAvgFrags}" 
-																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+																	 FontSize="{Binding Settings.FontSize}" />
 											</StackPanel>
 											<DockPanel Grid.Column="1" Visibility="{Binding TextVisibility}">
 												<TextBlock Margin="5" VerticalAlignment="Center" Foreground="{Binding ColorAvgDamage}" Text="No stats or hidden" />

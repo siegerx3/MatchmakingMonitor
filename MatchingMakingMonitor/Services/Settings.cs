@@ -1,49 +1,62 @@
-﻿using System;
+﻿using MatchingMakingMonitor.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MatchingMakingMonitor.Services
 {
-	public class Settings
+	public class Settings : BaseViewBinding
 	{
 		private static Settings instance;
 		#region Keys
-		public static readonly string KeyInstallDirectory = "InstallDirectory";
+		public const string KeyInstallDirectory = "InstallDirectory";
 
-		public static readonly string KeyAppIdNA = "AppIdNA";
-		public static readonly string KeyAppIdEU = "AppIdEU";
-		public static readonly string KeyAppIdRU = "AppIdRU";
-		public static readonly string KeyAppIdSEA = "AppIdSEA";
+		public const string KeyAppIdNA = "AppIdNA";
+		public const string KeyAppIdEU = "AppIdEU";
+		public const string KeyAppIdRU = "AppIdRU";
+		public const string KeyAppIdSEA = "AppIdSEA";
 
-		public static readonly string KeyBaseUrlNA = "BaseUrlNA";
-		public static readonly string KeyBaseUrlEU = "BaseUrlEU";
-		public static readonly string KeyBaseUrlRU = "BaseUrlRU";
-		public static readonly string KeyBaseUrlSEA = "BaseUrlSEA";
+		public const string KeyBaseUrlNA = "BaseUrlNA";
+		public const string KeyBaseUrlEU = "BaseUrlEU";
+		public const string KeyBaseUrlRU = "BaseUrlRU";
+		public const string KeyBaseUrlSEA = "BaseUrlSEA";
 
-		public static readonly string KeyRegion = "Region";
+		public const string KeyRegion = "Region";
 
-		public static readonly string KeyOverall9 = "Overall9";
-		public static readonly string KeyOverall8 = "Overall8";
-		public static readonly string KeyOverall7 = "Overall7";
-		public static readonly string KeyOverall6 = "Overall6";
-		public static readonly string KeyOverall5 = "Overall5";
-		public static readonly string KeyOverall4 = "Overall4";
-		public static readonly string KeyOverall3 = "Overall3";
-		public static readonly string KeyOverall2 = "Overall2";
-		public static readonly string KeyOverall1 = "Overall1";
+		public const string KeyColor9 = "Color9";
+		public const string KeyColor8 = "Color8";
+		public const string KeyColor7 = "Color7";
+		public const string KeyColor6 = "Color6";
+		public const string KeyColor5 = "Color5";
+		public const string KeyColor4 = "Color4";
+		public const string KeyColor3 = "Color3";
+		public const string KeyColor2 = "Color2";
+		public const string KeyColor1 = "Color1";
 
-		public static string[] KeyColors = new string[] { KeyOverall9, KeyOverall8, KeyOverall7, KeyOverall6, KeyOverall5, KeyOverall4, KeyOverall3, KeyOverall2, KeyOverall1 };
-		public static string[] KeyUISettings = KeyColors.Concat(new string[] { KeyFontSize }).ToArray();
+		public const string KeyBattleLimits = "BattleLimits";
+		public const string KeyWinLimits = "WinLimits";
+		public const string KeyFragsLimits = "FragsLimits";
+		public const string KeyXpLimits = "XpLimits";
+		public const string KeyDmgLimits = "DmgLimits";
 
-		public static readonly string KeyFontSize = "FontSize";
+		public const string KeyFontSize = "FontSize";
 
-		public static readonly string KeyToken = "Token";
+		public static string[] KeysColors = new string[] { KeyColor9, KeyColor8, KeyColor7, KeyColor6, KeyColor5, KeyColor4, KeyColor3, KeyColor2, KeyColor1 };
+		public static string[] KeysLimits = new string[] { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimits };
+		public static string[] KeysOthers = new string[] { KeyFontSize };
+		public static string[] KeysUISettings = KeysColors.Concat(KeysLimits).ToArray();
+
+		public const string KeyToken = "Token";
 		#endregion
 
 		#region Settings
@@ -61,21 +74,128 @@ namespace MatchingMakingMonitor.Services
 
 		public string Region { get { return instance.Get<string>(KeyRegion); } set { instance.Set(KeyRegion, value); } }
 
-		public string Overall9 { get { return instance.Get<string>(KeyOverall9); } set { instance.Set(KeyOverall9, value); } }
-		public string Overall8 { get { return instance.Get<string>(KeyOverall8); } set { instance.Set(KeyOverall8, value); } }
-		public string Overall7 { get { return instance.Get<string>(KeyOverall7); } set { instance.Set(KeyOverall7, value); } }
-		public string Overall6 { get { return instance.Get<string>(KeyOverall6); } set { instance.Set(KeyOverall6, value); } }
-		public string Overall5 { get { return instance.Get<string>(KeyOverall5); } set { instance.Set(KeyOverall5, value); } }
-		public string Overall4 { get { return instance.Get<string>(KeyOverall4); } set { instance.Set(KeyOverall4, value); } }
-		public string Overall3 { get { return instance.Get<string>(KeyOverall3); } set { instance.Set(KeyOverall3, value); } }
-		public string Overall2 { get { return instance.Get<string>(KeyOverall2); } set { instance.Set(KeyOverall2, value); } }
-		public string Overall1 { get { return instance.Get<string>(KeyOverall1); } set { instance.Set(KeyOverall1, value); } }
+		public string Color9 { get { return instance.Get<string>(KeyColor9); } set { instance.Set(KeyColor9, value); FirePropertyChanged(); } }
+		public string Color8 { get { return instance.Get<string>(KeyColor8); } set { instance.Set(KeyColor8, value); FirePropertyChanged(); } }
+		public string Color7 { get { return instance.Get<string>(KeyColor7); } set { instance.Set(KeyColor7, value); FirePropertyChanged(); } }
+		public string Color6 { get { return instance.Get<string>(KeyColor6); } set { instance.Set(KeyColor6, value); FirePropertyChanged(); } }
+		public string Color5 { get { return instance.Get<string>(KeyColor5); } set { instance.Set(KeyColor5, value); FirePropertyChanged(); } }
+		public string Color4 { get { return instance.Get<string>(KeyColor4); } set { instance.Set(KeyColor4, value); FirePropertyChanged(); } }
+		public string Color3 { get { return instance.Get<string>(KeyColor3); } set { instance.Set(KeyColor3, value); FirePropertyChanged(); } }
+		public string Color2 { get { return instance.Get<string>(KeyColor2); } set { instance.Set(KeyColor2, value); FirePropertyChanged(); } }
+		public string Color1 { get { return instance.Get<string>(KeyColor1); } set { instance.Set(KeyColor1, value); FirePropertyChanged(); } }
 
-		public int FontSize { get { return instance.Get<int>(KeyFontSize); } set { instance.Set(KeyFontSize, value); } }
+		public int FontSize { get { return instance.Get<int>(KeyFontSize); } set { instance.Set(KeyFontSize, value); FirePropertyChanged(); } }
+
+		#region Limits
+		private ObservableCollection<double> battleLimits;
+		public ObservableCollection<double> BattleLimits
+		{
+			get
+			{
+				if (battleLimits == null) battleLimits = new ObservableCollection<double>(instance.Get<string>(KeyBattleLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				return battleLimits;
+			}
+			set
+			{
+				battleLimits = null;
+				instance.Set(KeyBattleLimits, string.Join(";", value));
+			}
+		}
+
+		public void BattleLimitsChanged()
+		{
+			instance.Set(KeyWinLimits, string.Join(";", battleLimits));
+		}
+
+		private ObservableCollection<double> winLimits;
+		public ObservableCollection<double> WinLimits
+		{
+			get
+			{
+				if (winLimits == null) winLimits = new ObservableCollection<double>(instance.Get<string>(KeyWinLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				return winLimits;
+			}
+			set
+			{
+				winLimits = null;
+				instance.Set(KeyWinLimits, string.Join(";", value));
+			}
+		}
+
+		public void WinLimitsChanged()
+		{
+			instance.Set(KeyWinLimits, string.Join(";", winLimits));
+		}
+
+		private ObservableCollection<double> fragsLimits;
+		public ObservableCollection<double> FragsLimits
+		{
+			get
+			{
+				if (fragsLimits == null) fragsLimits = new ObservableCollection<double>(instance.Get<string>(KeyFragsLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				return fragsLimits;
+			}
+			set
+			{
+				fragsLimits = null;
+				instance.Set(KeyFragsLimits, string.Join(";", value));
+			}
+		}
+
+		public void FragsLimitsChanged()
+		{
+			instance.Set(KeyFragsLimits, string.Join(";", fragsLimits));
+		}
+
+		private ObservableCollection<double> xpLimits;
+		public ObservableCollection<double> XpLimits
+		{
+			get
+			{
+				if (xpLimits == null) xpLimits = new ObservableCollection<double>(instance.Get<string>(KeyXpLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				return xpLimits;
+			}
+			set
+			{
+				xpLimits = null;
+				instance.Set(KeyXpLimits, string.Join(";", value));
+			}
+		}
+
+		public void XpLimitsChanged()
+		{
+			instance.Set(KeyXpLimits, string.Join(";", xpLimits));
+		}
+
+		private ObservableCollection<double> dmgLimits;
+		public ObservableCollection<double> DmgLimits
+		{
+			get
+			{
+				if (dmgLimits == null) dmgLimits = new ObservableCollection<double>(instance.Get<string>(KeyDmgLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				return dmgLimits;
+			}
+			set
+			{
+				dmgLimits = null;
+				instance.Set(KeyDmgLimits, string.Join(";", value));
+			}
+		}
+
+		public void DmgLimitsChanged()
+		{
+			instance.Set(KeyDmgLimits, string.Join(";", dmgLimits));
+		}
+		#endregion
 
 		public string Token { get { return instance.Get<string>(KeyToken); } set { instance.Set(KeyToken, value); } }
 
 		#endregion
+
+		private Subject<string> uiPropertiesChanged;
+		public IObservable<string> UiPropertiesChanged { get { return uiPropertiesChanged.AsObservable(); } }
+
+		private IObservable<string> uiPropertyChangedInternal;
 
 		private LoggingService loggingService;
 		private BehaviorSubject<string> propertyChangedSubject;
@@ -114,24 +234,27 @@ namespace MatchingMakingMonitor.Services
 				}
 			};
 
-			UiPropertyChanged = Observable.Merge(new IObservable<string>[] {
-				PropertyChanged(KeyOverall1, false),
-				PropertyChanged(KeyOverall2, false),
-				PropertyChanged(KeyOverall3, false),
-				PropertyChanged(KeyOverall4, false),
-				PropertyChanged(KeyOverall5, false),
-				PropertyChanged(KeyOverall6, false),
-				PropertyChanged(KeyOverall7, false),
-				PropertyChanged(KeyOverall8, false),
-				PropertyChanged(KeyOverall9, false),
-				PropertyChanged(KeyFontSize, false)
-			});
+			uiPropertiesChanged = new Subject<string>();
 
-			UiPropertyChanged.Subscribe(key =>
+			uiPropertyChangedInternal = Observable.Merge(KeysUISettings.Select(key => PropertyChanged(key, false))).Throttle(TimeSpan.FromMilliseconds(500));
+
+			uiPropertyChangedInternal.Subscribe(key =>
 			{
 				setBrushes();
+				uiPropertiesChanged.OnNext(key);
 			});
 			setBrushes();
+
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(BattleLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => BattleLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(WinLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => WinLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(XpLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => XpLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => DmgLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(FragsLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => FragsLimitsChanged());
+		}
+
+		public void Save()
+		{
+			Properties.Settings.Default.Save();
 		}
 
 		public IObservable<string> PropertyChanged(string key, bool initial = true)
@@ -176,22 +299,53 @@ namespace MatchingMakingMonitor.Services
 			{
 				foreach (SettingsProperty prop in Properties.Settings.Default.Properties)
 				{
-					if (KeyUISettings.Contains(prop.Name))
+					if (KeysColors.Contains(prop.Name))
 					{
-						Properties.Settings.Default[prop.Name] = prop.DefaultValue;
+						Properties.Settings.Default[prop.Name] = Convert.ChangeType(prop.DefaultValue, prop.PropertyType);
+						FirePropertyChanged(prop.Name);
+					}
+					else if (KeysLimits.Contains(prop.Name))
+					{
+						var ints = ((string)prop.DefaultValue).Split(';').Select(s => double.Parse(s)).ToArray();
+						var collection = getLimitCollectionByKey(prop.Name);
+						if (collection != null)
+						{
+							for (int i = 0; i < ints.Length; i++)
+							{
+								collection[i] = ints[i];
+							}
+						}
 					}
 				}
+				Properties.Settings.Default.Save();
 			});
 			resetting = false;
 		}
 
-		public IObservable<string> UiPropertyChanged { get; private set; }
+		private ObservableCollection<double> getLimitCollectionByKey(string key)
+		{
+			switch (key)
+			{
+				case KeyBattleLimits:
+					return battleLimits;
+				case KeyWinLimits:
+					return winLimits;
+				case KeyFragsLimits:
+					return fragsLimits;
+				case KeyXpLimits:
+					return xpLimits;
+				case KeyDmgLimits:
+					return dmgLimits;
+				default:
+					return null;
+			}
+		}
 
 		public SolidColorBrush[] Brushes { get; private set; }
 
 		private void setBrushes()
 		{
-			Brushes = KeyColors.Select(name =>
+			Brushes = KeysColors.Select(name =>
 			{
 				var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Get<string>(name)));
 				brush.Freeze();

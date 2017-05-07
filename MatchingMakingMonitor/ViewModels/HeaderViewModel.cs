@@ -15,6 +15,8 @@ namespace MatchingMakingMonitor.ViewModels
 
 		private string connectionState;
 
+		private SettingsWindow settingsWindow;
+
 		public string ConnectionState
 		{
 			get { return connectionState; }
@@ -61,8 +63,15 @@ namespace MatchingMakingMonitor.ViewModels
 
 		private void settingsClick()
 		{
-			var settingsWindow = IoCKernel.Get<SettingsWindow>();
-			settingsWindow.Show();
+			if(settingsWindow == null)
+			{
+				settingsWindow = IoCKernel.Get<SettingsWindow>();
+				settingsWindow.Show();
+				settingsWindow.Closed += (sender, args) =>
+				{
+					settingsWindow = null;
+				};
+			}
 		}
 	}
 }
