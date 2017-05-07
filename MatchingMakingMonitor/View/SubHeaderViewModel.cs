@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using MatchMakingMonitor.Services;
+using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.View
 {

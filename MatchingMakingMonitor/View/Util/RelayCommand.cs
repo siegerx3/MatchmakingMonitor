@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 // ReSharper disable InconsistentNaming
 
-namespace MatchMakingMonitor.View
+namespace MatchMakingMonitor.View.Util
 {
 	public class RelayCommand : ICommand
 	{

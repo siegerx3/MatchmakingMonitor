@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows;
 using MatchMakingMonitor.Services;
+using MatchMakingMonitor.View.Util;
 using Microsoft.Win32;
 
 namespace MatchMakingMonitor.View

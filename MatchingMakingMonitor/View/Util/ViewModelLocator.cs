@@ -2,7 +2,7 @@
 using System.Windows;
 using MatchMakingMonitor.Services;
 
-namespace MatchMakingMonitor.View
+namespace MatchMakingMonitor.View.Util
 {
 	public class ViewModelLocator
 	{

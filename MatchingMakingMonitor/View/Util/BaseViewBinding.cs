@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MatchMakingMonitor.View
+namespace MatchMakingMonitor.View.Util
 {
 	public class BaseViewBinding : INotifyPropertyChanged
 	{

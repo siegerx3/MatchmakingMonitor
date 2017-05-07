@@ -12,7 +12,7 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using MatchMakingMonitor.View;
+using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.Services
 {

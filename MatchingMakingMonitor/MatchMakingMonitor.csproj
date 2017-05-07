@@ -139,16 +139,16 @@
     </Compile>
     <Compile Include="SocketIO\LiveMatchSocket.cs" />
     <Compile Include="SocketIO\SocketIOService.cs" />
-    <Compile Include="View\BaseViewBinding.cs" />
-    <Compile Include="View\PercentageStringFormatConverter.cs" />
+    <Compile Include="View\Util\BaseViewBinding.cs" />
+    <Compile Include="View\Util\PercentageStringFormatConverter.cs" />
     <Compile Include="View\SubHeaderViewModel.cs" />
     <Compile Include="View\HeaderViewModel.cs" />
     <Compile Include="View\MainWindowViewModel.cs" />
     <Compile Include="View\QrCodeViewModel.cs" />
-    <Compile Include="View\RelayCommand.cs" />
+    <Compile Include="View\Util\RelayCommand.cs" />
     <Compile Include="View\SettingsWindowViewModel.cs" />
     <Compile Include="View\StatsViewModel.cs" />
-    <Compile Include="View\ViewModelLocator.cs" />
+    <Compile Include="View\Util\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

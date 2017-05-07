@@ -5,10 +5,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:view="clr-namespace:MatchMakingMonitor.View"
+             xmlns:util="clr-namespace:MatchMakingMonitor.View.Util"
              mc:Ignorable="d">
 	<Application.Resources>
-		<view:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
-		<view:PercentageConverter x:Key="PercentageConverter" />
+		<util:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
+		<util:PercentageConverter x:Key="PercentageConverter" />
 	</Application.Resources>
 </Application>

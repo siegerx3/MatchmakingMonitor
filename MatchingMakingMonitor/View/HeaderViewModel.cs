@@ -1,6 +1,7 @@
 ﻿using System;
 using MatchMakingMonitor.Services;
 using MatchMakingMonitor.SocketIO;
+using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.View
 {

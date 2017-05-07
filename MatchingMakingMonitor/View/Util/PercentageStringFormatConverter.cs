@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace MatchMakingMonitor.View
+namespace MatchMakingMonitor.View.Util
 {
 	class PercentageConverter : IValueConverter
 	{

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using MatchMakingMonitor.Models;
 using MatchMakingMonitor.Services;
+using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.View
 {
