@@ -3,13 +3,12 @@
 						 ShutdownMode="OnMainWindowClose"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MatchMakingMonitor"
-						 xmlns:vm="clr-namespace:MatchMakingMonitor.ViewModels"
-						 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:view="clr-namespace:MatchMakingMonitor.View"
              mc:Ignorable="d">
 	<Application.Resources>
-		<vm:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
-		<vm:PercentageConverter x:Key="PercentageConverter" />
+		<view:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
+		<view:PercentageConverter x:Key="PercentageConverter" />
 	</Application.Resources>
 </Application>

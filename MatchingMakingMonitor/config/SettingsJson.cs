@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatchMakingMonitor.config
 {
+	[SuppressMessage("ReSharper", "InconsistentNaming")]
 	public class SettingsJson
 	{
 		public string installDirectory { get; set; }
@@ -42,7 +40,7 @@ namespace MatchMakingMonitor.config
 		public double winWeight { get; set; }
 
 
-		private PropertyInfo[] properties;
+		private readonly PropertyInfo[] properties;
 		public SettingsJson()
 		{
 			properties = GetType().GetProperties();

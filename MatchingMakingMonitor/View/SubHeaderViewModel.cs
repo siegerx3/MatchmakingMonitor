@@ -1,143 +1,138 @@
-﻿using MatchMakingMonitor.Services;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using MatchMakingMonitor.Services;
 
-namespace MatchMakingMonitor.ViewModels
+namespace MatchMakingMonitor.View
 {
 	public class SubHeaderViewModel : BaseViewBinding
 	{
 		public RelayCommand PathClickCommand { get; set; }
 
-		public ObservableCollection<string> Regions { get; private set; } = new ObservableCollection<string>() { "NA", "EU", "RU", "SEA" };
+		public ObservableCollection<string> Regions { get; } = new ObservableCollection<string>() { "NA", "EU", "RU", "SEA" };
 
-		private string region = "NA";
+		private string _region = "NA";
 
 		public string Region
 		{
-			get { return region; }
+			get => _region;
 			set
 			{
-				region = value;
-				settings.Region = value;
+				_region = value;
+				_settings.Region = value;
 				FirePropertyChanged();
 			}
 		}
 
 
-		private string installDirectoryText = "Check install directory";
+		private string _installDirectoryText = "Check install directory";
 
 		public string InstallDirectoryText
 		{
-			get { return installDirectoryText; }
+			get => _installDirectoryText;
 			set
 			{
-				installDirectoryText = value;
+				_installDirectoryText = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush installDirectoryColor;
+		private SolidColorBrush _installDirectoryColor;
 
 		public SolidColorBrush InstallDirectoryColor
 		{
-			get { return installDirectoryColor; }
+			get => _installDirectoryColor;
 			set
 			{
-				installDirectoryColor = value;
+				_installDirectoryColor = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private string statusText = "Not currently in Battle...";
+		private string _statusText = "Not currently in Battle...";
 
 		public string StatusText
 		{
-			get { return statusText; }
+			get => _statusText;
 			set
 			{
-				statusText = value;
+				_statusText = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush statusColor = Brushes.Black;
+		private SolidColorBrush _statusColor = Brushes.Black;
 
 		public SolidColorBrush StatusColor
 		{
-			get { return statusColor; }
+			get => _statusColor;
 			set
 			{
-				statusColor = value;
+				_statusColor = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private bool enableUI = true;
-		public bool EnableUI
+		private bool _enableUi = true;
+		public bool EnableUi
 		{
-			get { return enableUI; }
+			get => _enableUi;
 			set
 			{
-				enableUI = value;
+				_enableUi = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private Visibility showProgress = Visibility.Collapsed;
+		private Visibility _showProgress = Visibility.Collapsed;
 		public Visibility ShowProgress
 		{
-			get { return showProgress; }
+			get => _showProgress;
 			set
 			{
-				showProgress = value;
+				_showProgress = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private LoggingService loggingService;
-		private Services.Settings settings;
-		private StatsService statsService;
+		private readonly Settings _settings;
 
-		public SubHeaderViewModel(Services.Settings settings, LoggingService loggingService, StatsService statsService)
+		public SubHeaderViewModel(Settings settings, StatsService statsService)
 		{
-			this.settings = settings;
-			this.loggingService = loggingService;
-			this.statsService = statsService;
+			_settings = settings;
 
-			this.PathClickCommand = new RelayCommand(pathClicked);
+			PathClickCommand = new RelayCommand(PathClicked);
 
-			this.settings.SettingChanged(Settings.KeyInstallDirectory).Subscribe(initPath);
-			this.statsService.StatsStatusChanged.Subscribe(status =>
+			_settings.SettingChanged(Settings.KeyInstallDirectory).Subscribe(InitPath);
+			statsService.StatsStatusChanged.Subscribe(status =>
 			{
-				setStatusText(status);
+				SetStatusText(status);
 				if (status == StatsStatus.Fetching)
 				{
-					EnableUI = false;
+					EnableUi = false;
 					ShowProgress = Visibility.Visible;
 				}
 				else
 				{
-					EnableUI = true;
+					EnableUi = true;
 					ShowProgress = Visibility.Collapsed;
 				}
 			});
 
 
-			Region = this.settings.Region;
+			Region = _settings.Region;
 		}
 
 		public SubHeaderViewModel()
 		{
 		}
 
-		private void initPath(string key)
+		private void InitPath(string key)
 		{
-			var directory = settings.Get<string>(key);
+			var directory = _settings.Get<string>(key);
 			if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 			{
 				InstallDirectoryColor = Brushes.Green;
@@ -150,17 +145,17 @@ namespace MatchMakingMonitor.ViewModels
 			}
 		}
 
-		private void pathClicked()
+		private void PathClicked()
 		{
 			var folderBrowser = new FolderBrowserDialog();
 			var result = folderBrowser.ShowDialog();
 			if (result == DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
 			{
-				this.settings.InstallDirectory = folderBrowser.SelectedPath;
+				_settings.InstallDirectory = folderBrowser.SelectedPath;
 			}
 		}
 
-		private void setStatusText(StatsStatus status)
+		private void SetStatusText(StatsStatus status)
 		{
 			switch (status)
 			{

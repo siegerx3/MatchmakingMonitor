@@ -1,29 +1,17 @@
 ﻿using MatchMakingMonitor.SocketIO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MatchMakingMonitor
 {
 	/// <summary>
 	/// Interaction logic for QrCode.xaml
 	/// </summary>
-	public partial class QrCodeWindow : Window
+	public partial class QrCodeWindow
 	{
-		private SocketIOService socketIOService;
-		public QrCodeWindow(SocketIOService socketIOService)
+		// ReSharper disable once NotAccessedField.Local
+		private SocketIoService _socketIoService;
+		public QrCodeWindow(SocketIoService socketIoService)
 		{
-			this.socketIOService = socketIOService;
+			_socketIoService = socketIoService;
 			InitializeComponent();
 		}
 	}

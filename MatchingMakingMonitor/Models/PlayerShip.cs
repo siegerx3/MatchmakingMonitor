@@ -64,29 +64,25 @@
 
 		public PlayerShip(Ship ship, WargamingPlayer player, ShipInfo shipInfo, int relationship) : this(shipInfo)
 		{
-			if (ship != null && player != null)
-			{
-				ShipId = ship.ship_id;
-				AccountId = ship.account_id;
-				Nickname = player.nickname;
-				Relation = relationship;
-				Frags = ship.pvp.frags;
-				Wins = ship.pvp.wins;
-				Battles = ship.pvp.battles;
-				DamageDealt = ship.pvp.damage_dealt;
-				XpEarned = ship.pvp.xp;
-				IsPrivateOrHidden = ship.@private != null;
-			}
+			if (ship == null || player == null) return;
+			ShipId = ship.ship_id;
+			AccountId = ship.account_id;
+			Nickname = player.nickname;
+			Relation = relationship;
+			Frags = ship.pvp.frags;
+			Wins = ship.pvp.wins;
+			Battles = ship.pvp.battles;
+			DamageDealt = ship.pvp.damage_dealt;
+			XpEarned = ship.pvp.xp;
+			IsPrivateOrHidden = ship.@private != null;
 		}
 
 		public PlayerShip(ShipInfo shipInfo)
 		{
-			if (shipInfo != null)
-			{
-				ShipName = shipInfo.ShipName;
-				ShipType = shipInfo.ShipType;
-				ShipTier = shipInfo.Tier;
-			}
+			if (shipInfo == null) return;
+			ShipName = shipInfo.ShipName;
+			ShipType = shipInfo.ShipType;
+			ShipTier = shipInfo.Tier;
 		}
 
 		public PlayerShip()

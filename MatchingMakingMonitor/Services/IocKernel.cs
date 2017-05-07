@@ -1,38 +1,31 @@
 ﻿using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.ViewModels;
+using MatchMakingMonitor.View;
 using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatchMakingMonitor.Services
 {
 	public static class IoCKernel
 	{
-		private static IKernel kernel;
+		private static IKernel _kernel;
 
 		public static void Init()
 		{
-			if (kernel == null)
-			{
-				kernel = new StandardKernel();
+			if (_kernel != null) return;
+			_kernel = new StandardKernel();
 
-				kernel.Bind<LoggingService>().To<LoggingService>().InSingletonScope();
-				kernel.Bind<SocketIOService>().To<SocketIOService>().InSingletonScope();
-				kernel.Bind<WatcherService>().To<WatcherService>().InSingletonScope();
-				kernel.Bind<StatsService>().To<StatsService>().InSingletonScope();
-				kernel.Bind<ApiService>().To<ApiService>().InSingletonScope();
-				kernel.Bind<Settings>().To<Settings>().InSingletonScope();
+			_kernel.Bind<LoggingService>().To<LoggingService>().InSingletonScope();
+			_kernel.Bind<SocketIoService>().To<SocketIoService>().InSingletonScope();
+			_kernel.Bind<WatcherService>().To<WatcherService>().InSingletonScope();
+			_kernel.Bind<StatsService>().To<StatsService>().InSingletonScope();
+			_kernel.Bind<ApiService>().To<ApiService>().InSingletonScope();
+			_kernel.Bind<Settings>().To<Settings>().InSingletonScope();
 
-				kernel.Bind<StatsViewModel>().To<StatsViewModel>().InSingletonScope();
-			}
+			_kernel.Bind<StatsViewModel>().To<StatsViewModel>().InSingletonScope();
 		}
 
 		public static T Get<T>()
 		{
-			return kernel.Get<T>();
+			return _kernel.Get<T>();
 		}
 	}
 }

@@ -1,40 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace MatchMakingMonitor.Services
 {
 	public class WatcherService
 	{
-		private FileSystemWatcher fileSystemWatcher;
-		private bool initialCheckDone = false;
+		private bool _initialCheckDone;
 
-		private Settings settings;
+		private readonly Settings _settings;
 
-		private BehaviorSubject<string> matchFoundSubject;
-		public IObservable<string> MatchFound => matchFoundSubject.AsObservable();
-		public WatcherService(LoggingService loggingService, Settings settings)
+		private readonly BehaviorSubject<string> _matchFoundSubject;
+		public IObservable<string> MatchFound => _matchFoundSubject.AsObservable();
+		public WatcherService(Settings settings)
 		{
-			this.settings = settings;
+			_settings = settings;
 
-			matchFoundSubject = new BehaviorSubject<string>(null);
+			_matchFoundSubject = new BehaviorSubject<string>(null);
 
-			fileSystemWatcher = new FileSystemWatcher();
-			fileSystemWatcher.Filter = "tempArenaInfo.json";
-			fileSystemWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.Attributes | NotifyFilters.LastAccess;
+			var fileSystemWatcher = new FileSystemWatcher
+			{
+				Filter = "tempArenaInfo.json",
+				NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.Attributes |
+				               NotifyFilters.LastAccess
+			};
 			fileSystemWatcher.Created += (obj, args) =>
 			{
-				matchFound(args.FullPath);
+				CallMatchFound(args.FullPath);
 			};
 			fileSystemWatcher.Changed += (obj, args) =>
 			{
-				matchFound(args.FullPath);
+				CallMatchFound(args.FullPath);
 			};
 
 
@@ -45,11 +42,9 @@ namespace MatchMakingMonitor.Services
 				{
 					fileSystemWatcher.Path = Path.Combine(directory, "replays");
 					fileSystemWatcher.EnableRaisingEvents = true;
-					if (!initialCheckDone)
-					{
-						initialCheckDone = true;
-						checkStatic();
-					}
+					if (_initialCheckDone) return;
+					_initialCheckDone = true;
+					CheckStatic();
 				}
 				else
 				{
@@ -59,23 +54,23 @@ namespace MatchMakingMonitor.Services
 
 			settings.SettingChanged(Settings.KeyRegion, false).Subscribe(key =>
 			{
-				checkStatic();
+				CheckStatic();
 			});
 		}
 
-		private void checkStatic()
+		private void CheckStatic()
 		{
-			var directory = settings.InstallDirectory;
+			var directory = _settings.InstallDirectory;
 			var path = Path.Combine(directory, "replays", "tempArenaInfo.json");
 			if (File.Exists(path))
 			{
-				matchFound(path);
+				CallMatchFound(path);
 			}
 		}
 
-		private void matchFound(string path)
+		private void CallMatchFound(string path)
 		{
-			matchFoundSubject.OnNext(path);
+			_matchFoundSubject.OnNext(path);
 		}
 	}
 }

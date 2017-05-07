@@ -1,13 +1,9 @@
 ﻿using MatchMakingMonitor.Services;
-using MatchMakingMonitor.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using MatchMakingMonitor.View;
 
 namespace MatchMakingMonitor.Models
 {
@@ -15,90 +11,90 @@ namespace MatchMakingMonitor.Models
 	{
 		public PlayerShip Player { get; set; }
 
-		private SolidColorBrush background;
+		private SolidColorBrush _background;
 		public SolidColorBrush Background
 		{
-			get { return background; }
+			get => _background;
 			set
 			{
-				background = value;
+				_background = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorName = Brushes.Black;
+		private SolidColorBrush _colorName = Brushes.Black;
 		public SolidColorBrush ColorName
 		{
-			get { return colorName; }
+			get => _colorName;
 			set
 			{
-				colorName = value;
+				_colorName = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorWinRate = Brushes.Black;
+		private SolidColorBrush _colorWinRate = Brushes.Black;
 		public SolidColorBrush ColorWinRate
 		{
-			get { return colorWinRate; }
+			get => _colorWinRate;
 			set
 			{
-				colorWinRate = value;
+				_colorWinRate = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorAvgXp = Brushes.Black;
+		private SolidColorBrush _colorAvgXp = Brushes.Black;
 		public SolidColorBrush ColorAvgXp
 		{
-			get { return colorAvgXp; }
+			get => _colorAvgXp;
 			set
 			{
-				colorAvgXp = value;
+				_colorAvgXp = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorAvgFrags = Brushes.Black;
+		private SolidColorBrush _colorAvgFrags = Brushes.Black;
 		public SolidColorBrush ColorAvgFrags
 		{
-			get { return colorAvgFrags; }
+			get => _colorAvgFrags;
 			set
 			{
-				colorAvgFrags = value;
+				_colorAvgFrags = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorAvgDamage = Brushes.Black;
+		private SolidColorBrush _colorAvgDamage = Brushes.Black;
 		public SolidColorBrush ColorAvgDamage
 		{
-			get { return colorAvgDamage; }
+			get => _colorAvgDamage;
 			set
 			{
-				colorAvgDamage = value;
+				_colorAvgDamage = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorBattles = Brushes.Black;
+		private SolidColorBrush _colorBattles = Brushes.Black;
 		public SolidColorBrush ColorBattles
 		{
-			get { return colorBattles; }
+			get => _colorBattles;
 			set
 			{
-				colorBattles = value;
+				_colorBattles = value;
 				FirePropertyChanged();
 			}
 		}
 
-		private SolidColorBrush colorBorder = Brushes.Transparent;
+		private SolidColorBrush _colorBorder = Brushes.Transparent;
 		public SolidColorBrush ColorBorder
 		{
-			get { return colorBorder; }
+			get => _colorBorder;
 			set
 			{
-				colorBorder = value;
+				_colorBorder = value;
 				FirePropertyChanged();
 			}
 		}
@@ -111,7 +107,7 @@ namespace MatchMakingMonitor.Models
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
 		public string TextName => $"{Player?.Nickname} | {AccountId}";
 
-		public string[] CommandParams => new string[] { AccountId, Player.Nickname };
+		public string[] CommandParams => new[] { AccountId, Player.Nickname };
 
 		public string ShipName => Player?.ShipName;
 		public string AccountId => Player?.AccountId.ToString();
@@ -121,35 +117,23 @@ namespace MatchMakingMonitor.Models
 		public double AvgFrags { get; private set; }
 		public double AvgDamage { get; private set; }
 
-		private int colorNameKey;
-		private int colorWinRateKey;
-		private int colorAvgFragsKey;
-		private int colorAvgXpKey;
-		private int colorAvgDamageKey;
-		private int colorBattlesKey;
+		private int _colorNameKey;
+		private int _colorWinRateKey;
+		private int _colorAvgFragsKey;
+		private int _colorAvgXpKey;
+		private int _colorAvgDamageKey;
+		private int _colorBattlesKey;
 
 
-		public Visibility Visibility
-		{
-			get
-			{
-				return Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
-			}
-		}
+		public Visibility Visibility => Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
 
-		public Visibility TextVisibility
-		{
-			get
-			{
-				return !Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
-			}
-		}
+		public Visibility TextVisibility => !Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
 
 		public Settings Settings { get; set; }
 		public DisplayPlayerStats(Settings settings, PlayerShip player) : this()
 		{
 			Player = player;
-			this.Settings = settings;
+			Settings = settings;
 			WinRate = Math.Round(player.Wins / player.Battles * 100, 2);
 			AvgFrags = Math.Round(player.Frags / player.Battles, 2);
 			AvgXp = Math.Round(player.XpEarned / player.Battles, 0);
@@ -180,14 +164,14 @@ namespace MatchMakingMonitor.Models
 			double totalRating = 0;
 			if (!Player.IsPrivateOrHidden)
 			{
-				ColorWinRate = getColor(WinRate, Settings.WinLimits, totalRating, Settings.WinWeight, out totalRating, out colorWinRateKey);
-				ColorAvgFrags = getColor(AvgFrags, Settings.FragsLimits, totalRating, Settings.FragsWeight, out totalRating, out colorAvgFragsKey);
-				ColorAvgXp = getColor(AvgXp, Settings.XpLimits, totalRating, Settings.XpWeight, out totalRating, out colorAvgXpKey);
-				ColorAvgDamage = getColor(AvgDamage, Settings.DmgLimits, totalRating, Settings.DmgWeight, out totalRating, out colorAvgDamageKey);
-				ColorBattles = getColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating, out colorBattlesKey);
+				ColorWinRate = GetColor(WinRate, Settings.WinLimits, totalRating, Settings.WinWeight, out totalRating, out _colorWinRateKey);
+				ColorAvgFrags = GetColor(AvgFrags, Settings.FragsLimits, totalRating, Settings.FragsWeight, out totalRating, out _colorAvgFragsKey);
+				ColorAvgXp = GetColor(AvgXp, Settings.XpLimits, totalRating, Settings.XpWeight, out totalRating, out _colorAvgXpKey);
+				ColorAvgDamage = GetColor(AvgDamage, Settings.DmgLimits, totalRating, Settings.DmgWeight, out totalRating, out _colorAvgDamageKey);
+				ColorBattles = GetColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating, out _colorBattlesKey);
 
-				colorNameKey = (int)Math.Floor((double)(totalRating / 5));
-				ColorName = Settings.Brushes[colorNameKey - 1];
+				_colorNameKey = (int)Math.Floor(totalRating / 5);
+				ColorName = Settings.Brushes[_colorNameKey - 1];
 			}
 
 			var color = ColorName.CloneCurrentValue();
@@ -199,29 +183,15 @@ namespace MatchMakingMonitor.Models
 		}
 
 		#region Colors
-		private static double[] dmgLimits = new double[9] { 75000, 65000, 55000, 45000, 35000, 25000, 15000, 10000, 0 };
-		private static double[] xpLimits = new double[9] { 1500, 1200, 1000, 900, 800, 600, 500, 400, 0 };
-		private static double[] fragsLimits = new double[9] { 1.5, 1.3, 1.1, 1.0, 0.8, 0.6, 0.4, 0.2, 0 };
-		private static double[] winLimits = new double[9] { 90, 80, 70, 60, 50, 40, 30, 20, 0 };
-		private static double[] battleLimits = new double[9] { 150, 100, 80, 60, 40, 30, 20, 10, 0 };
 
-		private SolidColorBrush getColor(double value, ObservableCollection<double> limits)
+		private SolidColorBrush GetColor(double value, IReadOnlyList<double> limits, double oldTotal, double multiplier, out double total, out int key)
 		{
-			double dummy = 0;
-			int dummyInt = 0;
-			return getColor(value, limits, dummy, 1, out dummy, out dummyInt);
-		}
-
-		private SolidColorBrush getColor(double value, ObservableCollection<double> limits, double oldTotal, double multiplier, out double total, out int key)
-		{
-			for (int i = 0; i < limits.Count; i++)
+			for (var i = 0; i < limits.Count; i++)
 			{
-				if (value >= limits[i])
-				{
-					key = i + 1;
-					total = oldTotal + (key * multiplier);
-					return Settings.Brushes[i];
-				}
+				if (!(value >= limits[i])) continue;
+				key = i + 1;
+				total = oldTotal + (key * multiplier);
+				return Settings.Brushes[i];
 			}
 			total = oldTotal + (9 * multiplier);
 			key = 9;
@@ -246,12 +216,12 @@ namespace MatchMakingMonitor.Models
 				AvgFrags = AvgFrags,
 				AvgDamage = AvgDamage,
 
-				ColorNameKey = colorNameKey,
-				ColorWinRateKey = colorWinRateKey,
-				ColorAvgFragsKey = colorAvgFragsKey,
-				ColorAvgXpKey = colorAvgXpKey,
-				ColorAvgDamageKey = colorAvgDamageKey,
-				ColorBattlesKey = colorBattlesKey,
+				ColorNameKey = _colorNameKey,
+				ColorWinRateKey = _colorWinRateKey,
+				ColorAvgFragsKey = _colorAvgFragsKey,
+				ColorAvgXpKey = _colorAvgXpKey,
+				ColorAvgDamageKey = _colorAvgDamageKey,
+				ColorBattlesKey = _colorBattlesKey,
 			};
 		}
 	}

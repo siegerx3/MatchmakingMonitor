@@ -1,78 +1,65 @@
 ﻿using Quobject.SocketIoClientDotNet.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MatchMakingMonitor.SocketIO
 {
-	public class SocketIOService
+	public class SocketIoService
 	{
 		public LiveMatchSocket Hub;
 
-		public IObservable<ConnectionState> StateChanged
+		public IObservable<ConnectionState> StateChanged => _stateChanged.AsObservable();
+
+		private readonly ReplaySubject<ConnectionState> _stateChanged;
+
+
+		public ConnectionState ConnectionState { get; private set; }
+
+		private readonly Socket _socketConnection;
+
+		public SocketIoService()
 		{
-			get
+			_socketConnection = IO.Socket("http://localhost:4000", new IO.Options() { AutoConnect = false });
+			Hub = new LiveMatchSocket(_socketConnection);
+
+			_stateChanged = new ReplaySubject<ConnectionState>();
+
+			_socketConnection.On(Socket.EVENT_CONNECT, () =>
 			{
-				return stateChanged.AsObservable();
-			}
-		}
-
-		private ReplaySubject<ConnectionState> stateChanged;
-
-
-		public ConnectionState ConnectionState { get { return this.connectionState; } }
-
-		private ConnectionState connectionState;
-
-		private Socket socketConnection;
-
-		public SocketIOService()
-		{
-			socketConnection = IO.Socket("http://localhost:4000", new IO.Options() { AutoConnect = false });
-			Hub = new LiveMatchSocket(socketConnection);
-
-			stateChanged = new ReplaySubject<ConnectionState>();
-
-			socketConnection.On(Socket.EVENT_CONNECT, () =>
-			{
-				connectionState = ConnectionState.Connected;
-				stateChanged.OnNext(connectionState);
+				ConnectionState = ConnectionState.Connected;
+				_stateChanged.OnNext(ConnectionState);
 			});
 
-			socketConnection.On(Socket.EVENT_DISCONNECT, () =>
+			_socketConnection.On(Socket.EVENT_DISCONNECT, () =>
 			{
-				connectionState = ConnectionState.Disconnected;
-				stateChanged.OnNext(connectionState);
+				ConnectionState = ConnectionState.Disconnected;
+				_stateChanged.OnNext(ConnectionState);
 			});
 
-			socketConnection.On(Socket.EVENT_RECONNECTING, () =>
+			_socketConnection.On(Socket.EVENT_RECONNECTING, () =>
 			{
-				connectionState = ConnectionState.Reconnecting;
-				stateChanged.OnNext(connectionState);
+				ConnectionState = ConnectionState.Reconnecting;
+				_stateChanged.OnNext(ConnectionState);
 			});
 
-			socketConnection.On(Socket.EVENT_RECONNECT, () =>
+			_socketConnection.On(Socket.EVENT_RECONNECT, () =>
 			{
-				connectionState = ConnectionState.Connected;
-				stateChanged.OnNext(connectionState);
+				ConnectionState = ConnectionState.Connected;
+				_stateChanged.OnNext(ConnectionState);
 			});
 		}
 
 		public void Connect()
 		{
-			connectionState = ConnectionState.Connecting;
-			stateChanged.OnNext(connectionState);
-			socketConnection.Connect();
+			ConnectionState = ConnectionState.Connecting;
+			_stateChanged.OnNext(ConnectionState);
+			_socketConnection.Connect();
 		}
 
 		public void Disconnect()
 		{
-			socketConnection.Disconnect();
+			_socketConnection.Disconnect();
 		}
 		
 	}

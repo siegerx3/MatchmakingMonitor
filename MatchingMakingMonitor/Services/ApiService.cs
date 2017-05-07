@@ -1,88 +1,81 @@
 ﻿using MatchMakingMonitor.Models;
 using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MatchMakingMonitor.Services
 {
 	public class ApiService
 	{
-		private Settings settings;
-		private LoggingService loggingService;
+		private readonly Settings _settings;
+		private readonly LoggingService _loggingService;
 
-		private List<ShipInfo> shipInfos;
-		public IReadOnlyList<ShipInfo> ShipInfos => shipInfos.AsReadOnly();
+		private List<ShipInfo> _shipInfos;
+		public IReadOnlyList<ShipInfo> ShipInfos => _shipInfos.AsReadOnly();
 
-		private HttpClient httpClient;
+		private HttpClient _httpClient;
 		public ApiService(LoggingService loggingService, Settings settings)
 		{
-			this.settings = settings;
-			this.loggingService = loggingService;
+			_settings = settings;
+			_loggingService = loggingService;
+#pragma warning disable 4014
 			Ships();
+#pragma warning restore 4014
 		}
 
-		private string applicationId
-		{
-			get
-			{
-				return settings.Get<string>("appId" + settings.Region);
-			}
-		}
+		private string ApplicationId => _settings.Get<string>("appId" + _settings.Region);
 
-		private async Task Ships()
+		private async void Ships()
 		{
 			try
 			{
 				var client = new HttpClient() { BaseAddress = new Uri("https://wowreplays.com") };
 
 				var result = await client.PostAsync("/Home/GetShipsForMatchmakingMonitor", null);
-				if (result.StatusCode == HttpStatusCode.OK)
-				{
-					var shipsJson = await result.Content.ReadAsStringAsync();
-					shipInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<ShipInfo>>(shipsJson));
-				}
-			} //end try
+				if (result.StatusCode != HttpStatusCode.OK) return;
+				var shipsJson = await result.Content.ReadAsStringAsync();
+				_shipInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<ShipInfo>>(shipsJson));
+			}
 			catch (Exception e)
 			{
-				loggingService.Error("Exception Occurred While Retrieving Ships", e);
-				shipInfos = new List<ShipInfo>();
-			} //end catch
+				_loggingService.Error("Exception Occurred While Retrieving Ships", e);
+				_shipInfos = new List<ShipInfo>();
+			}
 		}
 
 		public async Task<IEnumerable<PlayerShip>> Players(Replay replay)
 		{
 			try
 			{
-				while (shipInfos == null)
+				while (_shipInfos == null)
 				{
 					await Task.Delay(1000);
 				}
-				var baseUrl = settings.Get<string>("baseUrl" + settings.Region);
-				httpClient = new HttpClient();
-				httpClient.BaseAddress = new Uri(baseUrl);
+				var baseUrl = _settings.Get<string>("baseUrl" + _settings.Region);
+				_httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
-				var tasks = replay.vehicles.Select(v => getAsync(v)).ToList();
+				var tasks = replay.vehicles.Select(GetAsync).ToList();
 				var list = await Task.WhenAll(tasks);
 				return list.Where(p => p != null);
 			}
 			catch (Exception e)
 			{
-				loggingService.Error("Error occured while fetching players", e);
+				_loggingService.Error("Error occured while fetching players", e);
 				return new List<PlayerShip>();
 			}
 		}
 
-		private async Task<PlayerShip> getAsync(Vehicle vehicle)
+		[SuppressMessage("ReSharper", "InvertIf")]
+		private async Task<PlayerShip> GetAsync(Vehicle vehicle)
 		{
 			var shipInfo = ShipInfos.SingleOrDefault(s => s.ShipId == vehicle.shipId);
 
-			var playerResponse = await httpClient.GetAsync($"wows/account/list/?application_id={applicationId}&search={vehicle.name}");
+			var playerResponse = await _httpClient.GetAsync($"wows/account/list/?application_id={ApplicationId}&search={vehicle.name}");
 			if (playerResponse.StatusCode == HttpStatusCode.OK)
 			{
 				var playerJson = await playerResponse.Content.ReadAsStringAsync();
@@ -91,13 +84,13 @@ namespace MatchMakingMonitor.Services
 				var player = players.data.SingleOrDefault(p => p.nickname == vehicle.name);
 				if (player != null)
 				{
-					var shipResponse = await httpClient.GetAsync($"wows/ships/stats/?application_id={applicationId}&account_id={player.account_id}&ship_id={vehicle.shipId}");
+					var shipResponse = await _httpClient.GetAsync($"wows/ships/stats/?application_id={ApplicationId}&account_id={player.account_id}&ship_id={vehicle.shipId}");
 					if (shipResponse.StatusCode == HttpStatusCode.OK)
 					{
 						var shipJson = await shipResponse.Content.ReadAsStringAsync();
 						shipJson = shipJson.Replace("\"" + player.account_id + "\":", "\"Ships\":");
 						var stats = await Task.Run(() => JsonConvert.DeserializeObject<PlayerStats>(shipJson));
-						if (stats != null && stats.data != null && stats.data.Ships != null && stats.data.Ships.Any())
+						if (stats?.data?.Ships != null && stats.data.Ships.Any())
 						{
 							var ship = stats.data.Ships.First();
 							return new PlayerShip(ship, player, shipInfo, vehicle.relation);

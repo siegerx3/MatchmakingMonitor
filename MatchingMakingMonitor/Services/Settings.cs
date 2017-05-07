@@ -1,46 +1,41 @@
 ﻿using MatchMakingMonitor.config;
-using MatchMakingMonitor.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Configuration;
-using System.Dynamic;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using MatchMakingMonitor.View;
 
 namespace MatchMakingMonitor.Services
 {
 	public class Settings : BaseViewBinding
 	{
-		private static Settings instance;
+		private static Settings _instance;
 
-		private static string defaultSettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.default.json");
-		private static string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.json");
+		private static readonly string SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.json");
 
-		private SettingsJson currentSettings;
+		private SettingsJson _currentSettings;
 
 		#region Keys
 		public const string KeyInstallDirectory = nameof(SettingsJson.installDirectory);
 
-		public const string KeyAppIdNA = nameof(SettingsJson.appIdNA);
-		public const string KeyAppIdEU = nameof(SettingsJson.appIdEU);
-		public const string KeyAppIdRU = nameof(SettingsJson.appIdRU);
-		public const string KeyAppIdSEA = nameof(SettingsJson.appIdSEA);
+		public const string KeyAppIdNa = nameof(SettingsJson.appIdNA);
+		public const string KeyAppIdEu = nameof(SettingsJson.appIdEU);
+		public const string KeyAppIdRu = nameof(SettingsJson.appIdRU);
+		public const string KeyAppIdSea = nameof(SettingsJson.appIdSEA);
 
-		public const string KeyBaseUrlNA = nameof(SettingsJson.baseUrlNA);
-		public const string KeyBaseUrlEU = nameof(SettingsJson.baseUrlEU);
-		public const string KeyBaseUrlRU = nameof(SettingsJson.baseUrlRU);
-		public const string KeyBaseUrlSEA = nameof(SettingsJson.baseUrlSEA);
+		public const string KeyBaseUrlNa = nameof(SettingsJson.baseUrlNA);
+		public const string KeyBaseUrlEu = nameof(SettingsJson.baseUrlEU);
+		public const string KeyBaseUrlRu = nameof(SettingsJson.baseUrlRU);
+		public const string KeyBaseUrlSea = nameof(SettingsJson.baseUrlSEA);
 
 		public const string KeyRegion = nameof(SettingsJson.region);
 
@@ -74,179 +69,200 @@ namespace MatchMakingMonitor.Services
 		public static string[] KeysLimits = new string[] { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimits };
 		public static string[] KeysWeights = new string[] { KeyBattleWeight, KeyWinWeight, KeyFragsWeight, KeyXpWeight, KeyDmgWeight };
 		public static string[] KeysOthers = new string[] { KeyFontSize };
-		public static string[] KeysUISettings = KeysColors.Concat(KeysLimits).Concat(KeysWeights).ToArray();
+		public static string[] KeysUiSettings = KeysColors.Concat(KeysLimits).Concat(KeysWeights).ToArray();
 
 		#endregion
 
 		#region Settings
-		public string InstallDirectory { get { return instance.Get<string>(KeyInstallDirectory); } set { instance.Set(KeyInstallDirectory, value); } }
+		public string InstallDirectory { get => _instance.Get<string>(KeyInstallDirectory);
+			set => _instance.Set(KeyInstallDirectory, value);
+		}
 
-		public string AppIdNA { get { return instance.Get<string>(KeyAppIdNA); } set { instance.Set(KeyAppIdNA, value); } }
-		public string AppIdEU { get { return instance.Get<string>(KeyAppIdEU); } set { instance.Set(KeyAppIdEU, value); } }
-		public string AppIdRU { get { return instance.Get<string>(KeyAppIdRU); } set { instance.Set(KeyAppIdRU, value); } }
-		public string AppIdSEA { get { return instance.Get<string>(KeyAppIdSEA); } set { instance.Set(KeyAppIdSEA, value); } }
+		public string AppIdNa { get => _instance.Get<string>(KeyAppIdNa);
+			set => _instance.Set(KeyAppIdNa, value);
+		}
+		public string AppIdEu { get => _instance.Get<string>(KeyAppIdEu);
+			set => _instance.Set(KeyAppIdEu, value);
+		}
+		public string AppIdRu { get => _instance.Get<string>(KeyAppIdRu);
+			set => _instance.Set(KeyAppIdRu, value);
+		}
+		public string AppIdSea { get => _instance.Get<string>(KeyAppIdSea);
+			set => _instance.Set(KeyAppIdSea, value);
+		}
 
-		public string BaseUrlNA { get { return instance.Get<string>(KeyBaseUrlNA); } set { instance.Set(KeyBaseUrlNA, value); } }
-		public string BaseUrlEU { get { return instance.Get<string>(KeyBaseUrlEU); } set { instance.Set(KeyBaseUrlEU, value); } }
-		public string BaseUrlRU { get { return instance.Get<string>(KeyBaseUrlRU); } set { instance.Set(KeyBaseUrlRU, value); } }
-		public string BaseUrlSEA { get { return instance.Get<string>(KeyBaseUrlSEA); } set { instance.Set(KeyBaseUrlSEA, value); } }
+		public string BaseUrlNa { get => _instance.Get<string>(KeyBaseUrlNa);
+			set => _instance.Set(KeyBaseUrlNa, value);
+		}
+		public string BaseUrlEu { get => _instance.Get<string>(KeyBaseUrlEu);
+			set => _instance.Set(KeyBaseUrlEu, value);
+		}
+		public string BaseUrlRu { get => _instance.Get<string>(KeyBaseUrlRu);
+			set => _instance.Set(KeyBaseUrlRu, value);
+		}
+		public string BaseUrlSea { get => _instance.Get<string>(KeyBaseUrlSea);
+			set => _instance.Set(KeyBaseUrlSea, value);
+		}
 
-		public string Region { get { return instance.Get<string>(KeyRegion); } set { instance.Set(KeyRegion, value); } }
+		public string Region { get => _instance.Get<string>(KeyRegion);
+			set => _instance.Set(KeyRegion, value);
+		}
 
-		public string Color9 { get { return instance.Get<string>(KeyColor9); } set { instance.Set(KeyColor9, value); FirePropertyChanged(); } }
-		public string Color8 { get { return instance.Get<string>(KeyColor8); } set { instance.Set(KeyColor8, value); FirePropertyChanged(); } }
-		public string Color7 { get { return instance.Get<string>(KeyColor7); } set { instance.Set(KeyColor7, value); FirePropertyChanged(); } }
-		public string Color6 { get { return instance.Get<string>(KeyColor6); } set { instance.Set(KeyColor6, value); FirePropertyChanged(); } }
-		public string Color5 { get { return instance.Get<string>(KeyColor5); } set { instance.Set(KeyColor5, value); FirePropertyChanged(); } }
-		public string Color4 { get { return instance.Get<string>(KeyColor4); } set { instance.Set(KeyColor4, value); FirePropertyChanged(); } }
-		public string Color3 { get { return instance.Get<string>(KeyColor3); } set { instance.Set(KeyColor3, value); FirePropertyChanged(); } }
-		public string Color2 { get { return instance.Get<string>(KeyColor2); } set { instance.Set(KeyColor2, value); FirePropertyChanged(); } }
-		public string Color1 { get { return instance.Get<string>(KeyColor1); } set { instance.Set(KeyColor1, value); FirePropertyChanged(); } }
+		public string Color9 { get => _instance.Get<string>(KeyColor9);
+			set { _instance.Set(KeyColor9, value); FirePropertyChanged(); } }
+		public string Color8 { get => _instance.Get<string>(KeyColor8);
+			set { _instance.Set(KeyColor8, value); FirePropertyChanged(); } }
+		public string Color7 { get => _instance.Get<string>(KeyColor7);
+			set { _instance.Set(KeyColor7, value); FirePropertyChanged(); } }
+		public string Color6 { get => _instance.Get<string>(KeyColor6);
+			set { _instance.Set(KeyColor6, value); FirePropertyChanged(); } }
+		public string Color5 { get => _instance.Get<string>(KeyColor5);
+			set { _instance.Set(KeyColor5, value); FirePropertyChanged(); } }
+		public string Color4 { get => _instance.Get<string>(KeyColor4);
+			set { _instance.Set(KeyColor4, value); FirePropertyChanged(); } }
+		public string Color3 { get => _instance.Get<string>(KeyColor3);
+			set { _instance.Set(KeyColor3, value); FirePropertyChanged(); } }
+		public string Color2 { get => _instance.Get<string>(KeyColor2);
+			set { _instance.Set(KeyColor2, value); FirePropertyChanged(); } }
+		public string Color1 { get => _instance.Get<string>(KeyColor1);
+			set { _instance.Set(KeyColor1, value); FirePropertyChanged(); } }
 
-		public int FontSize { get { return instance.Get<int>(KeyFontSize); } set { instance.Set(KeyFontSize, value); FirePropertyChanged(); } }
+		public int FontSize { get => _instance.Get<int>(KeyFontSize);
+			set { _instance.Set(KeyFontSize, value); FirePropertyChanged(); } }
 
 		#region Limits
-		private ObservableCollection<double> battleLimits;
+		private ObservableCollection<double> _battleLimits;
 		public ObservableCollection<double> BattleLimits
 		{
-			get
-			{
-				if (battleLimits == null) battleLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyBattleLimits));
-				return battleLimits;
-			}
+			get => _battleLimits ?? (_battleLimits =
+				       new ObservableCollection<double>(_instance.Get<double[]>(KeyBattleLimits)));
 			set
 			{
-				battleLimits = null;
-				instance.Set(KeyBattleLimits, value);
+				_battleLimits = null;
+				_instance.Set(KeyBattleLimits, value);
 			}
 		}
 
 		public void BattleLimitsChanged()
 		{
-			instance.Set(KeyBattleLimits, battleLimits.ToArray(), true);
+			_instance.Set(KeyBattleLimits, _battleLimits.ToArray(), true);
 		}
 
-		private ObservableCollection<double> winLimits;
+		private ObservableCollection<double> _winLimits;
 		public ObservableCollection<double> WinLimits
 		{
-			get
-			{
-				if (winLimits == null) winLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyWinLimits));
-				return winLimits;
-			}
+			get => _winLimits ?? (_winLimits = new ObservableCollection<double>(_instance.Get<double[]>(KeyWinLimits)));
 			set
 			{
-				winLimits = null;
-				instance.Set(KeyWinLimits, value);
+				_winLimits = null;
+				_instance.Set(KeyWinLimits, value);
 			}
 		}
 
 		public void WinLimitsChanged()
 		{
-			instance.Set(KeyWinLimits, winLimits.ToArray(), true);
+			_instance.Set(KeyWinLimits, _winLimits.ToArray(), true);
 		}
 
-		private ObservableCollection<double> fragsLimits;
+		private ObservableCollection<double> _fragsLimits;
 		public ObservableCollection<double> FragsLimits
 		{
-			get
-			{
-				if (fragsLimits == null) fragsLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyFragsLimits));
-				return fragsLimits;
-			}
+			get => _fragsLimits ?? (_fragsLimits = new ObservableCollection<double>(_instance.Get<double[]>(KeyFragsLimits)));
 			set
 			{
-				fragsLimits = null;
-				instance.Set(KeyFragsLimits, value);
+				_fragsLimits = null;
+				_instance.Set(KeyFragsLimits, value);
 			}
 		}
 
 		public void FragsLimitsChanged()
 		{
-			instance.Set(KeyFragsLimits, fragsLimits.ToArray(), true);
+			_instance.Set(KeyFragsLimits, _fragsLimits.ToArray(), true);
 		}
 
-		private ObservableCollection<double> xpLimits;
+		private ObservableCollection<double> _xpLimits;
 		public ObservableCollection<double> XpLimits
 		{
-			get
-			{
-				if (xpLimits == null) xpLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyXpLimits));
-				return xpLimits;
-			}
+			get => _xpLimits ?? (_xpLimits = new ObservableCollection<double>(_instance.Get<double[]>(KeyXpLimits)));
 			set
 			{
-				xpLimits = null;
-				instance.Set(KeyXpLimits, value);
+				_xpLimits = null;
+				_instance.Set(KeyXpLimits, value);
 			}
 		}
 
 		public void XpLimitsChanged()
 		{
-			instance.Set(KeyXpLimits, xpLimits.ToArray(), true);
+			_instance.Set(KeyXpLimits, _xpLimits.ToArray(), true);
 		}
 
-		private ObservableCollection<double> dmgLimits;
+		private ObservableCollection<double> _dmgLimits;
 		public ObservableCollection<double> DmgLimits
 		{
-			get
-			{
-				if (dmgLimits == null) dmgLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyDmgLimits));
-				return dmgLimits;
-			}
+			get => _dmgLimits ?? (_dmgLimits = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimits)));
 			set
 			{
-				dmgLimits = null;
-				instance.Set(KeyDmgLimits, value);
+				_dmgLimits = null;
+				_instance.Set(KeyDmgLimits, value);
 			}
 		}
 
 		public void DmgLimitsChanged()
 		{
-			instance.Set(KeyDmgLimits, dmgLimits.ToArray(), true);
+			_instance.Set(KeyDmgLimits, _dmgLimits.ToArray(), true);
 		}
 
-		public double BattleWeight { get { return instance.Get<double>(KeyBattleWeight); } set { instance.Set(KeyBattleWeight, value); } }
-		public double FragsWeight { get { return instance.Get<double>(KeyFragsWeight); } set { instance.Set(KeyFragsWeight, value); } }
-		public double XpWeight { get { return instance.Get<double>(KeyXpWeight); } set { instance.Set(KeyXpWeight, value); } }
-		public double DmgWeight { get { return instance.Get<double>(KeyDmgWeight); } set { instance.Set(KeyDmgWeight, value); } }
-		public double WinWeight { get { return instance.Get<double>(KeyWinWeight); } set { instance.Set(KeyWinWeight, value); } }
+		public double BattleWeight { get => _instance.Get<double>(KeyBattleWeight);
+			set => _instance.Set(KeyBattleWeight, value);
+		}
+		public double FragsWeight { get => _instance.Get<double>(KeyFragsWeight);
+			set => _instance.Set(KeyFragsWeight, value);
+		}
+		public double XpWeight { get => _instance.Get<double>(KeyXpWeight);
+			set => _instance.Set(KeyXpWeight, value);
+		}
+		public double DmgWeight { get => _instance.Get<double>(KeyDmgWeight);
+			set => _instance.Set(KeyDmgWeight, value);
+		}
+		public double WinWeight { get => _instance.Get<double>(KeyWinWeight);
+			set => _instance.Set(KeyWinWeight, value);
+		}
 		#endregion
 
-		public string Token { get { return instance.Get<string>(KeyToken); } set { instance.Set(KeyToken, value); } }
+		public string Token { get => _instance.Get<string>(KeyToken);
+			set => _instance.Set(KeyToken, value);
+		}
 
 		#endregion
 
-		private Subject<string> uiSettingsChangedSubject;
-		public IObservable<string> UiSettingsChanged { get { return uiSettingsChangedSubject.AsObservable(); } }
+		private readonly Subject<string> _uiSettingsChangedSubject;
+		public IObservable<string> UiSettingsChanged => _uiSettingsChangedSubject.AsObservable();
 
-		private IObservable<string> uiSettingsChangedInternal;
-
-		private LoggingService loggingService;
-		private BehaviorSubject<string> settingChangedSubject;
+		private readonly LoggingService _loggingService;
+		private readonly BehaviorSubject<string> _settingChangedSubject;
 		public Settings(LoggingService loggingService)
 		{
-			instance = this;
-			this.loggingService = loggingService;
+			_instance = this;
+			_loggingService = loggingService;
 
-			init();
+			Init();
 
-			settingChangedSubject = new BehaviorSubject<string>(string.Empty);
-			settingChangedSubject.Where(key => key != null).Throttle(TimeSpan.FromSeconds(2)).Subscribe(key =>
+			_settingChangedSubject = new BehaviorSubject<string>(string.Empty);
+			_settingChangedSubject.Where(key => key != null).Throttle(TimeSpan.FromSeconds(2)).Subscribe(async key =>
 			{
-				Save();
+				await Save();
 			});
 
-			uiSettingsChangedSubject = new Subject<string>();
+			_uiSettingsChangedSubject = new Subject<string>();
 
-			uiSettingsChangedInternal = Observable.Merge(KeysUISettings.Select(key => SettingChanged(key, false))).Throttle(TimeSpan.FromMilliseconds(500));
+			var uiSettingsChangedInternal = KeysUiSettings.Select(key => SettingChanged(key, false)).Merge().Throttle(TimeSpan.FromMilliseconds(500));
 
 			uiSettingsChangedInternal.Subscribe(key =>
 			{
-				setBrushes();
-				uiSettingsChangedSubject.OnNext(key);
+				SetBrushes();
+				_uiSettingsChangedSubject.OnNext(key);
 			});
-			setBrushes();
+			SetBrushes();
 
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(BattleLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => BattleLimitsChanged());
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(WinLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => WinLimitsChanged());
@@ -255,24 +271,25 @@ namespace MatchMakingMonitor.Services
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(FragsLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => FragsLimitsChanged());
 		}
 
-		private void init()
+		private void Init()
 		{
-			if (!File.Exists(settingsPath))
+			if (!File.Exists(SettingsPath))
 			{
-				Directory.CreateDirectory(Path.GetDirectoryName(settingsPath));
-				using (var f = File.CreateText(settingsPath))
+				// ReSharper disable once AssignNullToNotNullAttribute
+				Directory.CreateDirectory(Path.GetDirectoryName(SettingsPath));
+				using (var f = File.CreateText(SettingsPath))
 				{
-					f.Write(defaults());
+					f.Write(Defaults());
 				}
 			}
-			fromJson();
+			FromJson();
 		}
 
-		private string defaults()
+		private static string Defaults()
 		{
-			var assembly = Assembly.GetExecutingAssembly();
 			var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MatchMakingMonitor.config.settings.default.json");
 			var result = string.Empty;
+			if (stream == null) return result;
 			using (var sr = new StreamReader(stream))
 			{
 				result = sr.ReadToEnd();
@@ -280,21 +297,21 @@ namespace MatchMakingMonitor.Services
 			return result;
 		}
 
-		private void fromJson()
+		private void FromJson()
 		{
-			currentSettings = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(settingsPath));
+			_currentSettings = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsPath));
 		}
 
-		public async Task ExportUISettings(string path)
+		public async Task ExportUiSettings(string path)
 		{
 			var export = new Dictionary<string, Object>();
 
-			foreach (var key in KeysUISettings.Concat(KeysOthers))
+			foreach (var key in KeysUiSettings.Concat(KeysOthers))
 			{
-				export.Add(key, currentSettings.Get(key));
+				export.Add(key, _currentSettings.Get(key));
 			}
 
-			var exportJson = await Task.Run(() => { return JsonConvert.SerializeObject(export); });
+			var exportJson = await Task.Run(() => JsonConvert.SerializeObject(export));
 
 			using (var f = File.CreateText(path))
 			{
@@ -302,13 +319,13 @@ namespace MatchMakingMonitor.Services
 			}
 		}
 
-		public async Task ImportUISettings(string path)
+		public async Task ImportUiSettings(string path)
 		{
 			if (File.Exists(path))
 			{
 				var importJson = File.ReadAllText(path);
-				var import = await Task.Run(() => { return JsonConvert.DeserializeObject<SettingsJson>(importJson); });
-				await ResetUISettings(import);
+				var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson));
+				await ResetUiSettings(import);
 			}
 		}
 
@@ -316,20 +333,20 @@ namespace MatchMakingMonitor.Services
 		{
 			try
 			{
-				await Task.Run(() => { File.WriteAllText(settingsPath, JsonConvert.SerializeObject(currentSettings)); });
+				await Task.Run(() => { File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(_currentSettings)); });
 			}
 			catch (Exception e)
 			{
-				loggingService.Error("Exception occured while saving settings to file", e);
+				_loggingService.Error("Exception occured while saving settings to file", e);
 			}
 		}
 
 		public IObservable<string> SettingChanged(string key, bool initial = true)
 		{
-			var obs = settingChangedSubject.AsObservable().Where(k => key == k);
+			var obs = _settingChangedSubject.AsObservable().Where(k => key == k);
 			if (initial)
 			{
-				settingChangedSubject.OnNext(key);
+				_settingChangedSubject.OnNext(key);
 			}
 			return obs;
 		}
@@ -338,11 +355,11 @@ namespace MatchMakingMonitor.Services
 		{
 			try
 			{
-				return currentSettings.Get<T>(key);
+				return _currentSettings.Get<T>(key);
 			}
 			catch (Exception e)
 			{
-				loggingService.Error($"Exception occured while getting setting '{key}'", e);
+				_loggingService.Error($"Exception occured while getting setting '{key}'", e);
 				return default(T);
 			}
 		}
@@ -352,33 +369,34 @@ namespace MatchMakingMonitor.Services
 			try
 			{
 				var changed = forceChanged || !value.Equals(Get<T>(key));
-				currentSettings.Set(key, value);
-				if (changed) fireSettingChanged(key);
+				_currentSettings.Set(key, value);
+				if (changed) FireSettingChanged(key);
 			}
 			catch (Exception e)
 			{
-				loggingService.Error($"Exception occured while setting setting '{key}'", e);
+				_loggingService.Error($"Exception occured while setting setting '{key}'", e);
 			}
 		}
 
-		public async Task ResetUISettings(SettingsJson sourceSettings = null)
+		[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
+		public async Task ResetUiSettings(SettingsJson sourceSettings = null)
 		{
-			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(this.defaults());
+			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults());
 			await Task.Run(() =>
 			{
 				foreach (var key in KeysColors.Concat(KeysOthers).Concat(KeysWeights))
 				{
-					currentSettings.Set(key, sourceSettings.Get(key));
-					FirePropertyChanged(firstLetterToUpper(key));
+					_currentSettings.Set(key, sourceSettings.Get(key));
+					FirePropertyChanged(FirstLetterToUpper(key));
 				}
 				foreach (var key in KeysLimits)
 				{
-					currentSettings.Set(key, sourceSettings.Get(key));
-					var collection = getLimitCollectionByKey(key);
+					_currentSettings.Set(key, sourceSettings.Get(key));
+					var collection = GetLimitCollectionByKey(key);
 					if (collection != null)
 					{
 						var defaultLimit = sourceSettings.Get<double[]>(key);
-						var limit = currentSettings.Get<double[]>(key);
+						var limit = _currentSettings.Get<double[]>(key);
 						for (int i = 0; i < defaultLimit.Length; i++)
 						{
 							collection[i] = limit[i];
@@ -389,25 +407,25 @@ namespace MatchMakingMonitor.Services
 			await Save();
 		}
 
-		private void fireSettingChanged(string key)
+		private void FireSettingChanged(string key)
 		{
-			settingChangedSubject.OnNext(key);
+			_settingChangedSubject.OnNext(key);
 		}
 
-		private ObservableCollection<double> getLimitCollectionByKey(string key)
+		private ObservableCollection<double> GetLimitCollectionByKey(string key)
 		{
 			switch (key)
 			{
 				case KeyBattleLimits:
-					return battleLimits;
+					return _battleLimits;
 				case KeyWinLimits:
-					return winLimits;
+					return _winLimits;
 				case KeyFragsLimits:
-					return fragsLimits;
+					return _fragsLimits;
 				case KeyXpLimits:
-					return xpLimits;
+					return _xpLimits;
 				case KeyDmgLimits:
-					return dmgLimits;
+					return _dmgLimits;
 				default:
 					return null;
 			}
@@ -415,17 +433,19 @@ namespace MatchMakingMonitor.Services
 
 		public SolidColorBrush[] Brushes { get; private set; }
 
-		private void setBrushes()
+		private void SetBrushes()
 		{
 			Brushes = KeysColors.Select(name =>
 			{
-				var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Get<string>(name)));
+				var convertFromString = ColorConverter.ConvertFromString(Get<string>(name));
+				if (convertFromString == null) return System.Windows.Media.Brushes.Black;
+				var brush = new SolidColorBrush((Color)convertFromString);
 				brush.Freeze();
 				return brush;
 			}).ToArray();
 		}
 
-		private string firstLetterToUpper(string str)
+		private static string FirstLetterToUpper(string str)
 		{
 			if (str == null)
 				return null;

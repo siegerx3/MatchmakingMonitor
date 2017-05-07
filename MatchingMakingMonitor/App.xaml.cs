@@ -1,13 +1,4 @@
 ﻿using MatchMakingMonitor.Services;
-using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.ViewModels;
-using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace MatchMakingMonitor
@@ -15,9 +6,8 @@ namespace MatchMakingMonitor
 	/// <summary>
 	/// Interaction logic for App.xaml
 	/// </summary>
-	public partial class App : Application
+	public partial class App
 	{
-		private SocketIOService socketIOService;
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			IoCKernel.Init();
@@ -37,17 +27,9 @@ namespace MatchMakingMonitor
 			base.OnStartup(e);
 		}
 
-		private void ConfigureMainWindow()
+		private static void ConfigureMainWindow()
 		{
 			Current.MainWindow = IoCKernel.Get<MainWindow>();
-		}
-
-
-
-		protected override void OnExit(ExitEventArgs e)
-		{
-			//socketIOService.Disconnect();
-			base.OnExit(e);
 		}
 	}
 }

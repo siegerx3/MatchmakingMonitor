@@ -1,6 +1,4 @@
 using System;
-using System.Threading.Tasks;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Quobject.SocketIoClientDotNet.Client;
@@ -12,38 +10,34 @@ namespace MatchMakingMonitor.SocketIO
 {
 	public class LiveMatchSocket
 	{
-		private Socket socket;
+		private readonly Socket _socket;
 
-		private ReplaySubject<object> onTokenChanged;
-		private ReplaySubject<object> onStatsRequested;
+#pragma warning disable 169
+		private ReplaySubject<object> _onTokenChanged;
+#pragma warning restore 169
+		private readonly ReplaySubject<object> _onStatsRequested;
 
 		public LiveMatchSocket(Socket socket)
 		{
-			this.socket = socket;
+			_socket = socket ?? throw new ArgumentNullException(nameof(socket));
 
-			this.onStatsRequested = new ReplaySubject<object>();
-			this.socket.On("statsRequested", () =>
+			_onStatsRequested = new ReplaySubject<object>();
+			_socket.On("statsRequested", () =>
 			{
-				this.onStatsRequested.OnNext(null);
+				_onStatsRequested.OnNext(null);
 			});
 		}
 
 		public void SetToken(string token)
 		{
-			socket.Emit("setToken", token);
+			_socket.Emit("setToken", token);
 		}
 
 		public void SendStats(List<PlayerShip> stats)
 		{
-			socket.Emit("sendStats", JsonConvert.SerializeObject(stats));
+			_socket.Emit("sendStats", JsonConvert.SerializeObject(stats));
 		}
 
-		public IObservable<object> OnStatsRequested
-		{
-			get
-			{
-				return this.onStatsRequested.AsObservable();
-			}
-		}
+		public IObservable<object> OnStatsRequested => _onStatsRequested.AsObservable();
 	}
 }
