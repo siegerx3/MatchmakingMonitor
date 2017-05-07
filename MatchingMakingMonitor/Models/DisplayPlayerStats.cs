@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MatchingMakingMonitor.Services;
+using MatchingMakingMonitor.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +10,98 @@ using System.Windows.Media;
 
 namespace MatchingMakingMonitor.Models
 {
-	public class DisplayPlayer
+	public class DisplayPlayerStats: BaseViewBinding
 	{
 		public PlayerShip Player { get; set; }
 
-		public SolidColorBrush Background { get; private set; }
-		public SolidColorBrush ColorName { get; private set; } = Brushes.Black;
-		public SolidColorBrush ColorWinRate { get; private set; } = Brushes.Black;
-		public SolidColorBrush ColorAvgXp { get; private set; } = Brushes.Black;
-		public SolidColorBrush ColorAvgFrags { get; private set; } = Brushes.Black;
-		public SolidColorBrush ColorAvgDamage { get; private set; } = Brushes.Black;
-		public SolidColorBrush ColorBattles { get; private set; } = Brushes.Black;
-		public SolidColorBrush ColorBorder => Player.Relation == 0 ? ColorName : Brushes.Transparent;
+		private SolidColorBrush background;
+		public SolidColorBrush Background
+		{
+			get { return background; }
+			set
+			{
+				background = value;
+				FirePropertyChanged();
+			}
+		}
 
+		private SolidColorBrush colorName = Brushes.Black;
+		public SolidColorBrush ColorName
+		{
+			get { return colorName; }
+			set
+			{
+				colorName = value;
+				FirePropertyChanged();
+			}
+		}
+
+		private SolidColorBrush colorWinRate = Brushes.Black;
+		public SolidColorBrush ColorWinRate
+		{
+			get { return colorWinRate; }
+			set
+			{
+				colorWinRate = value;
+				FirePropertyChanged();
+			}
+		}
+
+		private SolidColorBrush colorAvgXp = Brushes.Black;
+		public SolidColorBrush ColorAvgXp
+		{
+			get { return colorAvgXp; }
+			set
+			{
+				colorAvgXp = value;
+				FirePropertyChanged();
+			}
+		}
+
+		private SolidColorBrush colorAvgFrags = Brushes.Black;
+		public SolidColorBrush ColorAvgFrags
+		{
+			get { return colorAvgFrags; }
+			set
+			{
+				colorAvgFrags = value;
+				FirePropertyChanged();
+			}
+		}
+
+		private SolidColorBrush colorAvgDamage = Brushes.Black;
+		public SolidColorBrush ColorAvgDamage
+		{
+			get { return colorAvgDamage; }
+			set
+			{
+				colorAvgDamage = value;
+				FirePropertyChanged();
+			}
+		}
+
+		private SolidColorBrush colorBattles = Brushes.Black;
+		public SolidColorBrush ColorBattles
+		{
+			get { return colorBattles; }
+			set
+			{
+				colorBattles = value;
+				FirePropertyChanged();
+			}
+		}
+
+		private SolidColorBrush colorBorder = Brushes.Transparent;
+		public SolidColorBrush ColorBorder
+		{
+			get { return colorBorder; }
+			set
+			{
+				colorBorder = value;
+				FirePropertyChanged();
+			}
+		}
+		
 		public string TextBattles => $"Battles: {Player.Battles}";
 		public string TextWins => $"Wins: {Player.Wins}";
 		public string TextWinRate => $"WinRate: {WinRate}%";
@@ -28,6 +109,8 @@ namespace MatchingMakingMonitor.Models
 		public string TextAvgFrags => $"Avg Frags: {AvgFrags}";
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
 		public string TextName => $"{Player?.Nickname} | {AccountId}";
+
+		public int FontSize => settings.FontSize;
 
 		public string[] CommandParams => new string[] { AccountId, Player.Nickname };
 
@@ -55,44 +138,27 @@ namespace MatchingMakingMonitor.Models
 			}
 		}
 
-		private SolidColorBrush[] brushes;
-
-		public DisplayPlayer(PlayerShip player, SolidColorBrush[] brushes) : this()
+		private Settings settings;
+		public DisplayPlayerStats(Settings settings, PlayerShip player) : this()
 		{
-			this.Player = player;
-			this.brushes = brushes;
+			Player = player;
+			this.settings = settings;
 			WinRate = Math.Round(player.Wins / player.Battles * 100, 2);
 			AvgFrags = Math.Round(player.Frags / player.Battles, 2);
 			AvgXp = Math.Round(player.XpEarned / player.Battles, 0);
 			AvgDamage = Math.Round(player.DamageDealt / player.Battles, 0);
 
-			double totalRating = 0;
-			if (!player.IsPrivateOrHidden)
-			{
-				ColorWinRate = getColor(WinRate, winBoundaries, totalRating, 1, out totalRating);
-				ColorAvgFrags = getColor(AvgFrags, fragsBoundaries, totalRating, 1.1, out totalRating);
-				ColorAvgXp = getColor(AvgXp, xpBoundaries, totalRating, 0.8, out totalRating);
-				ColorAvgDamage = getColor(AvgDamage, dmgBoundaries, totalRating, 0.9, out totalRating);
-				ColorBattles = getColor(player.Battles, battleBoundaries, totalRating, 1.2, out totalRating);
-
-				var totalRatingInt = (int)Math.Floor((double)(totalRating / 5));
-				ColorName = brushes[totalRatingInt - 1];
-			}
-
-			var color = ColorName.CloneCurrentValue();
-			color.Opacity = 0.08;
-			color.Freeze();
-			Background = color;
+			ComputeUi();
 		}
 
-		public DisplayPlayer()
+		public DisplayPlayerStats()
 		{
 
 		}
 
-		public static DisplayPlayer MockPlayer(int relation = 1, bool privateOrHidden = false)
+		public static DisplayPlayerStats MockPlayer(int relation = 1, bool privateOrHidden = false)
 		{
-			return new DisplayPlayer()
+			return new DisplayPlayerStats()
 			{
 				Player = new PlayerShip() { Nickname = "Test", AccountId = 12323325, ShipName = "ShipName", IsPrivateOrHidden = privateOrHidden, Relation = relation },
 				WinRate = 40,
@@ -100,6 +166,29 @@ namespace MatchingMakingMonitor.Models
 				AvgXp = 1234,
 				AvgDamage = 123242
 			};
+		}
+
+		public void ComputeUi()
+		{
+			double totalRating = 0;
+			if (!Player.IsPrivateOrHidden)
+			{
+				ColorWinRate = getColor(WinRate, winBoundaries, totalRating, 1, out totalRating);
+				ColorAvgFrags = getColor(AvgFrags, fragsBoundaries, totalRating, 1.1, out totalRating);
+				ColorAvgXp = getColor(AvgXp, xpBoundaries, totalRating, 0.8, out totalRating);
+				ColorAvgDamage = getColor(AvgDamage, dmgBoundaries, totalRating, 0.9, out totalRating);
+				ColorBattles = getColor(Player.Battles, battleBoundaries, totalRating, 1.2, out totalRating);
+
+				var totalRatingInt = (int)Math.Floor((double)(totalRating / 5));
+				ColorName = settings.Brushes[totalRatingInt - 1];
+			}
+
+			var color = ColorName.CloneCurrentValue();
+			color.Opacity = 0.08;
+			color.Freeze();
+			Background = color;
+
+			ColorBorder = Player.Relation == 0 ? ColorName : Brushes.Transparent;
 		}
 
 		#region Colors
@@ -122,7 +211,7 @@ namespace MatchingMakingMonitor.Models
 				if (value >= boundaries[i])
 				{
 					total = oldTotal + ((i + 1) * multiplier);
-					return brushes[i];
+					return settings.Brushes[i];
 				}
 			}
 			total = oldTotal + (9 * multiplier);

@@ -17,7 +17,6 @@ namespace MatchingMakingMonitor.Services
 	{
 		private Replay currentReplay;
 		private string currentRegion;
-		private static string[] colors = new string[9] { "Overall9", "Overall8", "Overall7", "Overall6", "Overall5", "Overall4", "Overall3", "Overall2", "Overall1" };
 
 		private LoggingService loggingService;
 		private WatcherService watcherService;
@@ -27,8 +26,8 @@ namespace MatchingMakingMonitor.Services
 		private BehaviorSubject<StatsStatus> statsStatusChangedSubject;
 		public IObservable<StatsStatus> StatsStatusChanged => statsStatusChangedSubject.AsObservable();
 
-		private BehaviorSubject<List<DisplayPlayer>> statsSubject;
-		public IObservable<List<DisplayPlayer>> Stats => statsSubject.Where(s => s != null).AsObservable();
+		private BehaviorSubject<List<DisplayPlayerStats>> statsSubject;
+		public IObservable<List<DisplayPlayerStats>> Stats => statsSubject.Where(s => s != null).AsObservable();
 
 		public StatsService(LoggingService loggingService, Settings settings, WatcherService watcherService, ApiService apiService)
 		{
@@ -38,7 +37,7 @@ namespace MatchingMakingMonitor.Services
 			this.settings = settings;
 
 			this.statsStatusChangedSubject = new BehaviorSubject<StatsStatus>(StatsStatus.Waiting);
-			this.statsSubject = new BehaviorSubject<List<DisplayPlayer>>(null);
+			this.statsSubject = new BehaviorSubject<List<DisplayPlayerStats>>(null);
 
 			this.watcherService.MatchFound.Subscribe(path =>
 			{
@@ -65,7 +64,7 @@ namespace MatchingMakingMonitor.Services
 			}
 			if (replay != null)
 			{
-				var region = this.settings.Get<string>("Region");
+				var region = settings.Region;
 				if (currentReplay == null || region != currentRegion || (currentReplay != null && replay.dateTime > currentReplay.dateTime))
 				{
 					currentReplay = replay;
@@ -94,15 +93,9 @@ namespace MatchingMakingMonitor.Services
 			}
 		}
 
-		private async Task<List<DisplayPlayer>> computeDisplayPlayer(IEnumerable<PlayerShip> players)
+		private async Task<List<DisplayPlayerStats>> computeDisplayPlayer(IEnumerable<PlayerShip> players)
 		{
-			var brushes = colors.Select(name =>
-			{
-				var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(settings.Get<string>(name)));
-				brush.Freeze();
-				return brush;
-			}).ToArray();
-			return await Task.Run(() => players.Select(p => new DisplayPlayer(p, brushes)).ToList());
+			return await Task.Run(() => players.Select(p => new DisplayPlayerStats(settings, p)).ToList());
 		}
 	}
 

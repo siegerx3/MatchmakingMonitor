@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MatchingMakingMonitor.ViewModels
 {
-	public class HeaderViewModel : BaseViewModel
+	public class HeaderViewModel : BaseViewBinding
 	{
 		public RelayCommand LogoClickCommand { get; set; }
 		public RelayCommand SettingsCommand { get; set; }

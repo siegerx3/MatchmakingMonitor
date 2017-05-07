@@ -31,7 +31,7 @@ namespace MatchingMakingMonitor.Services
 		{
 			get
 			{
-				return settings.Get<string>("AppId" + settings.Get<string>("Region"));
+				return settings.Get<string>("AppId" + settings.Region);
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace MatchingMakingMonitor.Services
 				{
 					await Task.Delay(1000);
 				}
-				var baseUrl = settings.Get<string>("BaseUrl" + settings.Get<string>("Region"));
+				var baseUrl = settings.Get<string>("BaseUrl" + settings.Region);
 				httpClient = new HttpClient();
 				httpClient.BaseAddress = new Uri(baseUrl);
 

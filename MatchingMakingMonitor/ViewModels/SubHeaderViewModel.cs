@@ -9,14 +9,13 @@ using System.Windows.Media;
 
 namespace MatchingMakingMonitor.ViewModels
 {
-	public class SubHeaderViewModel : BaseViewModel
+	public class SubHeaderViewModel : BaseViewBinding
 	{
-		private static readonly string INSTALL_DIRECTORY = "InstallDirectory";
 		public RelayCommand PathClickCommand { get; set; }
 
 		public ObservableCollection<string> Regions { get; private set; } = new ObservableCollection<string>() { "NA", "EU", "RU", "SEA" };
 
-		private string region;
+		private string region = "NA";
 
 		public string Region
 		{
@@ -24,7 +23,7 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				region = value;
-				settings.Set("Region", value);
+				settings.Region = value;
 				FirePropertyChanged();
 			}
 		}
@@ -112,7 +111,7 @@ namespace MatchingMakingMonitor.ViewModels
 
 			this.PathClickCommand = new RelayCommand(pathClicked);
 
-			this.settings.PropertyChanged(INSTALL_DIRECTORY).Subscribe(initPath);
+			this.settings.PropertyChanged(Settings.KeyInstallDirectory).Subscribe(initPath);
 			this.statsService.StatsStatusChanged.Subscribe(status =>
 			{
 				setStatusText(status);
@@ -129,7 +128,7 @@ namespace MatchingMakingMonitor.ViewModels
 			});
 
 
-			Region = this.settings.Get<string>("Region");
+			Region = this.settings.Region;
 		}
 
 		public SubHeaderViewModel()
@@ -141,12 +140,12 @@ namespace MatchingMakingMonitor.ViewModels
 			var directory = settings.Get<string>(key);
 			if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 			{
-				InstallDirectoryColor = new SolidColorBrush(Color.FromRgb(17, 143, 19));
+				InstallDirectoryColor = Brushes.Green;
 				InstallDirectoryText = directory;
 			}
 			else
 			{
-				InstallDirectoryColor = new SolidColorBrush(Colors.OrangeRed);
+				InstallDirectoryColor = Brushes.OrangeRed;
 				InstallDirectoryText = directory + " - Invalid Path or Replays not enabled! - Click here to update!";
 			}
 		}
@@ -157,7 +156,7 @@ namespace MatchingMakingMonitor.ViewModels
 			var result = folderBrowser.ShowDialog();
 			if (result == DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
 			{
-				this.settings.Set(INSTALL_DIRECTORY, folderBrowser.SelectedPath);
+				this.settings.InstallDirectory = folderBrowser.SelectedPath;
 			}
 		}
 

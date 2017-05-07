@@ -10,12 +10,12 @@ using System.Windows;
 
 namespace MatchingMakingMonitor.ViewModels
 {
-	public class StatsViewModel : BaseViewModel
+	public class StatsViewModel : BaseViewBinding
 	{
 		public RelayCommand DetailCommand { get; set; }
 
-		private ObservableCollection<DisplayPlayer> friendlyPlayers;
-		public ObservableCollection<DisplayPlayer> FriendlyPlayers
+		private ObservableCollection<DisplayPlayerStats> friendlyPlayers;
+		public ObservableCollection<DisplayPlayerStats> FriendlyPlayers
 		{
 			get { return friendlyPlayers; }
 			set
@@ -25,8 +25,8 @@ namespace MatchingMakingMonitor.ViewModels
 			}
 		}
 
-		private ObservableCollection<DisplayPlayer> enemyPlayers;
-		public ObservableCollection<DisplayPlayer> EnemyPlayers
+		private ObservableCollection<DisplayPlayerStats> enemyPlayers;
+		public ObservableCollection<DisplayPlayerStats> EnemyPlayers
 		{
 			get { return enemyPlayers; }
 			set
@@ -35,6 +35,19 @@ namespace MatchingMakingMonitor.ViewModels
 				FirePropertyChanged();
 			}
 		}
+
+		private int fontSize;
+
+		public int FontSize
+		{
+			get { return fontSize; }
+			set
+			{
+				fontSize = value;
+				FirePropertyChanged();
+			}
+		}
+
 
 		private Visibility listVisibility = Visibility.Collapsed;
 
@@ -49,24 +62,45 @@ namespace MatchingMakingMonitor.ViewModels
 		}
 
 		private Settings settings;
-		public StatsViewModel(StatsService statsService, Settings settings)
+		private List<DisplayPlayerStats> stats;
+		public StatsViewModel(LoggingService loggingService, StatsService statsService, Settings settings)
 		{
 			this.settings = settings;
 
 			DetailCommand = new RelayCommand(param => openPlayerDetail((string[])param));
 
-			statsService.Stats.Subscribe(stats =>
+			statsService.Stats.Subscribe(async stats =>
 			{
-				FriendlyPlayers = new ObservableCollection<DisplayPlayer>(stats.Where(p => p.Player.Relation != 2));
-				EnemyPlayers = new ObservableCollection<DisplayPlayer>(stats.Where(p => p.Player.Relation == 2));
-				ListVisibility = Visibility.Visible;
+				await Task.Run(() =>
+				{
+					this.stats = stats;
+					FriendlyPlayers = new ObservableCollection<DisplayPlayerStats>(stats.Where(p => p.Player.Relation != 2));
+					EnemyPlayers = new ObservableCollection<DisplayPlayerStats>(stats.Where(p => p.Player.Relation == 2));
+					ListVisibility = Visibility.Visible;
+				});
+			});
+
+			this.settings.UiPropertyChanged.Subscribe(async key =>
+			{
+				loggingService.Info("UiPropertyChanged" + key);
+				if (stats != null)
+				{
+					await Task.Run(() =>
+					{
+						FontSize = this.settings.FontSize;
+						foreach (var player in stats)
+						{
+							player.ComputeUi();
+						}
+					});
+				}
 			});
 		}
 
 		public StatsViewModel()
 		{
-			FriendlyPlayers = new ObservableCollection<DisplayPlayer>(new List<DisplayPlayer>() { DisplayPlayer.MockPlayer(1), DisplayPlayer.MockPlayer(0) });
-			EnemyPlayers = new ObservableCollection<DisplayPlayer>(new List<DisplayPlayer>() { DisplayPlayer.MockPlayer(2), DisplayPlayer.MockPlayer(2, true) });
+			FriendlyPlayers = new ObservableCollection<DisplayPlayerStats>(new List<DisplayPlayerStats>() { DisplayPlayerStats.MockPlayer(1), DisplayPlayerStats.MockPlayer(0) });
+			EnemyPlayers = new ObservableCollection<DisplayPlayerStats>(new List<DisplayPlayerStats>() { DisplayPlayerStats.MockPlayer(2), DisplayPlayerStats.MockPlayer(2, true) });
 			ListVisibility = Visibility.Visible;
 		}
 
@@ -74,7 +108,7 @@ namespace MatchingMakingMonitor.ViewModels
 		{
 			if (param[0] != "0")
 			{
-				System.Diagnostics.Process.Start($"https://{settings.Get<string>("Region")}.warships.today/player/{param[0]}/{param[1]}");
+				System.Diagnostics.Process.Start($"https://{settings.Region}.warships.today/player/{param[0]}/{param[1]}");
 			}
 		}
 	}

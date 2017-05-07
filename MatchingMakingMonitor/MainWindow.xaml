@@ -49,9 +49,9 @@
 				</StackPanel>
 			</DockPanel>
 			<DockPanel Background="#33333333" DataContext="{Binding SubHeaderViewModel, Source={StaticResource ViewModelLocator}}" Height="31">
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
-					<TextBlock Text="Region:" Margin="0,0,10,0" VerticalAlignment="Center" />
-					<ComboBox VerticalAlignment="Center" Width="90" Height="26" 
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" >
+					<TextBlock Text="Region:" Margin="0,0,10,0" VerticalAlignment="Center" Height="19" />
+					<ComboBox VerticalAlignment="Center" Width="90" 
 										ItemsSource="{Binding Regions}"
 										SelectedValue="{Binding Region}"
 										IsEnabled="{Binding EnableUI}">
@@ -68,8 +68,8 @@
 					</Button>
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-					<Label Foreground="{Binding StatusColor}" Content="{Binding StatusText}" Margin="0,0,10,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-					<ProgressBar Width="100" Height="15" IsIndeterminate="True" Visibility="{Binding ShowProgress}"></ProgressBar>
+					<TextBlock Foreground="{Binding StatusColor}" Height="19" Text="{Binding StatusText}" Margin="0,0,10,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+					<ProgressBar Width="100" Height="19" IsIndeterminate="True" Visibility="{Binding ShowProgress}"></ProgressBar>
 				</StackPanel>
 			</DockPanel>
 		</StackPanel>
@@ -91,20 +91,28 @@
 												<ColumnDefinition Width="25*"></ColumnDefinition>
 											</Grid.ColumnDefinitions>
 											<StackPanel Grid.Column="0" Orientation="Vertical">
-												<TextBlock Margin="5" FontWeight="Bold" Foreground="{Binding ColorName}" Text="{Binding TextName}"/>
-												<TextBlock Margin="5" Foreground="Black" Text="{Binding ShipName}" />
+												<TextBlock Margin="5" FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" 
+																	 FontWeight="Bold" Foreground="{Binding ColorName}" Text="{Binding TextName}"/>
+												<TextBlock Margin="5" FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" 
+																	 Foreground="Black" Text="{Binding ShipName}" />
 											</StackPanel>
 											<StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
-												<TextBlock Margin="5" Foreground="{Binding ColorBattles}" Text="{Binding TextBattles}" />
-												<TextBlock Margin="5" Foreground="{Binding ColorAvgXp}" Text="{Binding TextAvgXp}" />
+												<TextBlock Margin="5" Foreground="{Binding ColorBattles}" Text="{Binding TextBattles}"
+																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+												<TextBlock Margin="5" Foreground="{Binding ColorAvgXp}" Text="{Binding TextAvgXp}"
+																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
 											</StackPanel>
 											<StackPanel Grid.Column="2" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
-												<TextBlock Margin="5" Foreground="{Binding ColorWins}" Text="{Binding TextWins}" />
-												<TextBlock Margin="5" Foreground="{Binding ColorWinRate}" Text="{Binding TextWinRate}" />
+												<TextBlock Margin="5" Foreground="{Binding ColorWins}" Text="{Binding TextWins}" 
+																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+												<TextBlock Margin="5" Foreground="{Binding ColorWinRate}" Text="{Binding TextWinRate}"
+																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
 											</StackPanel>
 											<StackPanel Grid.Column="3" Orientation="Vertical" Visibility="{Binding StatsVisibility}">
-												<TextBlock Margin="5" Foreground="{Binding ColorAvgDamage}" Text="{Binding TextAvgDamage}" />
-												<TextBlock Margin="5" Foreground="{Binding ColorAvgFrags}" Text="{Binding TextAvgFrags}" />
+												<TextBlock Margin="5" Foreground="{Binding ColorAvgDamage}" Text="{Binding TextAvgDamage}" 
+																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
+												<TextBlock Margin="5" Foreground="{Binding ColorAvgFrags}" Text="{Binding TextAvgFrags}" 
+																	 FontSize="{Binding StatsViewModel.FontSize, Source={StaticResource ViewModelLocator}}" />
 											</StackPanel>
 											<DockPanel Grid.Column="1" Visibility="{Binding TextVisibility}">
 												<TextBlock Margin="5" VerticalAlignment="Center" Foreground="{Binding ColorAvgDamage}" Text="No stats or hidden" />

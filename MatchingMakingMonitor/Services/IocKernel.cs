@@ -1,4 +1,5 @@
 ﻿using MatchingMakingMonitor.SocketIO;
+using MatchingMakingMonitor.ViewModels;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace MatchingMakingMonitor.Services
 				kernel.Bind<StatsService>().To<StatsService>().InSingletonScope();
 				kernel.Bind<ApiService>().To<ApiService>().InSingletonScope();
 				kernel.Bind<Settings>().To<Settings>().InSingletonScope();
+
+				kernel.Bind<StatsViewModel>().To<StatsViewModel>().InSingletonScope();
 			}
 		}
 

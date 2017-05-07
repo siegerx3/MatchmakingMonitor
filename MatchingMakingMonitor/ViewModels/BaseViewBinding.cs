@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MatchingMakingMonitor.ViewModels
 {
-	public class BaseViewModel : INotifyPropertyChanged
+	public class BaseViewBinding : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 		internal void FirePropertyChanged([CallerMemberName] string propertyName = null)

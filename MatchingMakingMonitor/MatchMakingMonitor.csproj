@@ -115,7 +115,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\DisplayPlayer.cs" />
+    <Compile Include="Models\DisplayPlayerStats.cs" />
     <Compile Include="QrCodeWindow.xaml.cs">
       <DependentUpon>QrCodeWindow.xaml</DependentUpon>
     </Compile>
@@ -130,7 +130,7 @@
     </Compile>
     <Compile Include="SocketIO\LiveMatchSocket.cs" />
     <Compile Include="SocketIO\SocketIOService.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewBinding.cs" />
     <Compile Include="ViewModels\SubHeaderViewModel.cs" />
     <Compile Include="ViewModels\HeaderViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

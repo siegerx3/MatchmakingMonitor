@@ -38,9 +38,9 @@ namespace MatchingMakingMonitor.Services
 			};
 
 
-			settings.PropertyChanged("InstallDirectory").Subscribe(key =>
+			settings.PropertyChanged(Settings.KeyInstallDirectory).Subscribe(key =>
 			{
-				var directory = settings.Get<string>(key);
+				var directory = settings.InstallDirectory;
 				if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 				{
 					fileSystemWatcher.Path = Path.Combine(directory, "replays");
@@ -57,14 +57,15 @@ namespace MatchingMakingMonitor.Services
 				}
 			});
 
-			settings.PropertyChanged("Region", false).Subscribe(key => {
+			settings.PropertyChanged(Settings.KeyRegion, false).Subscribe(key =>
+			{
 				checkStatic();
 			});
 		}
 
 		private void checkStatic()
 		{
-			var directory = this.settings.Get<string>("InstallDirectory");
+			var directory = settings.InstallDirectory;
 			var path = Path.Combine(directory, "replays", "tempArenaInfo.json");
 			if (File.Exists(path))
 			{

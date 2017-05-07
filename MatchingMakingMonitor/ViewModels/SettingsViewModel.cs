@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace MatchingMakingMonitor.ViewModels
 {
-	public class SettingsWindowViewModel : BaseViewModel
+	public class SettingsWindowViewModel : BaseViewBinding
 	{
 		public RelayCommand ResetCommand { get; set; }
 
@@ -23,8 +23,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				fontSize = value;
-				settings.Set("FontSize", value);
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.FontSize = value;
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -35,8 +38,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall9 = value;
-				settings.Set("Overall9", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall9 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -47,8 +53,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall8 = value;
-				settings.Set("Overall8", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall8 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -59,8 +68,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall7 = value;
-				settings.Set("Overall7", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall7 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -71,8 +83,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall6 = value;
-				settings.Set("Overall6", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall6 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -83,8 +98,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall5 = value;
-				settings.Set("Overall5", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall5 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -95,8 +113,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall4 = value;
-				settings.Set("Overall4", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall4 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -107,8 +128,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall3 = value;
-				settings.Set("Overall3", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall3 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -119,8 +143,11 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall2 = value;
-				settings.Set("Overall2", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall2 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
@@ -131,13 +158,17 @@ namespace MatchingMakingMonitor.ViewModels
 			set
 			{
 				overall1 = value;
-				settings.Set("Overall1", value.ToString());
-				FirePropertyChanged();
+				if (initialized)
+				{
+					settings.Overall1 = value.ToString();
+					FirePropertyChanged();
+				}
 			}
 		}
 
 		private LoggingService loggingService;
 		private Services.Settings settings;
+		private bool initialized;
 
 		public SettingsWindowViewModel(LoggingService loggingService, Services.Settings settings)
 		{
@@ -149,7 +180,7 @@ namespace MatchingMakingMonitor.ViewModels
 				var result = MessageBox.Show("Are you sure you want to reset all settings?", "Reset settings", MessageBoxButton.YesNo);
 				if (result == MessageBoxResult.Yes)
 				{
-					this.settings.Reset();
+					this.settings.ResetUI();
 					initSettings();
 				}
 			});
@@ -166,16 +197,17 @@ namespace MatchingMakingMonitor.ViewModels
 		{
 			try
 			{
-				FontSize = settings.Get<int>("FontSize");
-				Overall9 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall9"));
-				Overall8 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall8"));
-				Overall7 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall7"));
-				Overall6 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall6"));
-				Overall5 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall5"));
-				Overall4 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall4"));
-				Overall3 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall3"));
-				Overall2 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall2"));
-				Overall1 = (Color)ColorConverter.ConvertFromString(settings.Get<string>("Overall1"));
+				FontSize = settings.FontSize;
+				Overall9 = (Color)ColorConverter.ConvertFromString(settings.Overall9);
+				Overall8 = (Color)ColorConverter.ConvertFromString(settings.Overall8);
+				Overall7 = (Color)ColorConverter.ConvertFromString(settings.Overall7);
+				Overall6 = (Color)ColorConverter.ConvertFromString(settings.Overall6);
+				Overall5 = (Color)ColorConverter.ConvertFromString(settings.Overall5);
+				Overall4 = (Color)ColorConverter.ConvertFromString(settings.Overall4);
+				Overall3 = (Color)ColorConverter.ConvertFromString(settings.Overall3);
+				Overall2 = (Color)ColorConverter.ConvertFromString(settings.Overall2);
+				Overall1 = (Color)ColorConverter.ConvertFromString(settings.Overall1);
+				initialized = true;
 			}
 			catch (Exception e)
 			{
