@@ -13,7 +13,7 @@ namespace MatchMakingMonitor.Services
 			if (_kernel != null) return;
 			_kernel = new StandardKernel();
 
-			_kernel.Bind<LoggingService>().To<LoggingService>().InSingletonScope();
+			_kernel.Bind<ILogger>().To<FileLogger>().InSingletonScope();
 			_kernel.Bind<SocketIoService>().To<SocketIoService>().InSingletonScope();
 			_kernel.Bind<WatcherService>().To<WatcherService>().InSingletonScope();
 			_kernel.Bind<StatsService>().To<StatsService>().InSingletonScope();

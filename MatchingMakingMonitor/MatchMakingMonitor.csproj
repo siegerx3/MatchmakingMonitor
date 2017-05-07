@@ -128,8 +128,9 @@
       <DependentUpon>QrCodeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ApiService.cs" />
+    <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\IocKernel.cs" />
-    <Compile Include="Services\LoggingService.cs" />
+    <Compile Include="Services\FileLogger.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\StatsService.cs" />
     <Compile Include="Services\WatcherService.cs" />

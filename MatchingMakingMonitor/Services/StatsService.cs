@@ -17,7 +17,7 @@ namespace MatchMakingMonitor.Services
 		private Replay _currentReplay;
 		private string _currentRegion;
 
-		private readonly LoggingService _loggingService;
+		private readonly ILogger _logger;
 		private readonly ApiService _apiService;
 		private readonly Settings _settings;
 
@@ -27,9 +27,9 @@ namespace MatchMakingMonitor.Services
 		private readonly BehaviorSubject<List<DisplayPlayerStats>> _statsSubject;
 		public IObservable<List<DisplayPlayerStats>> Stats => _statsSubject.Where(s => s != null).AsObservable();
 
-		public StatsService(LoggingService loggingService, Settings settings, WatcherService watcherService, ApiService apiService)
+		public StatsService(ILogger logger, Settings settings, WatcherService watcherService, ApiService apiService)
 		{
-			_loggingService = loggingService;
+			_logger = logger;
 			_apiService = apiService;
 			_settings = settings;
 
@@ -57,7 +57,7 @@ namespace MatchMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error("Error while reading replay file", e);
+				_logger.Error("Error while reading replay file", e);
 			}
 			sr.Dispose();
 
@@ -80,7 +80,7 @@ namespace MatchMakingMonitor.Services
 						}
 						catch (Exception e)
 						{
-							_loggingService.Error("Exception occured when computing player for display", e);
+							_logger.Error("Exception occured when computing player for display", e);
 							_statsStatusChangedSubject.OnNext(StatsStatus.Waiting);
 						}
 					}

@@ -3,10 +3,10 @@ using System.IO;
 
 namespace MatchMakingMonitor.Services
 {
-	public class LoggingService
+	public class FileLogger: ILogger
 	{
-		private string LogPath => AppDomain.CurrentDomain.BaseDirectory + "/Log.txt";
-		public LoggingService()
+		private static string LogPath => AppDomain.CurrentDomain.BaseDirectory + "/Log.txt";
+		public FileLogger()
 		{
 			if (!File.Exists(LogPath))
 			{
@@ -22,13 +22,13 @@ namespace MatchMakingMonitor.Services
 		{
 			Log($"Error - {message} - {e?.Message}");
 		}
-		private void Log(string message)
+		private static async void Log(string message)
 		{
 			try
 			{
 				using (var sw = new StreamWriter(LogPath, true))
 				{
-					sw.WriteLine(DateTime.Now + " - " + message);
+					await sw.WriteLineAsync(DateTime.Now + " - " + message);
 				}
 			}
 			catch

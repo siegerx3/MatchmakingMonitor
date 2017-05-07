@@ -24,16 +24,16 @@ namespace MatchMakingMonitor.View
 		}
 
 
-		private readonly LoggingService _loggingService;
+		private readonly ILogger _logger;
 
 		public HeaderViewModel()
 		{
 
 		}
 
-		public HeaderViewModel(LoggingService loggingService, SocketIoService socketIoService)
+		public HeaderViewModel(ILogger logger, SocketIoService socketIoService)
 		{
-			_loggingService = loggingService;
+			_logger = logger;
 
 			LogoClickCommand = new RelayCommand(LogoClick);
 			SettingsCommand = new RelayCommand(SettingsClick);
@@ -52,7 +52,7 @@ namespace MatchMakingMonitor.View
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error("Exception Throw on Logo Click", e);
+				_logger.Error("Exception Throw on Logo Click", e);
 			}
 		}
 

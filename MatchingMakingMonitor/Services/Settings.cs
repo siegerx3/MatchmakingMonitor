@@ -238,12 +238,12 @@ namespace MatchMakingMonitor.Services
 		private readonly Subject<string> _uiSettingsChangedSubject;
 		public IObservable<string> UiSettingsChanged => _uiSettingsChangedSubject.AsObservable();
 
-		private readonly LoggingService _loggingService;
+		private readonly ILogger _logger;
 		private readonly BehaviorSubject<string> _settingChangedSubject;
-		public Settings(LoggingService loggingService)
+		public Settings(ILogger logger)
 		{
 			_instance = this;
-			_loggingService = loggingService;
+			_logger = logger;
 
 			Init();
 
@@ -337,7 +337,7 @@ namespace MatchMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error("Exception occured while saving settings to file", e);
+				_logger.Error("Exception occured while saving settings to file", e);
 			}
 		}
 
@@ -359,7 +359,7 @@ namespace MatchMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error($"Exception occured while getting setting '{key}'", e);
+				_logger.Error($"Exception occured while getting setting '{key}'", e);
 				return default(T);
 			}
 		}
@@ -374,7 +374,7 @@ namespace MatchMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error($"Exception occured while setting setting '{key}'", e);
+				_logger.Error($"Exception occured while setting setting '{key}'", e);
 			}
 		}
 

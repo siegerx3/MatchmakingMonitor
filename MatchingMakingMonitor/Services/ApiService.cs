@@ -15,16 +15,16 @@ namespace MatchMakingMonitor.Services
 	public class ApiService
 	{
 		private readonly Settings _settings;
-		private readonly LoggingService _loggingService;
+		private readonly ILogger _logger;
 
 		private List<ShipInfo> _shipInfos;
 		public IReadOnlyList<ShipInfo> ShipInfos => _shipInfos.AsReadOnly();
 
 		private HttpClient _httpClient;
-		public ApiService(LoggingService loggingService, Settings settings)
+		public ApiService(ILogger logger, Settings settings)
 		{
 			_settings = settings;
-			_loggingService = loggingService;
+			_logger = logger;
 #pragma warning disable 4014
 			Ships();
 #pragma warning restore 4014
@@ -45,7 +45,7 @@ namespace MatchMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error("Exception Occurred While Retrieving Ships", e);
+				_logger.Error("Exception Occurred While Retrieving Ships", e);
 				_shipInfos = new List<ShipInfo>();
 			}
 		}
@@ -67,7 +67,7 @@ namespace MatchMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				_loggingService.Error("Error occured while fetching players", e);
+				_logger.Error("Error occured while fetching players", e);
 				return new List<PlayerShip>();
 			}
 		}
