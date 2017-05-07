@@ -1,4 +1,5 @@
 ﻿using MatchMakingMonitor.Services;
+// ReSharper disable InconsistentNaming
 
 namespace MatchMakingMonitor.Models
 {

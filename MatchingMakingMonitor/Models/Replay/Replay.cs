@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+// ReSharper disable InconsistentNaming
 
-namespace MatchMakingMonitor.Models
+namespace MatchMakingMonitor.Models.Replay
 {
-	public class Vehicle
-	{
-		public Int64 id { get; set; }
-		public int relation { get; set; }
-		public string name { get; set; }
-		public Int64 shipId { get; set; }
-	} //end class
-
 	public class Replay
 	{
 		public string clientVersionFromXml { get; set; }
@@ -33,5 +26,5 @@ namespace MatchMakingMonitor.Models
 		public int teamsCount { get; set; }
 		public string logic { get; set; }
 		public string playerVehicle { get; set; }
-	} //end class
-} //end namespace
+	}
+}

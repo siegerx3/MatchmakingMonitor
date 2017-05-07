@@ -1,4 +1,6 @@
-﻿namespace MatchMakingMonitor.Models
+﻿using MatchMakingMonitor.Models.ResponseTypes;
+
+namespace MatchMakingMonitor.Models
 {
 	public class PlayerShip
 	{
@@ -9,6 +11,14 @@
 		public string ShipName { get; set; }
 		public string ShipType { get; set; }
 		public string ShipTier { get; set; }
+		public int Frags { get; set; }
+		public double Wins { get; set; }
+		public double Battles { get; set; }
+		public long DamageDealt { get; set; }
+		public int XpEarned { get; set; }
+		public bool IsPrivateOrHidden { get; set; }
+
+		#region unused
 		//public int MaxFrags { get; set; }
 		//public int DamageToBuildings { get; set; }
 		//public int SuppressionCount { get; set; }
@@ -24,10 +34,10 @@
 		//public int MaxSuppressionCount { get; set; }
 		//public int TeamDroppedCapPoints { get; set; }
 		//public int BattlesSince512 { get; set; }
-		public int Frags { get; set; }
+
 		//public int CapturePoints { get; set; }
 		//public int Draws { get; set; }
-		public double Wins { get; set; }
+
 		//public int Losses { get; set; }
 		//public int MaxXp { get; set; }
 		//public int PlanesKilled { get; set; }
@@ -36,9 +46,9 @@
 		//public int TorpFrags { get; set; }
 		//public int TorpShots { get; set; }
 		//public int TorpHits { get; set; }
-		public double Battles { get; set; }
+
 		//public int MaxDamage { get; set; }
-		public long DamageDealt { get; set; }
+
 		//public int AircraftMaxFrags { get; set; }
 		//public int AircraftFrags { get; set; }
 		//public int RamMaxFrags { get; set; }
@@ -52,15 +62,15 @@
 		//public long SecondaryHits { get; set; }
 		//public long SecondaryShots { get; set; }
 		//public int SurvivedWins { get; set; }
-		public int XpEarned { get; set; }
+
 		//public int SurvivedBattles { get; set; }
 		//public int DroppedCapPoints { get; set; }
 		//public string LastUpdatedWG { get; set; }
 		//public int TotalBattles { get; set; }
-		public bool IsPrivateOrHidden { get; set; }
+
 		//public int ShipRating { get; set; }
 		//public int Passiveness { get; set; }
-
+		#endregion
 
 		public PlayerShip(Ship ship, WargamingPlayer player, ShipInfo shipInfo, int relationship) : this(shipInfo)
 		{

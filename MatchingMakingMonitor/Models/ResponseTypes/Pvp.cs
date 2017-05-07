@@ -1,50 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-
-namespace MatchMakingMonitor.Models
+// ReSharper disable InconsistentNaming
+namespace MatchMakingMonitor.Models.ResponseTypes
 {
-	public class Meta
-	{
-		public int count { get; set; }
-		public object hidden { get; set; }
-	}
-
-	public class MainBattery
-	{
-		public int max_frags_battle { get; set; }
-		public int frags { get; set; }
-		public int hits { get; set; }
-		public int shots { get; set; }
-	}
-
-	public class SecondBattery
-	{
-		public int max_frags_battle { get; set; }
-		public int frags { get; set; }
-		public int hits { get; set; }
-		public int shots { get; set; }
-	}
-
-	public class Ramming
-	{
-		public int max_frags_battle { get; set; }
-		public int frags { get; set; }
-	}
-
-	public class Torpedoes
-	{
-		public int max_frags_battle { get; set; }
-		public int frags { get; set; }
-		public int hits { get; set; }
-		public int shots { get; set; }
-	}
-
-	public class Aircraft
-	{
-		public int max_frags_battle { get; set; }
-		public int frags { get; set; }
-	}
-
 	public class Pvp
 	{
 		public int max_xp { get; set; }
@@ -82,30 +38,5 @@ namespace MatchMakingMonitor.Models
 		public int max_suppressions_count { get; set; }
 		public int team_dropped_capture_points { get; set; }
 		public int battles_since_512 { get; set; }
-	}
-
-	public class Ship
-	{
-		public int distance { get; set; }
-		public int last_battle_time { get; set; }
-		public long account_id { get; set; }
-		public Pvp pvp { get; set; }
-		public int updated_at { get; set; }
-		public int battles { get; set; }
-		public long ship_id { get; set; }
-		[JsonProperty(PropertyName = "private")]
-		public string @private { get; set; }
-	}
-
-	public class Data
-	{
-		public List<Ship> Ships { get; set; }
-	}
-
-	public class PlayerStats
-	{
-		public string status { get; set; }
-		public Meta meta { get; set; }
-		public Data data { get; set; }
 	}
 }

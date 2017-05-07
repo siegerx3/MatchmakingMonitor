@@ -113,6 +113,17 @@
     <Compile Include="Models\MobileDisplayPlayerStats.cs" />
     <Compile Include="Models\MobileSettings.cs" />
     <Compile Include="Models\PlayerShip.cs" />
+    <Compile Include="Models\Replay\Vehicle.cs" />
+    <Compile Include="Models\ResponseTypes\Aircraft.cs" />
+    <Compile Include="Models\ResponseTypes\Data.cs" />
+    <Compile Include="Models\ResponseTypes\MainBattery.cs" />
+    <Compile Include="Models\ResponseTypes\Meta.cs" />
+    <Compile Include="Models\ResponseTypes\Pvp.cs" />
+    <Compile Include="Models\ResponseTypes\Ramming.cs" />
+    <Compile Include="Models\ResponseTypes\SecondBattery.cs" />
+    <Compile Include="Models\ResponseTypes\Ship.cs" />
+    <Compile Include="Models\ResponseTypes\Torpedoes.cs" />
+    <Compile Include="Models\ResponseTypes\WargamingPlayer.cs" />
     <Compile Include="QrCodeWindow.xaml.cs">
       <DependentUpon>QrCodeWindow.xaml</DependentUpon>
     </Compile>
@@ -159,10 +170,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlayerStats.cs" />
-    <Compile Include="Models\Replay.cs" />
+    <Compile Include="Models\ResponseTypes\PlayerStats.cs" />
+    <Compile Include="Models\Replay\Replay.cs" />
     <Compile Include="Models\ShipInfo.cs" />
-    <Compile Include="Models\WargamingSearch.cs" />
+    <Compile Include="Models\ResponseTypes\WargamingSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
