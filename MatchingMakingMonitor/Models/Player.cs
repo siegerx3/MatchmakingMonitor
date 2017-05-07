@@ -1,4 +1,4 @@
-﻿namespace MatchingMakingMonitor.Models
+﻿namespace MatchMakingMonitor.Models
 {
 	public class PlayerShip
 	{

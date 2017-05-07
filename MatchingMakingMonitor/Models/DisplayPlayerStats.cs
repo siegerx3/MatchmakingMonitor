@@ -1,5 +1,5 @@
-﻿using MatchingMakingMonitor.Services;
-using MatchingMakingMonitor.ViewModels;
+﻿using MatchMakingMonitor.Services;
+using MatchMakingMonitor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace MatchingMakingMonitor.Models
+namespace MatchMakingMonitor.Models
 {
 	public class DisplayPlayerStats : BaseViewBinding
 	{
@@ -177,14 +177,14 @@ namespace MatchingMakingMonitor.Models
 
 		public void ComputeUi()
 		{
-			double totalRating = (9 * 1) + (9 * 1.1) + (9 * 0.8) + (9 * 0.9);
+			double totalRating = 0;
 			if (!Player.IsPrivateOrHidden)
 			{
-				//ColorWinRate = getColor(WinRate, winLimits, totalRating, 1, out totalRating, out colorWinRateKey);
-				//ColorAvgFrags = getColor(AvgFrags, fragsLimits, totalRating, 1.1, out totalRating, out colorAvgFragsKey);
-				//ColorAvgXp = getColor(AvgXp, xpLimits, totalRating, 0.8, out totalRating, out colorAvgXpKey);
-				//ColorAvgDamage = getColor(AvgDamage, dmgLimits, totalRating, 0.9, out totalRating, out colorAvgDamageKey);
-				ColorBattles = getColor(Player.Battles, Settings.BattleLimits, totalRating, 1.2, out totalRating, out colorBattlesKey);
+				ColorWinRate = getColor(WinRate, Settings.WinLimits, totalRating, Settings.WinWeight, out totalRating, out colorWinRateKey);
+				ColorAvgFrags = getColor(AvgFrags, Settings.FragsLimits, totalRating, Settings.FragsWeight, out totalRating, out colorAvgFragsKey);
+				ColorAvgXp = getColor(AvgXp, Settings.XpLimits, totalRating, Settings.XpWeight, out totalRating, out colorAvgXpKey);
+				ColorAvgDamage = getColor(AvgDamage, Settings.DmgLimits, totalRating, Settings.DmgWeight, out totalRating, out colorAvgDamageKey);
+				ColorBattles = getColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating, out colorBattlesKey);
 
 				colorNameKey = (int)Math.Floor((double)(totalRating / 5));
 				ColorName = Settings.Brushes[colorNameKey - 1];
@@ -203,7 +203,7 @@ namespace MatchingMakingMonitor.Models
 		private static double[] xpLimits = new double[9] { 1500, 1200, 1000, 900, 800, 600, 500, 400, 0 };
 		private static double[] fragsLimits = new double[9] { 1.5, 1.3, 1.1, 1.0, 0.8, 0.6, 0.4, 0.2, 0 };
 		private static double[] winLimits = new double[9] { 90, 80, 70, 60, 50, 40, 30, 20, 0 };
-		//private static double[] battleLimits = new double[9] { 150, 100, 80, 60, 40, 30, 20, 10, 0 };
+		private static double[] battleLimits = new double[9] { 150, 100, 80, 60, 40, 30, 20, 10, 0 };
 
 		private SolidColorBrush getColor(double value, ObservableCollection<double> limits)
 		{

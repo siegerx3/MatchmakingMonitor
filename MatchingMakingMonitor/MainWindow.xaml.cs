@@ -8,14 +8,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Forms;
-using MatchingMakingMonitor.Models;
+using MatchMakingMonitor.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-using MatchingMakingMonitor.SocketIO;
+using MatchMakingMonitor.SocketIO;
 using System.Reactive.Linq;
 
-namespace MatchingMakingMonitor
+namespace MatchMakingMonitor
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

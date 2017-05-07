@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MatchingMakingMonitor.ViewModels
+namespace MatchMakingMonitor.ViewModels
 {
 	public class RelayCommand : ICommand
 	{

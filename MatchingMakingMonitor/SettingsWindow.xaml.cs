@@ -1,4 +1,4 @@
-﻿using MatchingMakingMonitor.Services;
+﻿using MatchMakingMonitor.Services;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace MatchingMakingMonitor
+namespace MatchMakingMonitor
 {
 	/// <summary>
 	/// Interaction logic for Settings.xaml
@@ -32,13 +32,8 @@ namespace MatchingMakingMonitor
 
 		private void DoubleValidationTextBox(object sender, TextCompositionEventArgs e)
 		{
-			Regex regex = new Regex("[^0-9\\,]+");
+			Regex regex = new Regex("[^0-9,]+");
 			e.Handled = regex.IsMatch(e.Text);
-		}
-
-		protected override void OnClosed(EventArgs e)
-		{
-			base.OnClosed(e);
 		}
 	}
 } //end namespace

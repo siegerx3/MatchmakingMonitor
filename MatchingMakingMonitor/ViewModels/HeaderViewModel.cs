@@ -1,12 +1,12 @@
-﻿using MatchingMakingMonitor.Services;
-using MatchingMakingMonitor.SocketIO;
+﻿using MatchMakingMonitor.Services;
+using MatchMakingMonitor.SocketIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatchingMakingMonitor.ViewModels
+namespace MatchMakingMonitor.ViewModels
 {
 	public class HeaderViewModel : BaseViewBinding
 	{

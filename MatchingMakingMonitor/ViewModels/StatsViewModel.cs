@@ -1,5 +1,5 @@
-﻿using MatchingMakingMonitor.Models;
-using MatchingMakingMonitor.Services;
+﻿using MatchMakingMonitor.Models;
+using MatchMakingMonitor.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Threading;
 
-namespace MatchingMakingMonitor.ViewModels
+namespace MatchMakingMonitor.ViewModels
 {
 	public class StatsViewModel : BaseViewBinding
 	{

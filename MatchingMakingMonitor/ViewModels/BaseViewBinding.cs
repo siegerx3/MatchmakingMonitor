@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatchingMakingMonitor.ViewModels
+namespace MatchMakingMonitor.ViewModels
 {
 	public class BaseViewBinding : INotifyPropertyChanged
 	{

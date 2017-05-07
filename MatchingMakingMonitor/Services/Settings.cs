@@ -1,4 +1,4 @@
-﻿using MatchingMakingMonitor.ViewModels;
+﻿using MatchMakingMonitor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace MatchingMakingMonitor.Services
+namespace MatchMakingMonitor.Services
 {
 	public class Settings : BaseViewBinding
 	{
@@ -51,10 +51,17 @@ namespace MatchingMakingMonitor.Services
 
 		public const string KeyFontSize = "FontSize";
 
+		public const string KeyBattleWeight = "BattleWeight";
+		public const string KeyWinWeight = "WinWeight";
+		public const string KeyFragsWeight = "FragsWeight";
+		public const string KeyXpWeight = "XpWeight";
+		public const string KeyDmgWeight = "DmgWeight";
+
 		public static string[] KeysColors = new string[] { KeyColor9, KeyColor8, KeyColor7, KeyColor6, KeyColor5, KeyColor4, KeyColor3, KeyColor2, KeyColor1 };
 		public static string[] KeysLimits = new string[] { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimits };
+		public static string[] KeysWeights = new string[] { KeyBattleWeight, KeyWinWeight, KeyFragsWeight, KeyXpWeight, KeyDmgWeight };
 		public static string[] KeysOthers = new string[] { KeyFontSize };
-		public static string[] KeysUISettings = KeysColors.Concat(KeysLimits).ToArray();
+		public static string[] KeysUISettings = KeysColors.Concat(KeysLimits).Concat(KeysWeights).ToArray();
 
 		public const string KeyToken = "Token";
 		#endregion
@@ -104,7 +111,7 @@ namespace MatchingMakingMonitor.Services
 
 		public void BattleLimitsChanged()
 		{
-			instance.Set(KeyWinLimits, string.Join(";", battleLimits));
+			instance.Set(KeyBattleLimits, string.Join(";", battleLimits));
 		}
 
 		private ObservableCollection<double> winLimits;
@@ -186,6 +193,12 @@ namespace MatchingMakingMonitor.Services
 		{
 			instance.Set(KeyDmgLimits, string.Join(";", dmgLimits));
 		}
+
+		public double BattleWeight { get { return instance.Get<double>(KeyBattleWeight); } set { instance.Set(KeyBattleWeight, value); } }
+		public double FragsWeight { get { return instance.Get<double>(KeyFragsWeight); } set { instance.Set(KeyFragsWeight, value); } }
+		public double XpWeight { get { return instance.Get<double>(KeyXpWeight); } set { instance.Set(KeyXpWeight, value); } }
+		public double DmgWeight { get { return instance.Get<double>(KeyDmgWeight); } set { instance.Set(KeyDmgWeight, value); } }
+		public double WinWeight { get { return instance.Get<double>(KeyWinWeight); } set { instance.Set(KeyWinWeight, value); } }
 		#endregion
 
 		public string Token { get { return instance.Get<string>(KeyToken); } set { instance.Set(KeyToken, value); } }
@@ -245,11 +258,11 @@ namespace MatchingMakingMonitor.Services
 			});
 			setBrushes();
 
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(BattleLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => BattleLimitsChanged());
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(WinLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => WinLimitsChanged());
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(XpLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => XpLimitsChanged());
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => DmgLimitsChanged());
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(FragsLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(1500)).Subscribe(e => FragsLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(BattleLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => BattleLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(WinLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => WinLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(XpLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => XpLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(FragsLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => FragsLimitsChanged());
 		}
 
 		public void Save()
@@ -292,16 +305,24 @@ namespace MatchingMakingMonitor.Services
 			}
 		}
 
-		public async void ResetUI()
+		public async Task ResetUI()
 		{
 			resetting = true;
 			await Task.Run(() =>
 			{
 				foreach (SettingsProperty prop in Properties.Settings.Default.Properties)
 				{
-					if (KeysColors.Contains(prop.Name))
+					if (KeysColors.Concat(KeysOthers).Concat(KeysWeights).Contains(prop.Name))
 					{
-						Properties.Settings.Default[prop.Name] = Convert.ChangeType(prop.DefaultValue, prop.PropertyType);
+						if(prop.PropertyType == typeof(double))
+						{
+							Properties.Settings.Default[prop.Name] = double.Parse(((string)prop.DefaultValue).Replace('.', ','));
+						}
+						else
+						{
+							Properties.Settings.Default[prop.Name] = Convert.ChangeType(prop.DefaultValue, prop.PropertyType);
+						}
+						
 						FirePropertyChanged(prop.Name);
 					}
 					else if (KeysLimits.Contains(prop.Name))

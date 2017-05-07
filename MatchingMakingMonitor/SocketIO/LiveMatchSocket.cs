@@ -5,10 +5,10 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Quobject.SocketIoClientDotNet.Client;
 using Newtonsoft.Json;
-using MatchingMakingMonitor.Models;
+using MatchMakingMonitor.Models;
 using System.Collections.Generic;
 
-namespace MatchingMakingMonitor.SocketIO
+namespace MatchMakingMonitor.SocketIO
 {
 	public class LiveMatchSocket
 	{

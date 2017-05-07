@@ -1,4 +1,4 @@
-﻿using MatchingMakingMonitor.Services;
+﻿using MatchMakingMonitor.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace MatchingMakingMonitor.ViewModels
+namespace MatchMakingMonitor.ViewModels
 {
 	public class SubHeaderViewModel : BaseViewBinding
 	{

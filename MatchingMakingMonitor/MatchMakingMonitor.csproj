@@ -134,12 +134,13 @@
     <Compile Include="SocketIO\LiveMatchSocket.cs" />
     <Compile Include="SocketIO\SocketIOService.cs" />
     <Compile Include="ViewModels\BaseViewBinding.cs" />
+    <Compile Include="ViewModels\PercentageStringFormatConverter.cs" />
     <Compile Include="ViewModels\SubHeaderViewModel.cs" />
     <Compile Include="ViewModels\HeaderViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\QrCodeViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\StatsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">

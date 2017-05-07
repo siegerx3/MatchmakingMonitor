@@ -1,4 +1,4 @@
-﻿using MatchingMakingMonitor.Models;
+﻿using MatchMakingMonitor.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatchingMakingMonitor.Services
+namespace MatchMakingMonitor.Services
 {
 	public class ApiService
 	{

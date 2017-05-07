@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MatchingMakingMonitor.Properties {
+namespace MatchMakingMonitor.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -308,6 +308,66 @@ namespace MatchingMakingMonitor.Properties {
             }
             set {
                 this["DmgLimits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.2")]
+        public double BattleWeight {
+            get {
+                return ((double)(this["BattleWeight"]));
+            }
+            set {
+                this["BattleWeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.1")]
+        public double FragsWeight {
+            get {
+                return ((double)(this["FragsWeight"]));
+            }
+            set {
+                this["FragsWeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
+        public double XpWeight {
+            get {
+                return ((double)(this["XpWeight"]));
+            }
+            set {
+                this["XpWeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        public double DmgWeight {
+            get {
+                return ((double)(this["DmgWeight"]));
+            }
+            set {
+                this["DmgWeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double WinWeight {
+            get {
+                return ((double)(this["WinWeight"]));
+            }
+            set {
+                this["WinWeight"] = value;
             }
         }
     }

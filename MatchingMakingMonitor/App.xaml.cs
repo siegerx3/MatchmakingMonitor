@@ -1,6 +1,6 @@
-﻿using MatchingMakingMonitor.Services;
-using MatchingMakingMonitor.SocketIO;
-using MatchingMakingMonitor.ViewModels;
+﻿using MatchMakingMonitor.Services;
+using MatchMakingMonitor.SocketIO;
+using MatchMakingMonitor.ViewModels;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MatchingMakingMonitor
+namespace MatchMakingMonitor
 {
 	/// <summary>
 	/// Interaction logic for App.xaml
@@ -29,9 +29,9 @@ namespace MatchingMakingMonitor
 			//socketIOService.Connect();
 			//socketIOService.StateChanged.Where(s => s == ConnectionState.Connected).Subscribe(_ =>
 			//{
-			//	if (!string.IsNullOrEmpty(MatchingMakingMonitor.Properties.Settings.Default.Token))
+			//	if (!string.IsNullOrEmpty(MatchMakingMonitor.Properties.Settings.Default.Token))
 			//	{
-			//		socketIOService.Hub.SetToken(MatchingMakingMonitor.Properties.Settings.Default.Token);
+			//		socketIOService.Hub.SetToken(MatchMakingMonitor.Properties.Settings.Default.Token);
 			//	}
 			//});
 			base.OnStartup(e);

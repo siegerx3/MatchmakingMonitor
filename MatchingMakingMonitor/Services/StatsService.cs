@@ -1,4 +1,4 @@
-﻿using MatchingMakingMonitor.Models;
+﻿using MatchMakingMonitor.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace MatchingMakingMonitor.Services
+namespace MatchMakingMonitor.Services
 {
 	public class StatsService
 	{

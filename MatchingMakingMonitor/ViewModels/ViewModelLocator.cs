@@ -1,5 +1,5 @@
-﻿using MatchingMakingMonitor.Services;
-using MatchingMakingMonitor.ViewModels;
+﻿using MatchMakingMonitor.Services;
+using MatchMakingMonitor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MatchingMakingMonitor.ViewModels
+namespace MatchMakingMonitor.ViewModels
 {
 	public class ViewModelLocator
 	{

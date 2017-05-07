@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MatchingMakingMonitor.Models
+namespace MatchMakingMonitor.Models
 {
 	public class WargamingSearch
 	{

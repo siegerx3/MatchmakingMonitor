@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatchingMakingMonitor.Services
+namespace MatchMakingMonitor.Services
 {
 	public class LoggingService
 	{

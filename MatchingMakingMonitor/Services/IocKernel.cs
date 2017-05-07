@@ -1,5 +1,5 @@
-﻿using MatchingMakingMonitor.SocketIO;
-using MatchingMakingMonitor.ViewModels;
+﻿using MatchMakingMonitor.SocketIO;
+using MatchMakingMonitor.ViewModels;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatchingMakingMonitor.Services
+namespace MatchMakingMonitor.Services
 {
 	public static class IoCKernel
 	{
