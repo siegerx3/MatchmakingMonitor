@@ -38,7 +38,7 @@ namespace MatchMakingMonitor.Services
 			};
 
 
-			settings.PropertyChanged(Settings.KeyInstallDirectory).Subscribe(key =>
+			settings.SettingChanged(Settings.KeyInstallDirectory).Subscribe(key =>
 			{
 				var directory = settings.InstallDirectory;
 				if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
@@ -57,7 +57,7 @@ namespace MatchMakingMonitor.Services
 				}
 			});
 
-			settings.PropertyChanged(Settings.KeyRegion, false).Subscribe(key =>
+			settings.SettingChanged(Settings.KeyRegion, false).Subscribe(key =>
 			{
 				checkStatic();
 			});

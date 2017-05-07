@@ -1,4 +1,5 @@
 ﻿using MatchMakingMonitor.Services;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,8 @@ namespace MatchMakingMonitor.ViewModels
 	public class SettingsWindowViewModel : BaseViewBinding
 	{
 		public RelayCommand ResetCommand { get; set; }
+		public RelayCommand ExportCommand { get; set; }
+		public RelayCommand ImportCommand { get; set; }
 
 		public ObservableCollection<int> FontSizes { get; private set; } = new ObservableCollection<int>() { 8, 9, 10, 11, 12, 13, 14 };
 
@@ -131,7 +134,10 @@ namespace MatchMakingMonitor.ViewModels
 			this.loggingService = loggingService;
 			this.Settings = Settings;
 
-			this.ResetCommand = new RelayCommand(async () =>
+			ExportCommand = new RelayCommand(export);
+			ImportCommand = new RelayCommand(import);
+
+			ResetCommand = new RelayCommand(async () =>
 			{
 				var result = MessageBox.Show("Are you sure you want to reset all Settings?", "Reset Settings", MessageBoxButton.YesNo);
 				if (result == MessageBoxResult.Yes)
@@ -141,7 +147,7 @@ namespace MatchMakingMonitor.ViewModels
 					fragsWeight = null;
 					xpWeight = null;
 					dmgWeight = null;
-					await this.Settings.ResetUI();
+					await this.Settings.ResetUISettings();
 					FirePropertyChanged(nameof(WinWeight));
 					FirePropertyChanged(nameof(BattleWeight));
 					FirePropertyChanged(nameof(FragsWeight));
@@ -151,9 +157,40 @@ namespace MatchMakingMonitor.ViewModels
 			});
 		}
 
+
+
 		public SettingsWindowViewModel()
 		{
 
+		}
+
+		private async void import()
+		{
+			var ofd = new OpenFileDialog()
+			{
+				FileName = "settings.export.json",
+				DefaultExt = ".json",
+				Filter = "JSON Documents (.json)|*.json",
+				CheckFileExists = true
+			};
+			if (ofd.ShowDialog() == true)
+			{
+				await Settings.ImportUISettings(ofd.FileName);
+			}
+		}
+
+		private async void export()
+		{
+			var sfd = new SaveFileDialog()
+			{
+				FileName = "settings.export",
+				DefaultExt = ".json",
+				Filter = "JSON Documents (.json)|*.json"
+			};
+			if (sfd.ShowDialog() == true)
+			{
+				await Settings.ExportUISettings(sfd.FileName);
+			}
 		}
 
 		private bool validateWeights()

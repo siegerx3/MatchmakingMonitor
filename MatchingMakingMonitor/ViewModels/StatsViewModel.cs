@@ -82,7 +82,7 @@ namespace MatchMakingMonitor.ViewModels
 				});
 			});
 
-			this.settings.UiPropertiesChanged.Subscribe(async key =>
+			this.settings.UiSettingsChanged.Subscribe(async key =>
 			{
 				if (stats != null)
 				{

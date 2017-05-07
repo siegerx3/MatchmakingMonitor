@@ -111,7 +111,7 @@ namespace MatchMakingMonitor.ViewModels
 
 			this.PathClickCommand = new RelayCommand(pathClicked);
 
-			this.settings.PropertyChanged(Settings.KeyInstallDirectory).Subscribe(initPath);
+			this.settings.SettingChanged(Settings.KeyInstallDirectory).Subscribe(initPath);
 			this.statsService.StatsStatusChanged.Subscribe(status =>
 			{
 				setStatusText(status);

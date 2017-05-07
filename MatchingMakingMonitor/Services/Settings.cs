@@ -1,13 +1,18 @@
-﻿using MatchMakingMonitor.ViewModels;
+﻿using MatchMakingMonitor.config;
+using MatchMakingMonitor.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Dynamic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,44 +23,52 @@ namespace MatchMakingMonitor.Services
 	public class Settings : BaseViewBinding
 	{
 		private static Settings instance;
+
+		private static string defaultSettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.default.json");
+		private static string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.json");
+
+		private SettingsJson currentSettings;
+
 		#region Keys
-		public const string KeyInstallDirectory = "InstallDirectory";
+		public const string KeyInstallDirectory = nameof(SettingsJson.installDirectory);
 
-		public const string KeyAppIdNA = "AppIdNA";
-		public const string KeyAppIdEU = "AppIdEU";
-		public const string KeyAppIdRU = "AppIdRU";
-		public const string KeyAppIdSEA = "AppIdSEA";
+		public const string KeyAppIdNA = nameof(SettingsJson.appIdNA);
+		public const string KeyAppIdEU = nameof(SettingsJson.appIdEU);
+		public const string KeyAppIdRU = nameof(SettingsJson.appIdRU);
+		public const string KeyAppIdSEA = nameof(SettingsJson.appIdSEA);
 
-		public const string KeyBaseUrlNA = "BaseUrlNA";
-		public const string KeyBaseUrlEU = "BaseUrlEU";
-		public const string KeyBaseUrlRU = "BaseUrlRU";
-		public const string KeyBaseUrlSEA = "BaseUrlSEA";
+		public const string KeyBaseUrlNA = nameof(SettingsJson.baseUrlNA);
+		public const string KeyBaseUrlEU = nameof(SettingsJson.baseUrlEU);
+		public const string KeyBaseUrlRU = nameof(SettingsJson.baseUrlRU);
+		public const string KeyBaseUrlSEA = nameof(SettingsJson.baseUrlSEA);
 
-		public const string KeyRegion = "Region";
+		public const string KeyRegion = nameof(SettingsJson.region);
 
-		public const string KeyColor9 = "Color9";
-		public const string KeyColor8 = "Color8";
-		public const string KeyColor7 = "Color7";
-		public const string KeyColor6 = "Color6";
-		public const string KeyColor5 = "Color5";
-		public const string KeyColor4 = "Color4";
-		public const string KeyColor3 = "Color3";
-		public const string KeyColor2 = "Color2";
-		public const string KeyColor1 = "Color1";
+		public const string KeyToken = nameof(SettingsJson.token);
 
-		public const string KeyBattleLimits = "BattleLimits";
-		public const string KeyWinLimits = "WinLimits";
-		public const string KeyFragsLimits = "FragsLimits";
-		public const string KeyXpLimits = "XpLimits";
-		public const string KeyDmgLimits = "DmgLimits";
+		public const string KeyColor9 = nameof(SettingsJson.color9);
+		public const string KeyColor8 = nameof(SettingsJson.color8);
+		public const string KeyColor7 = nameof(SettingsJson.color7);
+		public const string KeyColor6 = nameof(SettingsJson.color6);
+		public const string KeyColor5 = nameof(SettingsJson.color5);
+		public const string KeyColor4 = nameof(SettingsJson.color4);
+		public const string KeyColor3 = nameof(SettingsJson.color3);
+		public const string KeyColor2 = nameof(SettingsJson.color2);
+		public const string KeyColor1 = nameof(SettingsJson.color1);
 
-		public const string KeyFontSize = "FontSize";
+		public const string KeyBattleLimits = nameof(SettingsJson.battleLimits);
+		public const string KeyWinLimits = nameof(SettingsJson.winLimits);
+		public const string KeyFragsLimits = nameof(SettingsJson.fragsLimits);
+		public const string KeyXpLimits = nameof(SettingsJson.xpLimits);
+		public const string KeyDmgLimits = nameof(SettingsJson.dmgLimits);
 
-		public const string KeyBattleWeight = "BattleWeight";
-		public const string KeyWinWeight = "WinWeight";
-		public const string KeyFragsWeight = "FragsWeight";
-		public const string KeyXpWeight = "XpWeight";
-		public const string KeyDmgWeight = "DmgWeight";
+		public const string KeyFontSize = nameof(SettingsJson.fontSize);
+
+		public const string KeyBattleWeight = nameof(SettingsJson.battleWeight);
+		public const string KeyWinWeight = nameof(SettingsJson.winWeight);
+		public const string KeyFragsWeight = nameof(SettingsJson.fragsWeight);
+		public const string KeyXpWeight = nameof(SettingsJson.xpWeight);
+		public const string KeyDmgWeight = nameof(SettingsJson.dmgWeight);
 
 		public static string[] KeysColors = new string[] { KeyColor9, KeyColor8, KeyColor7, KeyColor6, KeyColor5, KeyColor4, KeyColor3, KeyColor2, KeyColor1 };
 		public static string[] KeysLimits = new string[] { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimits };
@@ -63,7 +76,6 @@ namespace MatchMakingMonitor.Services
 		public static string[] KeysOthers = new string[] { KeyFontSize };
 		public static string[] KeysUISettings = KeysColors.Concat(KeysLimits).Concat(KeysWeights).ToArray();
 
-		public const string KeyToken = "Token";
 		#endregion
 
 		#region Settings
@@ -99,19 +111,19 @@ namespace MatchMakingMonitor.Services
 		{
 			get
 			{
-				if (battleLimits == null) battleLimits = new ObservableCollection<double>(instance.Get<string>(KeyBattleLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				if (battleLimits == null) battleLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyBattleLimits));
 				return battleLimits;
 			}
 			set
 			{
 				battleLimits = null;
-				instance.Set(KeyBattleLimits, string.Join(";", value));
+				instance.Set(KeyBattleLimits, value);
 			}
 		}
 
 		public void BattleLimitsChanged()
 		{
-			instance.Set(KeyBattleLimits, string.Join(";", battleLimits));
+			instance.Set(KeyBattleLimits, battleLimits.ToArray(), true);
 		}
 
 		private ObservableCollection<double> winLimits;
@@ -119,19 +131,19 @@ namespace MatchMakingMonitor.Services
 		{
 			get
 			{
-				if (winLimits == null) winLimits = new ObservableCollection<double>(instance.Get<string>(KeyWinLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				if (winLimits == null) winLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyWinLimits));
 				return winLimits;
 			}
 			set
 			{
 				winLimits = null;
-				instance.Set(KeyWinLimits, string.Join(";", value));
+				instance.Set(KeyWinLimits, value);
 			}
 		}
 
 		public void WinLimitsChanged()
 		{
-			instance.Set(KeyWinLimits, string.Join(";", winLimits));
+			instance.Set(KeyWinLimits, winLimits.ToArray(), true);
 		}
 
 		private ObservableCollection<double> fragsLimits;
@@ -139,19 +151,19 @@ namespace MatchMakingMonitor.Services
 		{
 			get
 			{
-				if (fragsLimits == null) fragsLimits = new ObservableCollection<double>(instance.Get<string>(KeyFragsLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				if (fragsLimits == null) fragsLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyFragsLimits));
 				return fragsLimits;
 			}
 			set
 			{
 				fragsLimits = null;
-				instance.Set(KeyFragsLimits, string.Join(";", value));
+				instance.Set(KeyFragsLimits, value);
 			}
 		}
 
 		public void FragsLimitsChanged()
 		{
-			instance.Set(KeyFragsLimits, string.Join(";", fragsLimits));
+			instance.Set(KeyFragsLimits, fragsLimits.ToArray(), true);
 		}
 
 		private ObservableCollection<double> xpLimits;
@@ -159,19 +171,19 @@ namespace MatchMakingMonitor.Services
 		{
 			get
 			{
-				if (xpLimits == null) xpLimits = new ObservableCollection<double>(instance.Get<string>(KeyXpLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				if (xpLimits == null) xpLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyXpLimits));
 				return xpLimits;
 			}
 			set
 			{
 				xpLimits = null;
-				instance.Set(KeyXpLimits, string.Join(";", value));
+				instance.Set(KeyXpLimits, value);
 			}
 		}
 
 		public void XpLimitsChanged()
 		{
-			instance.Set(KeyXpLimits, string.Join(";", xpLimits));
+			instance.Set(KeyXpLimits, xpLimits.ToArray(), true);
 		}
 
 		private ObservableCollection<double> dmgLimits;
@@ -179,19 +191,19 @@ namespace MatchMakingMonitor.Services
 		{
 			get
 			{
-				if (dmgLimits == null) dmgLimits = new ObservableCollection<double>(instance.Get<string>(KeyDmgLimits).Split(';').Select(s => double.Parse(s)).ToArray());
+				if (dmgLimits == null) dmgLimits = new ObservableCollection<double>(instance.Get<double[]>(KeyDmgLimits));
 				return dmgLimits;
 			}
 			set
 			{
 				dmgLimits = null;
-				instance.Set(KeyDmgLimits, string.Join(";", value));
+				instance.Set(KeyDmgLimits, value);
 			}
 		}
 
 		public void DmgLimitsChanged()
 		{
-			instance.Set(KeyDmgLimits, string.Join(";", dmgLimits));
+			instance.Set(KeyDmgLimits, dmgLimits.ToArray(), true);
 		}
 
 		public double BattleWeight { get { return instance.Get<double>(KeyBattleWeight); } set { instance.Set(KeyBattleWeight, value); } }
@@ -205,56 +217,34 @@ namespace MatchMakingMonitor.Services
 
 		#endregion
 
-		private Subject<string> uiPropertiesChanged;
-		public IObservable<string> UiPropertiesChanged { get { return uiPropertiesChanged.AsObservable(); } }
+		private Subject<string> uiSettingsChangedSubject;
+		public IObservable<string> UiSettingsChanged { get { return uiSettingsChangedSubject.AsObservable(); } }
 
-		private IObservable<string> uiPropertyChangedInternal;
+		private IObservable<string> uiSettingsChangedInternal;
 
 		private LoggingService loggingService;
-		private BehaviorSubject<string> propertyChangedSubject;
-		private Dictionary<string, object> oldSettings = new Dictionary<string, object>();
-		private bool resetting;
+		private BehaviorSubject<string> settingChangedSubject;
 		public Settings(LoggingService loggingService)
 		{
 			instance = this;
 			this.loggingService = loggingService;
-			this.propertyChangedSubject = new BehaviorSubject<string>(string.Empty);
 
-			foreach (SettingsProperty prop in Properties.Settings.Default.Properties)
+			init();
+
+			settingChangedSubject = new BehaviorSubject<string>(string.Empty);
+			settingChangedSubject.Where(key => key != null).Throttle(TimeSpan.FromSeconds(2)).Subscribe(key =>
 			{
-				oldSettings[prop.Name] = Properties.Settings.Default[prop.Name];
-			}
+				Save();
+			});
 
-			Properties.Settings.Default.SettingChanging += (sender, args) =>
-			{
-				oldSettings[args.SettingName] = Properties.Settings.Default[args.SettingName];
-			};
+			uiSettingsChangedSubject = new Subject<string>();
 
-			Properties.Settings.Default.PropertyChanged += (sender, args) =>
-			{
-				var key = args.PropertyName;
-				try
-				{
-					if (!resetting) Properties.Settings.Default.Save();
-					if (oldSettings[key] != Properties.Settings.Default[key])
-					{
-						propertyChangedSubject.OnNext(key);
-					}
-				}
-				catch (Exception e)
-				{
-					loggingService.Error($"Exception occured while saving setting '{key}'", e);
-				}
-			};
+			uiSettingsChangedInternal = Observable.Merge(KeysUISettings.Select(key => SettingChanged(key, false))).Throttle(TimeSpan.FromMilliseconds(500));
 
-			uiPropertiesChanged = new Subject<string>();
-
-			uiPropertyChangedInternal = Observable.Merge(KeysUISettings.Select(key => PropertyChanged(key, false))).Throttle(TimeSpan.FromMilliseconds(500));
-
-			uiPropertyChangedInternal.Subscribe(key =>
+			uiSettingsChangedInternal.Subscribe(key =>
 			{
 				setBrushes();
-				uiPropertiesChanged.OnNext(key);
+				uiSettingsChangedSubject.OnNext(key);
 			});
 			setBrushes();
 
@@ -265,17 +255,81 @@ namespace MatchMakingMonitor.Services
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(FragsLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => FragsLimitsChanged());
 		}
 
-		public void Save()
+		private void init()
 		{
-			Properties.Settings.Default.Save();
+			if (!File.Exists(settingsPath))
+			{
+				Directory.CreateDirectory(Path.GetDirectoryName(settingsPath));
+				using (var f = File.CreateText(settingsPath))
+				{
+					f.Write(defaults());
+				}
+			}
+			fromJson();
 		}
 
-		public IObservable<string> PropertyChanged(string key, bool initial = true)
+		private string defaults()
 		{
-			var obs = propertyChangedSubject.AsObservable().Where(k => key == k);
+			var assembly = Assembly.GetExecutingAssembly();
+			var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MatchMakingMonitor.config.settings.default.json");
+			var result = string.Empty;
+			using (var sr = new StreamReader(stream))
+			{
+				result = sr.ReadToEnd();
+			}
+			return result;
+		}
+
+		private void fromJson()
+		{
+			currentSettings = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(settingsPath));
+		}
+
+		public async Task ExportUISettings(string path)
+		{
+			var export = new Dictionary<string, Object>();
+
+			foreach (var key in KeysUISettings.Concat(KeysOthers))
+			{
+				export.Add(key, currentSettings.Get(key));
+			}
+
+			var exportJson = await Task.Run(() => { return JsonConvert.SerializeObject(export); });
+
+			using (var f = File.CreateText(path))
+			{
+				await f.WriteAsync(exportJson);
+			}
+		}
+
+		public async Task ImportUISettings(string path)
+		{
+			if (File.Exists(path))
+			{
+				var importJson = File.ReadAllText(path);
+				var import = await Task.Run(() => { return JsonConvert.DeserializeObject<SettingsJson>(importJson); });
+				await ResetUISettings(import);
+			}
+		}
+
+		public async Task Save()
+		{
+			try
+			{
+				await Task.Run(() => { File.WriteAllText(settingsPath, JsonConvert.SerializeObject(currentSettings)); });
+			}
+			catch (Exception e)
+			{
+				loggingService.Error("Exception occured while saving settings to file", e);
+			}
+		}
+
+		public IObservable<string> SettingChanged(string key, bool initial = true)
+		{
+			var obs = settingChangedSubject.AsObservable().Where(k => key == k);
 			if (initial)
 			{
-				propertyChangedSubject.OnNext(key);
+				settingChangedSubject.OnNext(key);
 			}
 			return obs;
 		}
@@ -284,7 +338,7 @@ namespace MatchMakingMonitor.Services
 		{
 			try
 			{
-				return (T)Properties.Settings.Default[key];
+				return currentSettings.Get<T>(key);
 			}
 			catch (Exception e)
 			{
@@ -293,11 +347,13 @@ namespace MatchMakingMonitor.Services
 			}
 		}
 
-		public void Set(string key, object value)
+		public void Set<T>(string key, T value, bool forceChanged = false)
 		{
 			try
 			{
-				Properties.Settings.Default[key] = value;
+				var changed = forceChanged || !value.Equals(Get<T>(key));
+				currentSettings.Set(key, value);
+				if (changed) fireSettingChanged(key);
 			}
 			catch (Exception e)
 			{
@@ -305,42 +361,37 @@ namespace MatchMakingMonitor.Services
 			}
 		}
 
-		public async Task ResetUI()
+		public async Task ResetUISettings(SettingsJson sourceSettings = null)
 		{
-			resetting = true;
+			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(this.defaults());
 			await Task.Run(() =>
 			{
-				foreach (SettingsProperty prop in Properties.Settings.Default.Properties)
+				foreach (var key in KeysColors.Concat(KeysOthers).Concat(KeysWeights))
 				{
-					if (KeysColors.Concat(KeysOthers).Concat(KeysWeights).Contains(prop.Name))
+					currentSettings.Set(key, sourceSettings.Get(key));
+					FirePropertyChanged(firstLetterToUpper(key));
+				}
+				foreach (var key in KeysLimits)
+				{
+					currentSettings.Set(key, sourceSettings.Get(key));
+					var collection = getLimitCollectionByKey(key);
+					if (collection != null)
 					{
-						if(prop.PropertyType == typeof(double))
+						var defaultLimit = sourceSettings.Get<double[]>(key);
+						var limit = currentSettings.Get<double[]>(key);
+						for (int i = 0; i < defaultLimit.Length; i++)
 						{
-							Properties.Settings.Default[prop.Name] = double.Parse(((string)prop.DefaultValue).Replace('.', ','));
-						}
-						else
-						{
-							Properties.Settings.Default[prop.Name] = Convert.ChangeType(prop.DefaultValue, prop.PropertyType);
-						}
-						
-						FirePropertyChanged(prop.Name);
-					}
-					else if (KeysLimits.Contains(prop.Name))
-					{
-						var ints = ((string)prop.DefaultValue).Split(';').Select(s => double.Parse(s)).ToArray();
-						var collection = getLimitCollectionByKey(prop.Name);
-						if (collection != null)
-						{
-							for (int i = 0; i < ints.Length; i++)
-							{
-								collection[i] = ints[i];
-							}
+							collection[i] = limit[i];
 						}
 					}
 				}
-				Properties.Settings.Default.Save();
 			});
-			resetting = false;
+			await Save();
+		}
+
+		private void fireSettingChanged(string key)
+		{
+			settingChangedSubject.OnNext(key);
 		}
 
 		private ObservableCollection<double> getLimitCollectionByKey(string key)
@@ -372,6 +423,17 @@ namespace MatchMakingMonitor.Services
 				brush.Freeze();
 				return brush;
 			}).ToArray();
+		}
+
+		private string firstLetterToUpper(string str)
+		{
+			if (str == null)
+				return null;
+
+			if (str.Length > 1)
+				return char.ToUpper(str[0]) + str.Substring(1);
+
+			return str.ToUpper();
 		}
 	}
 }
