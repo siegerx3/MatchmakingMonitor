@@ -18,6 +18,8 @@ namespace MatchingMakingMonitor.Models
 		public SolidColorBrush ColorAvgXp { get; private set; } = Brushes.Black;
 		public SolidColorBrush ColorAvgFrags { get; private set; } = Brushes.Black;
 		public SolidColorBrush ColorAvgDamage { get; private set; } = Brushes.Black;
+		public SolidColorBrush ColorBattles { get; private set; } = Brushes.Black;
+		public SolidColorBrush ColorBorder => Player.Relation == 0 ? ColorName : Brushes.Transparent;
 
 		public string TextBattles => $"Battles: {Player.Battles}";
 		public string TextWins => $"Wins: {Player.Wins}";
@@ -25,8 +27,10 @@ namespace MatchingMakingMonitor.Models
 		public string TextAvgXp => $"Avg XP: {AvgXp}";
 		public string TextAvgFrags => $"Avg Frags: {AvgFrags}";
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
+		public string TextName => $"{Player?.Nickname} | {AccountId}";
 
-		public string Name => Player?.Nickname;
+		public string[] CommandParams => new string[] { AccountId, Player.Nickname };
+
 		public string ShipName => Player?.ShipName;
 		public string AccountId => Player?.AccountId.ToString();
 
@@ -61,40 +65,67 @@ namespace MatchingMakingMonitor.Models
 			AvgFrags = Math.Round(player.Frags / player.Battles, 2);
 			AvgXp = Math.Round(player.XpEarned / player.Battles, 0);
 			AvgDamage = Math.Round(player.DamageDealt / player.Battles, 0);
-			ColorAvgDamage = getAvgDamageColor();
-		}
 
-		public DisplayPlayer()
-		{
+			double totalRating = 0;
+			if (!player.IsPrivateOrHidden)
+			{
+				ColorWinRate = getColor(WinRate, winBoundaries, totalRating, 1, out totalRating);
+				ColorAvgFrags = getColor(AvgFrags, fragsBoundaries, totalRating, 1.1, out totalRating);
+				ColorAvgXp = getColor(AvgXp, xpBoundaries, totalRating, 0.8, out totalRating);
+				ColorAvgDamage = getColor(AvgDamage, dmgBoundaries, totalRating, 0.9, out totalRating);
+				ColorBattles = getColor(player.Battles, battleBoundaries, totalRating, 1.2, out totalRating);
+
+				var totalRatingInt = (int)Math.Floor((double)(totalRating / 5));
+				ColorName = brushes[totalRatingInt - 1];
+			}
+
 			var color = ColorName.CloneCurrentValue();
-			color.Opacity = 0.2;
+			color.Opacity = 0.08;
 			color.Freeze();
 			Background = color;
 		}
 
-		public static DisplayPlayer MockPlayer(bool privateOrHidden = false)
+		public DisplayPlayer()
+		{
+
+		}
+
+		public static DisplayPlayer MockPlayer(int relation = 1, bool privateOrHidden = false)
 		{
 			return new DisplayPlayer()
 			{
-				Player = new PlayerShip() { Nickname = "Test", AccountId = 12323325, ShipName = "ShipName", IsPrivateOrHidden = privateOrHidden },
+				Player = new PlayerShip() { Nickname = "Test", AccountId = 12323325, ShipName = "ShipName", IsPrivateOrHidden = privateOrHidden, Relation = relation },
 				WinRate = 40,
 				AvgFrags = 5,
 				AvgXp = 1234,
-				AvgDamage = 123242,
+				AvgDamage = 123242
 			};
 		}
 
-		private static int[] dmgBoundaries = new int[9] { 75000, 65000, 55000, 45000, 35000, 25000, 15000, 10000, 0 };
-		#region NameColor
-		private SolidColorBrush getAvgDamageColor()
+		#region Colors
+		private static double[] dmgBoundaries = new double[9] { 75000, 65000, 55000, 45000, 35000, 25000, 15000, 10000, 0 };
+		private static double[] xpBoundaries = new double[9] { 1500, 1200, 1000, 900, 800, 600, 500, 400, 0 };
+		private static double[] fragsBoundaries = new double[9] { 1.5, 1.3, 1.1, 1.0, 0.8, 0.6, 0.4, 0.2, 0 };
+		private static double[] winBoundaries = new double[9] { 90, 80, 70, 60, 50, 40, 30, 20, 0 };
+		private static double[] battleBoundaries = new double[9] { 150, 100, 80, 60, 40, 30, 20, 10, 0 };
+
+		private SolidColorBrush getColor(double value, double[] boundaries)
 		{
-			for (int i = 0; i < dmgBoundaries.Length; i++)
+			double dummy = 0;
+			return getColor(value, boundaries, dummy, 1, out dummy);
+		}
+
+		private SolidColorBrush getColor(double value, double[] boundaries, double oldTotal, double multiplier, out double total)
+		{
+			for (int i = 0; i < boundaries.Length; i++)
 			{
-				if (AvgDamage >= dmgBoundaries[i])
+				if (value >= boundaries[i])
 				{
+					total = oldTotal + ((i + 1) * multiplier);
 					return brushes[i];
 				}
 			}
+			total = oldTotal + (9 * multiplier);
 			return Brushes.Black;
 		}
 		#endregion

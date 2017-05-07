@@ -74,7 +74,7 @@
 				Wins = ship.pvp.wins;
 				Battles = ship.pvp.battles;
 				DamageDealt = ship.pvp.damage_dealt;
-				XpEarned = ship.pvp.damage_dealt;
+				XpEarned = ship.pvp.xp;
 				IsPrivateOrHidden = ship.@private != null;
 			}
 		}

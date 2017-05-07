@@ -12,6 +12,8 @@ namespace MatchingMakingMonitor.ViewModels
 {
 	public class StatsViewModel : BaseViewModel
 	{
+		public RelayCommand DetailCommand { get; set; }
+
 		private ObservableCollection<DisplayPlayer> friendlyPlayers;
 		public ObservableCollection<DisplayPlayer> FriendlyPlayers
 		{
@@ -46,9 +48,13 @@ namespace MatchingMakingMonitor.ViewModels
 			}
 		}
 
-
-		public StatsViewModel(StatsService statsService)
+		private Settings settings;
+		public StatsViewModel(StatsService statsService, Settings settings)
 		{
+			this.settings = settings;
+
+			DetailCommand = new RelayCommand(param => openPlayerDetail((string[])param));
+
 			statsService.Stats.Subscribe(stats =>
 			{
 				FriendlyPlayers = new ObservableCollection<DisplayPlayer>(stats.Where(p => p.Player.Relation != 2));
@@ -59,9 +65,17 @@ namespace MatchingMakingMonitor.ViewModels
 
 		public StatsViewModel()
 		{
-			FriendlyPlayers = new ObservableCollection<DisplayPlayer>(new List<DisplayPlayer>() { DisplayPlayer.MockPlayer(), DisplayPlayer.MockPlayer(true) });
-			EnemyPlayers = new ObservableCollection<DisplayPlayer>(new List<DisplayPlayer>() { DisplayPlayer.MockPlayer(), DisplayPlayer.MockPlayer(true) });
+			FriendlyPlayers = new ObservableCollection<DisplayPlayer>(new List<DisplayPlayer>() { DisplayPlayer.MockPlayer(1), DisplayPlayer.MockPlayer(0) });
+			EnemyPlayers = new ObservableCollection<DisplayPlayer>(new List<DisplayPlayer>() { DisplayPlayer.MockPlayer(2), DisplayPlayer.MockPlayer(2, true) });
 			ListVisibility = Visibility.Visible;
+		}
+
+		private void openPlayerDetail(string[] param)
+		{
+			if (param[0] != "0")
+			{
+				System.Diagnostics.Process.Start($"https://{settings.Get<string>("Region")}.warships.today/player/{param[0]}/{param[1]}");
+			}
 		}
 	}
 }

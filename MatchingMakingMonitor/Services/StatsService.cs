@@ -1,5 +1,6 @@
 ﻿using MatchingMakingMonitor.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,11 +56,11 @@ namespace MatchingMakingMonitor.Services
 			{
 				try
 				{
-					replay = await Task.Run(async () => { return JsonConvert.DeserializeObject<Replay>(await sr.ReadToEndAsync()); });
+					replay = await Task.Run(async () => { return JsonConvert.DeserializeObject<Replay>(await sr.ReadToEndAsync(), new IsoDateTimeConverter()); });
 				}
 				catch (Exception e)
 				{
-					loggingService.Log("Error while reading replay file. " + e.Message);
+					loggingService.Error("Error while reading replay file", e);
 				}
 			}
 			if (replay != null)
@@ -81,10 +82,9 @@ namespace MatchingMakingMonitor.Services
 						}
 						catch (Exception e)
 						{
-							loggingService.Log("Exception occured when computing display player. " + e.Message);
+							loggingService.Error("Exception occured when computing player for display", e);
 							statsStatusChangedSubject.OnNext(StatsStatus.Waiting);
 						}
-
 					}
 					else
 					{

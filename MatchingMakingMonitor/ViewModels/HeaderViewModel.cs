@@ -52,16 +52,16 @@ namespace MatchingMakingMonitor.ViewModels
 			try
 			{
 				System.Diagnostics.Process.Start("https://wowreplays.com");
-			} //end try
-			catch (Exception ex)
+			}
+			catch (Exception e)
 			{
-				loggingService.Log("Exception Throw on Logo Click: " + ex.Message);
-			} //end catch
+				loggingService.Error("Exception Throw on Logo Click", e);
+			}
 		}
 
 		private void settingsClick()
 		{
-			var settingsWindow = IoCKernel.Get<Settings>();
+			var settingsWindow = IoCKernel.Get<SettingsWindow>();
 			settingsWindow.Show();
 		}
 	}

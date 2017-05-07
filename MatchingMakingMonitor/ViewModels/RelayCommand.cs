@@ -9,8 +9,13 @@ namespace MatchingMakingMonitor.ViewModels
 {
 	public class RelayCommand : ICommand
 	{
-		private Action action;
+		protected Action<object> actionWithParam;
+		protected Action action;
 
+		public RelayCommand(Action<object> action)
+		{
+			this.actionWithParam = action;
+		}
 		public RelayCommand(Action action)
 		{
 			this.action = action;
@@ -28,6 +33,7 @@ namespace MatchingMakingMonitor.ViewModels
 		public void Execute(object parameter)
 		{
 			action?.Invoke();
+			actionWithParam?.Invoke(parameter);
 		}
 	}
 }

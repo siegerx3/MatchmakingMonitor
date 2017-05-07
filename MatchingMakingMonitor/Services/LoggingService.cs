@@ -9,19 +9,35 @@ namespace MatchingMakingMonitor.Services
 {
 	public class LoggingService
 	{
-		public void Log(string message)
+		private string LogPath => AppDomain.CurrentDomain.BaseDirectory + "/Log.txt";
+		public LoggingService()
+		{
+			if (!File.Exists(LogPath))
+			{
+				File.Create(LogPath);
+			}
+		}
+		public void Info(string message)
+		{
+			log($"Info - {message}");
+		}
+
+		public void Error(string message, Exception e)
+		{
+			log($"Error - {message} - {e?.Message}");
+		}
+		private void log(string message)
 		{
 			try
 			{
-				using (var sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "/Log.txt", true))
+				using (var sw = new StreamWriter(LogPath, true))
 				{
 					sw.WriteLine(DateTime.Now + " - " + message);
-				} //end using
-			} //end try
+				}
+			}
 			catch (Exception ex)
 			{
-				//ignore
-			} //end catch
-		} //end Log
+			}
+		}
 	}
 }

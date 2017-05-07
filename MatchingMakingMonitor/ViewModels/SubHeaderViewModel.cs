@@ -167,7 +167,7 @@ namespace MatchingMakingMonitor.ViewModels
 			{
 				case StatsStatus.Fetching:
 					StatusText = "Fetching player stats for current battle";
-					StatusColor = Brushes.Orange;
+					StatusColor = Brushes.DarkOrange;
 					break;
 				case StatsStatus.Fetched:
 					StatusText = "Player Stats Succesfully Updated";

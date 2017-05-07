@@ -48,9 +48,9 @@ namespace MatchingMakingMonitor.Services
 					shipInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<ShipInfo>>(shipsJson));
 				}
 			} //end try
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				loggingService.Log("Exception Occurred While Retrieving Ships:  " + ex.Message);
+				loggingService.Error("Exception Occurred While Retrieving Ships", e);
 				shipInfos = new List<ShipInfo>();
 			} //end catch
 		}
@@ -73,6 +73,7 @@ namespace MatchingMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
+				loggingService.Error("Error occured while fetching players", e);
 				return new List<PlayerShip>();
 			}
 		}

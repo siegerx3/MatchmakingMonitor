@@ -179,7 +179,7 @@ namespace MatchingMakingMonitor.ViewModels
 			}
 			catch (Exception e)
 			{
-				loggingService.Log($"Error while initializing settings. {e.Message}");
+				loggingService.Error("Error while initializing settings", e);
 			}
 		}
 	}

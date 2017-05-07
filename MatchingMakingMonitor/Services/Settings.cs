@@ -29,14 +29,14 @@ namespace MatchingMakingMonitor.Services
 				try
 				{
 					Properties.Settings.Default.Save();
-					if(currentSettings[key] != Properties.Settings.Default[key])
+					if (currentSettings[key] != Properties.Settings.Default[key])
 					{
 						propertyChangedSubject.OnNext(key);
 					}
 				}
 				catch (Exception e)
 				{
-					loggingService.Log($"Exception occured while saving setting '{key}': {e.Message}");
+					loggingService.Error($"Exception occured while saving setting '{key}'", e);
 				}
 			};
 		}
@@ -59,7 +59,7 @@ namespace MatchingMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				loggingService.Log($"Exception occured while getting setting '{key}': {e.Message}");
+				loggingService.Error($"Exception occured while getting setting '{key}'", e);
 				return default(T);
 			}
 		}
@@ -72,7 +72,7 @@ namespace MatchingMakingMonitor.Services
 			}
 			catch (Exception e)
 			{
-				loggingService.Log($"Exception occured while setting setting '{key}': {e.Message}");
+				loggingService.Error($"Exception occured while setting setting '{key}'", e);
 			}
 		}
 
