@@ -35,6 +35,35 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
+		<AppConfig>App.Release.config</AppConfig>
+		<PreBuildEvent>
+		  cd $(TargetDir)
+		  del log.txt
+		  del *.config
+		  RD /S /Q "$(TargetDir)config"
+		  RD /S /Q "$(TargetDir)bin"
+	  </PreBuildEvent>
+	  <PostBuildEvent>
+		  cd $(TargetDir)
+		  del *.xml
+
+		  del Xceed.Wpf.AvalonDock.*
+		  del Xceed.Wpf.DataGrid.dll
+		  RD /S /Q "$(TargetDir)en"
+		  RD /S /Q "$(TargetDir)de"
+		  RD /S /Q "$(TargetDir)es"
+		  RD /S /Q "$(TargetDir)fr"
+		  RD /S /Q "$(TargetDir)hu"
+		  RD /S /Q "$(TargetDir)it"
+		  RD /S /Q "$(TargetDir)ro"
+		  RD /S /Q "$(TargetDir)ru"
+		  RD /S /Q "$(TargetDir)sv"
+		  RD /S /Q "$(TargetDir)pt-br"
+
+		  mkdir bin
+		  move *.dll bin
+		  RD /S /Q "$(TargetDir)zh-Hans"
+	  </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Images\favicon.ico</ApplicationIcon>
@@ -192,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+		<None Include="App.Release.config">
+			<DependentUpon>App.config</DependentUpon>
+		</None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\gearIcon.png" />

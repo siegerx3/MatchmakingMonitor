@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
 				Icon="Images/favicon.ico" 
-        Title="UI Settings" MinHeight="400" Height="400" Width="720"
+        Title="UI Settings" MinHeight="420" Height="420" Width="720"
 				DataContext="{Binding SettingsViewModel, Source={StaticResource ViewModelLocator}}">
 	<StackPanel Orientation="Vertical" Margin="10" Height="Auto">
 		<StackPanel x:Name="TextPanel" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true">

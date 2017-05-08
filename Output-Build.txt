@@ -1,0 +1,7 @@
+﻿1>------ Build started: Project: MatchMakingMonitor, Configuration: Release Any CPU ------
+1>D:\Desktop\Development\Git\MatchmakingMonitor\MatchingMakingMonitor\View\Util\RelayCommand.cs(22,29,22,46): warning CS0067: The event 'RelayCommand.CanExecuteChanged' is never used
+1>D:\Desktop\Development\Git\MatchmakingMonitor\MatchingMakingMonitor\View\Util\RelayCommand.cs(22,29,22,46): warning CS0067: The event 'RelayCommand.CanExecuteChanged' is never used
+1>  MatchMakingMonitor -> D:\Desktop\Development\Git\MatchmakingMonitor\MatchingMakingMonitor\bin\Release\MatchMakingMonitor.exe
+1>  D:\Desktop\Development\Git\MatchmakingMonitor\MatchingMakingMonitor\bin\Release\Xceed.Wpf.DataGrid.xml konnte nicht gefunden werden
+1>  Das System kann die angegebene Datei nicht finden.
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
