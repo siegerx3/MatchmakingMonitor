@@ -309,7 +309,10 @@ namespace MatchMakingMonitor.Services
 			Init();
 
 			_settingChangedSubject = new BehaviorSubject<string>(string.Empty);
-			_settingChangedSubject.Where(key => key != null).Throttle(TimeSpan.FromSeconds(2)).Subscribe(async key =>
+			_settingChangedSubject.Where(key => key != null)
+				.Do(key => _logger.Info($"Setting ({key}) changed"))
+				.Throttle(TimeSpan.FromSeconds(2))
+				.Subscribe(async key =>
 			{
 				await Save();
 			});

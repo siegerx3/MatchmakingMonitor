@@ -63,7 +63,7 @@ namespace MatchMakingMonitor.View
 
 		private readonly Settings _settings;
 		private List<DisplayPlayerStats> _stats;
-		public StatsViewModel(StatsService statsService, Settings settings)
+		public StatsViewModel(ILogger logger, StatsService statsService, Settings settings)
 		{
 			_settings = settings;
 
@@ -83,6 +83,7 @@ namespace MatchMakingMonitor.View
 			_settings.UiSettingsChanged.Subscribe(async key =>
 			{
 				if (_stats == null) return;
+				logger.Info("Re-computing UI for players");
 				FontSize = _settings.FontSize;
 				foreach (var player in _stats)
 				{

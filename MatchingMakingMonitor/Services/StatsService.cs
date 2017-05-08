@@ -64,13 +64,15 @@ namespace MatchMakingMonitor.Services
 			if (replay != null)
 			{
 				var region = _settings.Region;
-				if (_currentReplay == null || region != _currentRegion || (_currentReplay != null && replay.dateTime > _currentReplay.dateTime))
+				if (_currentReplay == null || region != _currentRegion ||
+				    (_currentReplay != null && replay.dateTime > _currentReplay.dateTime))
 				{
+					_logger.Info("Valid replay found. Fetching stats");
 					_currentReplay = replay;
 					_currentRegion = region;
 					_statsStatusChangedSubject.OnNext(StatsStatus.Fetching);
 					var players = (await _apiService.Players(_currentReplay)).ToArray();
-					if (players.Length > 6)
+					if (players.Count(p => p.AccountId != 0) > 6)
 					{
 						try
 						{
@@ -86,14 +88,20 @@ namespace MatchMakingMonitor.Services
 					}
 					else
 					{
+						_logger.Info("Less than 6 players with stats found. Something seems to be wrong");
 						_statsStatusChangedSubject.OnNext(StatsStatus.WrongRegion);
 					}
+				}
+				else
+				{
+					_logger.Info("Replay was already shown");
 				}
 			}
 		}
 
 		private async Task<List<DisplayPlayerStats>> ComputeDisplayPlayer(IEnumerable<PlayerShip> players)
 		{
+			_logger.Info("Computing UI for players");
 			return await Task.Run(() => players.Select(p => new DisplayPlayerStats(_settings, p)).ToList());
 		}
 	}

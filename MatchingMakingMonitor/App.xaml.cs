@@ -8,8 +8,12 @@ namespace MatchMakingMonitor
 	/// </summary>
 	public partial class App
 	{
+		public static bool IsDebug;
 		protected override void OnStartup(StartupEventArgs e)
 		{
+#if DEBUG
+			IsDebug = true;
+#endif
 			IoCKernel.Init();
 			ConfigureMainWindow();
 

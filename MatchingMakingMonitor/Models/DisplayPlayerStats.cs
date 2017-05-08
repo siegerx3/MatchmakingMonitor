@@ -171,6 +171,7 @@ namespace MatchMakingMonitor.Models
 				ColorBattles = GetColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating, out _colorBattlesKey);
 
 				_colorNameKey = (int)Math.Floor(totalRating / 5);
+				if (_colorNameKey == 0) _colorNameKey = 1;
 				ColorName = Settings.Brushes[_colorNameKey - 1];
 			}
 

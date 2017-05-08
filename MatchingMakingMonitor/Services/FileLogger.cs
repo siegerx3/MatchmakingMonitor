@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MatchMakingMonitor.Services
 {
-	public class FileLogger: ILogger
+	public class FileLogger : ILogger
 	{
 		private static string LogPath => AppDomain.CurrentDomain.BaseDirectory + "/Log.txt";
 		public FileLogger()

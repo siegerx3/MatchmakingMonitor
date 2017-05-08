@@ -10,12 +10,15 @@ namespace MatchMakingMonitor.Services
 		private bool _initialCheckDone;
 
 		private readonly Settings _settings;
+		private readonly ILogger _logger;
 
 		private readonly BehaviorSubject<string> _matchFoundSubject;
+
 		public IObservable<string> MatchFound => _matchFoundSubject.AsObservable();
-		public WatcherService(Settings settings)
+		public WatcherService(ILogger logger, Settings settings)
 		{
 			_settings = settings;
+			_logger = logger;
 
 			_matchFoundSubject = new BehaviorSubject<string>(null);
 
@@ -23,7 +26,7 @@ namespace MatchMakingMonitor.Services
 			{
 				Filter = "tempArenaInfo.json",
 				NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.Attributes |
-				               NotifyFilters.LastAccess
+											 NotifyFilters.LastAccess
 			};
 			fileSystemWatcher.Created += (obj, args) =>
 			{
@@ -62,6 +65,7 @@ namespace MatchMakingMonitor.Services
 		{
 			var directory = _settings.InstallDirectory;
 			var path = Path.Combine(directory, "replays", "tempArenaInfo.json");
+			_logger.Info("Checking for match in path " + path);
 			if (File.Exists(path))
 			{
 				CallMatchFound(path);
@@ -70,6 +74,7 @@ namespace MatchMakingMonitor.Services
 
 		private void CallMatchFound(string path)
 		{
+			_logger.Info("Match found");
 			_matchFoundSubject.OnNext(path);
 		}
 	}
