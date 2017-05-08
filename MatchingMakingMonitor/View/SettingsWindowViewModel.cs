@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows;
@@ -20,7 +21,7 @@ namespace MatchMakingMonitor.View
 		private string _battleWeight;
 		public string BattleWeight
 		{
-			get => _battleWeight ?? (_battleWeight = Settings.BattleWeight.ToString(CultureInfo.InvariantCulture));
+			get => _battleWeight ?? (_battleWeight = Settings.BattleWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_battleWeight = value;
@@ -32,7 +33,7 @@ namespace MatchMakingMonitor.View
 		private string _fragsWeight;
 		public string FragsWeight
 		{
-			get => _fragsWeight ?? (_fragsWeight = Settings.FragsWeight.ToString(CultureInfo.InvariantCulture));
+			get => _fragsWeight ?? (_fragsWeight = Settings.FragsWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_fragsWeight = value;
@@ -44,7 +45,7 @@ namespace MatchMakingMonitor.View
 		private string _xpWeight;
 		public string XpWeight
 		{
-			get => _xpWeight ?? (_xpWeight = Settings.XpWeight.ToString(CultureInfo.InvariantCulture));
+			get => _xpWeight ?? (_xpWeight = Settings.XpWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_xpWeight = value;
@@ -56,7 +57,7 @@ namespace MatchMakingMonitor.View
 		private string _dmgWeight;
 		public string DmgWeight
 		{
-			get => _dmgWeight ?? (_dmgWeight = Settings.DmgWeight.ToString(CultureInfo.InvariantCulture));
+			get => _dmgWeight ?? (_dmgWeight = Settings.DmgWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_dmgWeight = value;
@@ -68,7 +69,7 @@ namespace MatchMakingMonitor.View
 		private string _winWeight;
 		public string WinWeight
 		{
-			get => _winWeight ?? (_winWeight = Settings.WinWeight.ToString(CultureInfo.InvariantCulture));
+			get => _winWeight ?? (_winWeight = Settings.WinWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_winWeight = value;
@@ -177,7 +178,7 @@ namespace MatchMakingMonitor.View
 				var fragsWeightD = double.Parse(FragsWeight);
 				var xpWeightD = double.Parse(XpWeight);
 				var dmgWeightD = double.Parse(DmgWeight);
-				var sum = winWeightD + battleWeightD + fragsWeightD + xpWeightD + dmgWeightD;
+				var sum = Math.Round(winWeightD + battleWeightD + fragsWeightD + xpWeightD + dmgWeightD, 2);
 				// ReSharper disable once CompareOfFloatsByEqualityOperator
 				var valid = sum == 5;
 
