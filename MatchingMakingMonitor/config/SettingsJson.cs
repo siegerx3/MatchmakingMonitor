@@ -27,17 +27,17 @@ namespace MatchMakingMonitor.config
 		public string color7 { get; set; }
 		public string color8 { get; set; }
 		public string color9 { get; set; }
-		public int fontSize { get; set; }
+		public int? fontSize { get; set; }
 		public double[] battleLimits { get; set; }
 		public double[] winLimits { get; set; }
 		public double[] fragsLimits { get; set; }
 		public double[] xpLimits { get; set; }
 		public double[] dmgLimits { get; set; }
-		public double battleWeight { get; set; }
-		public double fragsWeight { get; set; }
-		public double xpWeight { get; set; }
-		public double dmgWeight { get; set; }
-		public double winWeight { get; set; }
+		public double? battleWeight { get; set; }
+		public double? fragsWeight { get; set; }
+		public double? xpWeight { get; set; }
+		public double? dmgWeight { get; set; }
+		public double? winWeight { get; set; }
 
 
 		private readonly PropertyInfo[] properties;
@@ -48,7 +48,8 @@ namespace MatchMakingMonitor.config
 
 		public void Set(string key, object value)
 		{
-			properties.Single(p => p.Name == key).SetValue(this, value);
+			if (value != null)
+				properties.Single(p => p.Name == key).SetValue(this, value);
 		}
 
 		public T Get<T>(string key)

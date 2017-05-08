@@ -1,7 +1,6 @@
 ﻿using MatchMakingMonitor.config;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
@@ -74,68 +73,118 @@ namespace MatchMakingMonitor.Services
 		#endregion
 
 		#region Settings
-		public string InstallDirectory { get => _instance.Get<string>(KeyInstallDirectory);
+		public string InstallDirectory
+		{
+			get => _instance.Get<string>(KeyInstallDirectory);
 			set => _instance.Set(KeyInstallDirectory, value);
 		}
 
-		public string AppIdNa { get => _instance.Get<string>(KeyAppIdNa);
+		public string AppIdNa
+		{
+			get => _instance.Get<string>(KeyAppIdNa);
 			set => _instance.Set(KeyAppIdNa, value);
 		}
-		public string AppIdEu { get => _instance.Get<string>(KeyAppIdEu);
+		public string AppIdEu
+		{
+			get => _instance.Get<string>(KeyAppIdEu);
 			set => _instance.Set(KeyAppIdEu, value);
 		}
-		public string AppIdRu { get => _instance.Get<string>(KeyAppIdRu);
+		public string AppIdRu
+		{
+			get => _instance.Get<string>(KeyAppIdRu);
 			set => _instance.Set(KeyAppIdRu, value);
 		}
-		public string AppIdSea { get => _instance.Get<string>(KeyAppIdSea);
+		public string AppIdSea
+		{
+			get => _instance.Get<string>(KeyAppIdSea);
 			set => _instance.Set(KeyAppIdSea, value);
 		}
 
-		public string BaseUrlNa { get => _instance.Get<string>(KeyBaseUrlNa);
+		public string BaseUrlNa
+		{
+			get => _instance.Get<string>(KeyBaseUrlNa);
 			set => _instance.Set(KeyBaseUrlNa, value);
 		}
-		public string BaseUrlEu { get => _instance.Get<string>(KeyBaseUrlEu);
+		public string BaseUrlEu
+		{
+			get => _instance.Get<string>(KeyBaseUrlEu);
 			set => _instance.Set(KeyBaseUrlEu, value);
 		}
-		public string BaseUrlRu { get => _instance.Get<string>(KeyBaseUrlRu);
+		public string BaseUrlRu
+		{
+			get => _instance.Get<string>(KeyBaseUrlRu);
 			set => _instance.Set(KeyBaseUrlRu, value);
 		}
-		public string BaseUrlSea { get => _instance.Get<string>(KeyBaseUrlSea);
+		public string BaseUrlSea
+		{
+			get => _instance.Get<string>(KeyBaseUrlSea);
 			set => _instance.Set(KeyBaseUrlSea, value);
 		}
 
-		public string Region { get => _instance.Get<string>(KeyRegion);
+		public string Region
+		{
+			get => _instance.Get<string>(KeyRegion);
 			set => _instance.Set(KeyRegion, value);
 		}
 
-		public string Color9 { get => _instance.Get<string>(KeyColor9);
-			set { _instance.Set(KeyColor9, value); FirePropertyChanged(); } }
-		public string Color8 { get => _instance.Get<string>(KeyColor8);
-			set { _instance.Set(KeyColor8, value); FirePropertyChanged(); } }
-		public string Color7 { get => _instance.Get<string>(KeyColor7);
-			set { _instance.Set(KeyColor7, value); FirePropertyChanged(); } }
-		public string Color6 { get => _instance.Get<string>(KeyColor6);
-			set { _instance.Set(KeyColor6, value); FirePropertyChanged(); } }
-		public string Color5 { get => _instance.Get<string>(KeyColor5);
-			set { _instance.Set(KeyColor5, value); FirePropertyChanged(); } }
-		public string Color4 { get => _instance.Get<string>(KeyColor4);
-			set { _instance.Set(KeyColor4, value); FirePropertyChanged(); } }
-		public string Color3 { get => _instance.Get<string>(KeyColor3);
-			set { _instance.Set(KeyColor3, value); FirePropertyChanged(); } }
-		public string Color2 { get => _instance.Get<string>(KeyColor2);
-			set { _instance.Set(KeyColor2, value); FirePropertyChanged(); } }
-		public string Color1 { get => _instance.Get<string>(KeyColor1);
-			set { _instance.Set(KeyColor1, value); FirePropertyChanged(); } }
+		public string Color9
+		{
+			get => _instance.Get<string>(KeyColor9);
+			set { _instance.Set(KeyColor9, value); FirePropertyChanged(); }
+		}
+		public string Color8
+		{
+			get => _instance.Get<string>(KeyColor8);
+			set { _instance.Set(KeyColor8, value); FirePropertyChanged(); }
+		}
+		public string Color7
+		{
+			get => _instance.Get<string>(KeyColor7);
+			set { _instance.Set(KeyColor7, value); FirePropertyChanged(); }
+		}
+		public string Color6
+		{
+			get => _instance.Get<string>(KeyColor6);
+			set { _instance.Set(KeyColor6, value); FirePropertyChanged(); }
+		}
+		public string Color5
+		{
+			get => _instance.Get<string>(KeyColor5);
+			set { _instance.Set(KeyColor5, value); FirePropertyChanged(); }
+		}
+		public string Color4
+		{
+			get => _instance.Get<string>(KeyColor4);
+			set { _instance.Set(KeyColor4, value); FirePropertyChanged(); }
+		}
+		public string Color3
+		{
+			get => _instance.Get<string>(KeyColor3);
+			set { _instance.Set(KeyColor3, value); FirePropertyChanged(); }
+		}
+		public string Color2
+		{
+			get => _instance.Get<string>(KeyColor2);
+			set { _instance.Set(KeyColor2, value); FirePropertyChanged(); }
+		}
+		public string Color1
+		{
+			get => _instance.Get<string>(KeyColor1);
+			set { _instance.Set(KeyColor1, value); FirePropertyChanged(); }
+		}
 
-		public int FontSize { get => _instance.Get<int>(KeyFontSize);
-			set { _instance.Set(KeyFontSize, value); FirePropertyChanged(); } }
+		public int FontSize
+		{
+			get => _instance.Get<int>(KeyFontSize);
+			set { _instance.Set(KeyFontSize, value); FirePropertyChanged(); }
+		}
 
 		#region Limits
 		private ObservableCollection<double> _battleLimits;
 		public ObservableCollection<double> BattleLimits
 		{
 			get => _battleLimits ?? (_battleLimits =
-				       new ObservableCollection<double>(_instance.Get<double[]>(KeyBattleLimits)));
+							 new ObservableCollection<double>(_instance.Get<double[]>(KeyBattleLimits)));
 			set
 			{
 				_battleLimits = null;
@@ -212,24 +261,36 @@ namespace MatchMakingMonitor.Services
 			_instance.Set(KeyDmgLimits, _dmgLimits.ToArray(), true);
 		}
 
-		public double BattleWeight { get => _instance.Get<double>(KeyBattleWeight);
+		public double BattleWeight
+		{
+			get => _instance.Get<double>(KeyBattleWeight);
 			set => _instance.Set(KeyBattleWeight, value);
 		}
-		public double FragsWeight { get => _instance.Get<double>(KeyFragsWeight);
+		public double FragsWeight
+		{
+			get => _instance.Get<double>(KeyFragsWeight);
 			set => _instance.Set(KeyFragsWeight, value);
 		}
-		public double XpWeight { get => _instance.Get<double>(KeyXpWeight);
+		public double XpWeight
+		{
+			get => _instance.Get<double>(KeyXpWeight);
 			set => _instance.Set(KeyXpWeight, value);
 		}
-		public double DmgWeight { get => _instance.Get<double>(KeyDmgWeight);
+		public double DmgWeight
+		{
+			get => _instance.Get<double>(KeyDmgWeight);
 			set => _instance.Set(KeyDmgWeight, value);
 		}
-		public double WinWeight { get => _instance.Get<double>(KeyWinWeight);
+		public double WinWeight
+		{
+			get => _instance.Get<double>(KeyWinWeight);
 			set => _instance.Set(KeyWinWeight, value);
 		}
 		#endregion
 
-		public string Token { get => _instance.Get<string>(KeyToken);
+		public string Token
+		{
+			get => _instance.Get<string>(KeyToken);
 			set => _instance.Set(KeyToken, value);
 		}
 
@@ -304,12 +365,7 @@ namespace MatchMakingMonitor.Services
 
 		public async Task ExportUiSettings(string path)
 		{
-			var export = new Dictionary<string, Object>();
-
-			foreach (var key in KeysUiSettings.Concat(KeysOthers))
-			{
-				export.Add(key, _currentSettings.Get(key));
-			}
+			var export = KeysUiSettings.Concat(KeysOthers).ToDictionary(key => key, key => _currentSettings.Get(key));
 
 			var exportJson = await Task.Run(() => JsonConvert.SerializeObject(export));
 
@@ -323,9 +379,16 @@ namespace MatchMakingMonitor.Services
 		{
 			if (File.Exists(path))
 			{
-				var importJson = File.ReadAllText(path);
-				var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson));
-				await ResetUiSettings(import);
+				try
+				{
+					var importJson = File.ReadAllText(path);
+					var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson));
+					await ResetUiSettings(import);
+				}
+				catch (Exception e)
+				{
+					_logger.Error("Error during import", e);
+				}
 			}
 		}
 
@@ -395,11 +458,14 @@ namespace MatchMakingMonitor.Services
 					var collection = GetLimitCollectionByKey(key);
 					if (collection != null)
 					{
-						var defaultLimit = sourceSettings.Get<double[]>(key);
-						var limit = _currentSettings.Get<double[]>(key);
-						for (int i = 0; i < defaultLimit.Length; i++)
+						var sourceLimit = sourceSettings.Get<double[]>(key);
+						if (sourceLimit != null)
 						{
-							collection[i] = limit[i];
+							var limit = _currentSettings.Get<double[]>(key);
+							for (var i = 0; i < sourceLimit.Length; i++)
+							{
+								collection[i] = limit[i];
+							}
 						}
 					}
 				}
