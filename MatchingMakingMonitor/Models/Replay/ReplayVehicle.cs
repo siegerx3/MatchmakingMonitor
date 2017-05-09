@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Models.Replay
 {
-	public class Vehicle
+	public class ReplayVehicle
 	{
 		[JsonProperty("id")]
 		public long Id { get; set; }

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
-	public class Ship
+	public class WgStatsShip
 	{
 		[JsonProperty("distance")]
 		public int Distance { get; set; }
@@ -11,7 +11,7 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 		[JsonProperty("account_id")]
 		public long AccountId { get; set; }
 		[JsonProperty("pvp")]
-		public Pvp Pvp { get; set; }
+		public WgStatsPvp Pvp { get; set; }
 		[JsonProperty("updated_at")]
 		public int UpdatedAt { get; set; }
 		[JsonProperty("battles")]

@@ -31,7 +31,7 @@ namespace MatchMakingMonitor.Models.Replay
 		[JsonProperty("playerID")]
 		public int PlayerId { get; set; }
 		[JsonProperty("vehicles")]
-		public List<Vehicle> Vehicles { get; set; }
+		public List<ReplayVehicle> Vehicles { get; set; }
 		[JsonProperty("playersPerTeam")]
 		public int PlayersPerTeam { get; set; }
 		[JsonProperty("dateTime")]

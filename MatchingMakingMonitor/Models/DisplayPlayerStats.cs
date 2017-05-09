@@ -108,7 +108,7 @@ namespace MatchMakingMonitor.Models
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
 		public string TextName => $"{Player?.Nickname} | {AccountId}";
 
-		public string TextShipName => $"{ShipName} (Tier {TierStrings[Player.ShipTier == 0 ? 0 : Player.ShipTier - 1]}";
+		public string TextShipName => $"{ShipName} (Tier {TierStrings[Player.ShipTier == 0 ? 0 : Player.ShipTier - 1]})";
 
 
 		public string[] CommandParams => new[] { AccountId, Player.Nickname };
@@ -155,7 +155,7 @@ namespace MatchMakingMonitor.Models
 		{
 			return new DisplayPlayerStats()
 			{
-				Player = new PlayerShip() { Nickname = "Test", AccountId = 12323325, ShipName = "ShipName", IsPrivateOrHidden = privateOrHidden, Relation = relation },
+				Player = new PlayerShip() { Nickname = "Test", AccountId = 12323325, ShipName = "Name", IsPrivateOrHidden = privateOrHidden, Relation = relation },
 				WinRate = 40,
 				AvgFrags = 5,
 				AvgXp = 1234,

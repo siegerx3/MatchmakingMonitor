@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
-	public class MainBattery
+	public class WgStatsTorpedoes
 	{
 		[JsonProperty("max_frags_battle")]
 		public int MaxFragsBattle { get; set; }

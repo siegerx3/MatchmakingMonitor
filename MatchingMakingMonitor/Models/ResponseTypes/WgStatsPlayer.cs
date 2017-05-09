@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
-	public class WargamingPlayer
+	public class WgStatsPlayer
 	{
 		[JsonProperty("nickname")]
 		public string Nickname { get; set; }

@@ -72,27 +72,27 @@ namespace MatchMakingMonitor.Models
 		//public int Passiveness { get; set; }
 		#endregion
 
-		public PlayerShip(Ship ship, WargamingPlayer player, ShipInfo shipInfo, int relationship) : this(shipInfo)
+		public PlayerShip(WgStatsShip wgStatsShip, WgStatsPlayer player, WgShip wgShip, int relationship) : this(wgShip)
 		{
-			if (ship == null || player == null) return;
-			ShipId = ship.ShipId;
-			AccountId = ship.AccountId;
+			if (wgStatsShip == null || player == null) return;
+			ShipId = wgStatsShip.ShipId;
+			AccountId = wgStatsShip.AccountId;
 			Nickname = player.Nickname;
 			Relation = relationship;
-			Frags = ship.Pvp.Frags;
-			Wins = ship.Pvp.Wins;
-			Battles = ship.Pvp.Battles;
-			DamageDealt = ship.Pvp.DamageDealt;
-			XpEarned = ship.Pvp.Xp;
-			IsPrivateOrHidden = ship.Private != null;
+			Frags = wgStatsShip.Pvp.Frags;
+			Wins = wgStatsShip.Pvp.Wins;
+			Battles = wgStatsShip.Pvp.Battles;
+			DamageDealt = wgStatsShip.Pvp.DamageDealt;
+			XpEarned = wgStatsShip.Pvp.Xp;
+			IsPrivateOrHidden = wgStatsShip.Private != null;
 		}
 
-		public PlayerShip(ShipInfo shipInfo)
+		public PlayerShip(WgShip wgShip)
 		{
-			if (shipInfo == null) return;
-			ShipName = shipInfo.ShipName;
-			ShipType = shipInfo.ShipType;
-			ShipTier = shipInfo.Tier;
+			if (wgShip == null) return;
+			ShipName = wgShip.Name;
+			ShipType = wgShip.Type;
+			ShipTier = wgShip.Tier;
 		}
 
 		public PlayerShip()

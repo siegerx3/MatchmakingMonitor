@@ -2,14 +2,14 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
-	public class Pvp
+	public class WgStatsPvp
 	{
 		[JsonProperty("max_xp")]
 		public int MaxXp { get; set; }
 		[JsonProperty("damage_to_buildings")]
 		public int DamageToBuildings { get; set; }
 		[JsonProperty("main_battery")]
-		public MainBattery MainBattery { get; set; }
+		public WgStatsMainBattery MainBattery { get; set; }
 		[JsonProperty("suppressions_count")]
 		public int SuppressionsCount { get; set; }
 		[JsonProperty("max_damage_scouting")]
@@ -19,7 +19,7 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 		[JsonProperty("ships_spotted")]
 		public int ShipsSpotted { get; set; }
 		[JsonProperty("second_battery")]
-		public SecondBattery SecondBattery { get; set; }
+		public WgStatsSecondBattery SecondBattery { get; set; }
 		[JsonProperty("xp")]
 		public int Xp { get; set; }
 		[JsonProperty("survived_battles")]
@@ -51,11 +51,11 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 		[JsonProperty("capture_points")]
 		public int CapturePoints { get; set; }
 		[JsonProperty("ramming")]
-		public Ramming Ramming { get; set; }
+		public WgStatsRamming Ramming { get; set; }
 		[JsonProperty("torpedoes")]
-		public Torpedoes Torpedoes { get; set; }
+		public WgStatsTorpedoes Torpedoes { get; set; }
 		[JsonProperty("aircraft")]
-		public Aircraft Aircraft { get; set; }
+		public WgStatsAircraft Aircraft { get; set; }
 		[JsonProperty("survived_wins")]
 		public int SurvivedWins { get; set; }
 		[JsonProperty("max_damage_dealt")]
