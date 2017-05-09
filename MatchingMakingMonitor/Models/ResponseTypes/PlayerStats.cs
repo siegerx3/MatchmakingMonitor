@@ -1,10 +1,14 @@
-﻿// ReSharper disable InconsistentNaming
+﻿using Newtonsoft.Json;
+
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
 	public class PlayerStats
 	{
-		public string status { get; set; }
-		public Meta meta { get; set; }
-		public Data data { get; set; }
+		[JsonProperty("status")]
+		public string Status { get; set; }
+		[JsonProperty("meta")]
+		public Meta Meta { get; set; }
+		[JsonProperty("data")]
+		public Data Data { get; set; }
 	}
 }

@@ -1,30 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-// ReSharper disable InconsistentNaming
+using Newtonsoft.Json;
+
+
 
 namespace MatchMakingMonitor.Models.Replay
 {
 	public class Replay
 	{
-		public string clientVersionFromXml { get; set; }
-		public int gameMode { get; set; }
-		public string clientVersionFromExe { get; set; }
-		public string mapDisplayName { get; set; }
-		public int mapId { get; set; }
-		public string matchGroup { get; set; }
-		public int duration { get; set; }
-		public string gameLogic { get; set; }
-		public string name { get; set; }
-		public string scenario { get; set; }
-		public int playerID { get; set; }
-		public List<Vehicle> vehicles { get; set; }
-		public int playersPerTeam { get; set; }
-		public DateTime dateTime { get; set; }
-		public string mapName { get; set; }
-		public string playerName { get; set; }
-		public int scenarioConfigId { get; set; }
-		public int teamsCount { get; set; }
-		public string logic { get; set; }
-		public string playerVehicle { get; set; }
+		[JsonProperty("clientVersionFromXml")]
+		public string ClientVersionFromXml { get; set; }
+		[JsonProperty("gameMode")]
+		public int GameMode { get; set; }
+		[JsonProperty("clientVersionFromExe")]
+		public string ClientVersionFromExe { get; set; }
+		[JsonProperty("mapDisplayName")]
+		public string MapDisplayName { get; set; }
+		[JsonProperty("mapId")]
+		public int MapId { get; set; }
+		[JsonProperty("matchGroup")]
+		public string MatchGroup { get; set; }
+		[JsonProperty("duration")]
+		public int Duration { get; set; }
+		[JsonProperty("gameLogic")]
+		public string GameLogic { get; set; }
+		[JsonProperty("name")]
+		public string Name { get; set; }
+		[JsonProperty("scenario")]
+		public string Scenario { get; set; }
+		[JsonProperty("playerID")]
+		public int PlayerId { get; set; }
+		[JsonProperty("vehicles")]
+		public List<Vehicle> Vehicles { get; set; }
+		[JsonProperty("playersPerTeam")]
+		public int PlayersPerTeam { get; set; }
+		[JsonProperty("dateTime")]
+		public DateTime DateTime { get; set; }
+		[JsonProperty("mapName")]
+		public string MapName { get; set; }
+		[JsonProperty("playerName")]
+		public string PlayerName { get; set; }
+		[JsonProperty("scenarioConfigId")]
+		public int ScenarioConfigId { get; set; }
+		[JsonProperty("teamsCount")]
+		public int TeamsCount { get; set; }
+		[JsonProperty("logic")]
+		public string Logic { get; set; }
+		[JsonProperty("playerVehicle")]
+		public string PlayerVehicle { get; set; }
 	}
 }

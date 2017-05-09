@@ -1,12 +1,14 @@
-﻿// ReSharper disable InconsistentNaming
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
 	public class WargamingSearch
 	{
-		public string status { get; set; }
-		public Dictionary<string, int> meta { get; set; }
-		public List<WargamingPlayer> data { get; set; }
+		[JsonProperty("status")]
+		public string Status { get; set; }
+		public Dictionary<string, int> Meta { get; set; }
+		[JsonProperty("data")]
+		public List<WargamingPlayer> Data { get; set; }
 	}
 }

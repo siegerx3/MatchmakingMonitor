@@ -1,18 +1,24 @@
 using Newtonsoft.Json;
 
-// ReSharper disable InconsistentNaming
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
 	public class Ship
 	{
-		public int distance { get; set; }
-		public int last_battle_time { get; set; }
-		public long account_id { get; set; }
-		public Pvp pvp { get; set; }
-		public int updated_at { get; set; }
-		public int battles { get; set; }
-		public long ship_id { get; set; }
-		[JsonProperty(PropertyName = "private")]
-		public string @private { get; set; }
+		[JsonProperty("distance")]
+		public int Distance { get; set; }
+		[JsonProperty("last_battle_time")]
+		public int LastBattleTime { get; set; }
+		[JsonProperty("account_id")]
+		public long AccountId { get; set; }
+		[JsonProperty("pvp")]
+		public Pvp Pvp { get; set; }
+		[JsonProperty("updated_at")]
+		public int UpdatedAt { get; set; }
+		[JsonProperty("battles")]
+		public int Battles { get; set; }
+		[JsonProperty("ship_id")]
+		public long ShipId { get; set; }
+		[JsonProperty("private")]
+		public string Private { get; set; }
 	}
 }

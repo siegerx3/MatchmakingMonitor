@@ -1,11 +1,16 @@
-// ReSharper disable InconsistentNaming
+using Newtonsoft.Json;
+
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
 	public class MainBattery
 	{
-		public int max_frags_battle { get; set; }
-		public int frags { get; set; }
-		public int hits { get; set; }
-		public int shots { get; set; }
+		[JsonProperty("max_frags_battle")]
+		public int MaxFragsBattle { get; set; }
+		[JsonProperty("frags")]
+		public int Frags { get; set; }
+		[JsonProperty("hits")]
+		public int Hits { get; set; }
+		[JsonProperty("shots")]
+		public int Shots { get; set; }
 	}
 }

@@ -65,7 +65,7 @@ namespace MatchMakingMonitor.Services
 			{
 				var region = _settings.Region;
 				if (_currentReplay == null || region != _currentRegion ||
-				    (_currentReplay != null && replay.dateTime > _currentReplay.dateTime))
+				    (_currentReplay != null && replay.DateTime > _currentReplay.DateTime))
 				{
 					_logger.Info("Valid replay found. Fetching stats");
 					_currentReplay = replay;

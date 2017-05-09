@@ -1,42 +1,78 @@
-// ReSharper disable InconsistentNaming
+using Newtonsoft.Json;
+
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
 	public class Pvp
 	{
-		public int max_xp { get; set; }
-		public int damage_to_buildings { get; set; }
-		public MainBattery main_battery { get; set; }
-		public int suppressions_count { get; set; }
-		public int max_damage_scouting { get; set; }
-		public int art_agro { get; set; }
-		public int ships_spotted { get; set; }
-		public SecondBattery second_battery { get; set; }
-		public int xp { get; set; }
-		public int survived_battles { get; set; }
-		public int dropped_capture_points { get; set; }
-		public int max_damage_dealt_to_buildings { get; set; }
-		public int torpedo_agro { get; set; }
-		public int draws { get; set; }
-		public int planes_killed { get; set; }
-		public int battles { get; set; }
-		public int max_ships_spotted { get; set; }
-		public int team_capture_points { get; set; }
-		public int frags { get; set; }
-		public int damage_scouting { get; set; }
-		public int max_total_agro { get; set; }
-		public int max_frags_battle { get; set; }
-		public int capture_points { get; set; }
-		public Ramming ramming { get; set; }
-		public Torpedoes torpedoes { get; set; }
-		public Aircraft aircraft { get; set; }
-		public int survived_wins { get; set; }
-		public int max_damage_dealt { get; set; }
-		public int wins { get; set; }
-		public int losses { get; set; }
-		public int damage_dealt { get; set; }
-		public int max_planes_killed { get; set; }
-		public int max_suppressions_count { get; set; }
-		public int team_dropped_capture_points { get; set; }
-		public int battles_since_512 { get; set; }
+		[JsonProperty("max_xp")]
+		public int MaxXp { get; set; }
+		[JsonProperty("damage_to_buildings")]
+		public int DamageToBuildings { get; set; }
+		[JsonProperty("main_battery")]
+		public MainBattery MainBattery { get; set; }
+		[JsonProperty("suppressions_count")]
+		public int SuppressionsCount { get; set; }
+		[JsonProperty("max_damage_scouting")]
+		public int MaxDamageScouting { get; set; }
+		[JsonProperty("art_agro")]
+		public int ArtAgro { get; set; }
+		[JsonProperty("ships_spotted")]
+		public int ShipsSpotted { get; set; }
+		[JsonProperty("second_battery")]
+		public SecondBattery SecondBattery { get; set; }
+		[JsonProperty("xp")]
+		public int Xp { get; set; }
+		[JsonProperty("survived_battles")]
+		public int SurvivedBattles { get; set; }
+		[JsonProperty("dropped_capture_points")]
+		public int DroppedCapturePoints { get; set; }
+		[JsonProperty("max_damage_dealt_to_buildings")]
+		public int MaxDamageDealtToBuildings { get; set; }
+		[JsonProperty("torpedo_agro")]
+		public int TorpedoAgro { get; set; }
+		[JsonProperty("draws")]
+		public int Draws { get; set; }
+		[JsonProperty("planes_killed")]
+		public int PlanesKilled { get; set; }
+		[JsonProperty("battles")]
+		public int Battles { get; set; }
+		[JsonProperty("max_ships_spotted")]
+		public int MaxShipsSpotted { get; set; }
+		[JsonProperty("team_capture_points")]
+		public int TeamCapturePoints { get; set; }
+		[JsonProperty("frags")]
+		public int Frags { get; set; }
+		[JsonProperty("damage_scouting")]
+		public int DamageScouting { get; set; }
+		[JsonProperty("max_total_agro")]
+		public int MaxTotalAgro { get; set; }
+		[JsonProperty("max_frags_battle")]
+		public int MaxFragsBattle { get; set; }
+		[JsonProperty("capture_points")]
+		public int CapturePoints { get; set; }
+		[JsonProperty("ramming")]
+		public Ramming Ramming { get; set; }
+		[JsonProperty("torpedoes")]
+		public Torpedoes Torpedoes { get; set; }
+		[JsonProperty("aircraft")]
+		public Aircraft Aircraft { get; set; }
+		[JsonProperty("survived_wins")]
+		public int SurvivedWins { get; set; }
+		[JsonProperty("max_damage_dealt")]
+		public int MaxDamageDealt { get; set; }
+		[JsonProperty("wins")]
+		public int Wins { get; set; }
+		[JsonProperty("losses")]
+		public int Losses { get; set; }
+		[JsonProperty("damage_dealt")]
+		public int DamageDealt { get; set; }
+		[JsonProperty("max_planes_killed")]
+		public int MaxPlanesKilled { get; set; }
+		[JsonProperty("max_suppressions_count")]
+		public int MaxSuppressionsCount { get; set; }
+		[JsonProperty("team_dropped_capture_points")]
+		public int TeamDroppedCapturePoints { get; set; }
+		[JsonProperty("battles_since_512")]
+		public int BattlesSince512 { get; set; }
 	}
 }

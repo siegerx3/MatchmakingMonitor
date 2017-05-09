@@ -61,7 +61,7 @@ namespace MatchMakingMonitor.Services
 				var baseUrl = _settings.Get<string>("baseUrl" + _settings.Region);
 				_httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
-				var tasks = replay.vehicles.Select(GetAsync).ToList();
+				var tasks = replay.Vehicles.Select(GetAsync).ToList();
 				var list = await Task.WhenAll(tasks);
 				return list.Where(p => p != null);
 			}
@@ -75,35 +75,35 @@ namespace MatchMakingMonitor.Services
 		[SuppressMessage("ReSharper", "InvertIf")]
 		private async Task<PlayerShip> GetAsync(Vehicle vehicle)
 		{
-			var shipInfo = ShipInfos.SingleOrDefault(s => s.ShipId == vehicle.shipId);
+			var shipInfo = ShipInfos.SingleOrDefault(s => s.ShipId == vehicle.ShipId);
 
-			var playerResponse = await _httpClient.GetAsync($"wows/account/list/?application_id={ApplicationId}&search={vehicle.name}");
+			var playerResponse = await _httpClient.GetAsync($"wows/account/list/?application_id={ApplicationId}&search={vehicle.Name}");
 			if (playerResponse.StatusCode == HttpStatusCode.OK)
 			{
 				var playerJson = await playerResponse.Content.ReadAsStringAsync();
 				var players = await Task.Run(() => JsonConvert.DeserializeObject<WargamingSearch>(playerJson));
 
-				var player = players.data.SingleOrDefault(p => p.nickname == vehicle.name);
+				var player = players.Data.SingleOrDefault(p => p.Nickname == vehicle.Name);
 				if (player != null)
 				{
-					var shipResponse = await _httpClient.GetAsync($"wows/ships/stats/?application_id={ApplicationId}&account_id={player.account_id}&ship_id={vehicle.shipId}");
+					var shipResponse = await _httpClient.GetAsync($"wows/ships/stats/?application_id={ApplicationId}&account_id={player.AccountId}&ship_id={vehicle.ShipId}");
 					if (shipResponse.StatusCode == HttpStatusCode.OK)
 					{
 						var shipJson = await shipResponse.Content.ReadAsStringAsync();
-						shipJson = shipJson.Replace("\"" + player.account_id + "\":", "\"Ships\":");
+						shipJson = shipJson.Replace("\"" + player.AccountId + "\":", "\"Ships\":");
 						var stats = await Task.Run(() => JsonConvert.DeserializeObject<PlayerStats>(shipJson));
-						if (stats?.data?.Ships != null && stats.data.Ships.Any())
+						if (stats?.Data?.Ships != null && stats.Data.Ships.Any())
 						{
-							var ship = stats.data.Ships.First();
-							return new PlayerShip(ship, player, shipInfo, vehicle.relation);
+							var ship = stats.Data.Ships.First();
+							return new PlayerShip(ship, player, shipInfo, vehicle.Relation);
 						}
 					}
 				}
 			}
 			return new PlayerShip(shipInfo)
 			{
-				Nickname = vehicle.name,
-				Relation = vehicle.relation,
+				Nickname = vehicle.Name,
+				Relation = vehicle.Relation,
 				IsPrivateOrHidden = true
 			};
 		}

@@ -75,16 +75,16 @@ namespace MatchMakingMonitor.Models
 		public PlayerShip(Ship ship, WargamingPlayer player, ShipInfo shipInfo, int relationship) : this(shipInfo)
 		{
 			if (ship == null || player == null) return;
-			ShipId = ship.ship_id;
-			AccountId = ship.account_id;
-			Nickname = player.nickname;
+			ShipId = ship.ShipId;
+			AccountId = ship.AccountId;
+			Nickname = player.Nickname;
 			Relation = relationship;
-			Frags = ship.pvp.frags;
-			Wins = ship.pvp.wins;
-			Battles = ship.pvp.battles;
-			DamageDealt = ship.pvp.damage_dealt;
-			XpEarned = ship.pvp.xp;
-			IsPrivateOrHidden = ship.@private != null;
+			Frags = ship.Pvp.Frags;
+			Wins = ship.Pvp.Wins;
+			Battles = ship.Pvp.Battles;
+			DamageDealt = ship.Pvp.DamageDealt;
+			XpEarned = ship.Pvp.Xp;
+			IsPrivateOrHidden = ship.Private != null;
 		}
 
 		public PlayerShip(ShipInfo shipInfo)

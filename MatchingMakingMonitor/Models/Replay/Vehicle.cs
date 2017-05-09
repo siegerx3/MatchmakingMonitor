@@ -1,11 +1,16 @@
-// ReSharper disable InconsistentNaming
+using Newtonsoft.Json;
+
 namespace MatchMakingMonitor.Models.Replay
 {
 	public class Vehicle
 	{
-		public long id { get; set; }
-		public int relation { get; set; }
-		public string name { get; set; }
-		public long shipId { get; set; }
+		[JsonProperty("id")]
+		public long Id { get; set; }
+		[JsonProperty("relation")]
+		public int Relation { get; set; }
+		[JsonProperty("name")]
+		public string Name { get; set; }
+		[JsonProperty("shipId")]
+		public long ShipId { get; set; }
 	}
 }

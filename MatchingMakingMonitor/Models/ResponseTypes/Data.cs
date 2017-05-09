@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 
-// ReSharper disable InconsistentNaming
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
 	public class Data
