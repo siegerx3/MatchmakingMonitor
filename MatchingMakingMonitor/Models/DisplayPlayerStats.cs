@@ -9,6 +9,7 @@ namespace MatchMakingMonitor.Models
 {
 	public class DisplayPlayerStats : BaseViewBinding
 	{
+		private static readonly string[] TierStrings = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 		public PlayerShip Player { get; set; }
 
 		private SolidColorBrush _background;
@@ -107,6 +108,9 @@ namespace MatchMakingMonitor.Models
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
 		public string TextName => $"{Player?.Nickname} | {AccountId}";
 
+		public string TextShipName => $"{ShipName} (Tier {TierStrings[Player.ShipTier == 0 ? 0 : Player.ShipTier - 1]}";
+
+
 		public string[] CommandParams => new[] { AccountId, Player.Nickname };
 
 		public string ShipName => Player?.ShipName;
@@ -161,26 +165,38 @@ namespace MatchMakingMonitor.Models
 
 		public void ComputeUi()
 		{
-			double totalRating = 0;
-			if (!Player.IsPrivateOrHidden)
+			try
 			{
-				ColorWinRate = GetColor(WinRate, Settings.WinLimits, totalRating, Settings.WinWeight, out totalRating, out _colorWinRateKey);
-				ColorAvgFrags = GetColor(AvgFrags, Settings.FragsLimits, totalRating, Settings.FragsWeight, out totalRating, out _colorAvgFragsKey);
-				ColorAvgXp = GetColor(AvgXp, Settings.XpLimits, totalRating, Settings.XpWeight, out totalRating, out _colorAvgXpKey);
-				ColorAvgDamage = GetColor(AvgDamage, Settings.DmgLimits, totalRating, Settings.DmgWeight, out totalRating, out _colorAvgDamageKey);
-				ColorBattles = GetColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating, out _colorBattlesKey);
+				double totalRating = 0;
+				if (!Player.IsPrivateOrHidden)
+				{
+					ColorWinRate = GetColor(WinRate, Settings.WinLimits, totalRating, Settings.WinWeight, out totalRating,
+						out _colorWinRateKey);
+					ColorAvgFrags = GetColor(AvgFrags, Settings.FragsLimits, totalRating, Settings.FragsWeight, out totalRating,
+						out _colorAvgFragsKey);
+					ColorAvgXp = GetColor(AvgXp, Settings.XpLimits, totalRating, Settings.XpWeight, out totalRating,
+						out _colorAvgXpKey);
+					ColorAvgDamage = GetColor(AvgDamage, Settings.Get<double[]>("dmgLimitsT" + Player.ShipTier), totalRating,
+						Settings.DmgWeight, out totalRating, out _colorAvgDamageKey);
+					ColorBattles = GetColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating,
+						out _colorBattlesKey);
 
-				_colorNameKey = (int)Math.Floor(totalRating / 5);
-				if (_colorNameKey == 0) _colorNameKey = 1;
-				ColorName = Settings.Brushes[_colorNameKey - 1];
+					_colorNameKey = (int)Math.Floor(totalRating / 5);
+					if (_colorNameKey == 0) _colorNameKey = 1;
+					ColorName = Settings.Brushes[_colorNameKey - 1];
+				}
+
+				var color = ColorName.CloneCurrentValue();
+				color.Opacity = 0.08;
+				color.Freeze();
+				Background = color;
+
+				ColorBorder = Player.Relation == 0 ? ColorName : Brushes.Transparent;
 			}
-
-			var color = ColorName.CloneCurrentValue();
-			color.Opacity = 0.08;
-			color.Freeze();
-			Background = color;
-
-			ColorBorder = Player.Relation == 0 ? ColorName : Brushes.Transparent;
+			catch (Exception e)
+			{
+				IoCKernel.Get<ILogger>().Error("Error during UI computation", e);
+			}
 		}
 
 		#region Colors

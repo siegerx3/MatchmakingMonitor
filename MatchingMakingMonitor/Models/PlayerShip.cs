@@ -10,7 +10,7 @@ namespace MatchMakingMonitor.Models
 		public int Relation { get; set; }
 		public string ShipName { get; set; }
 		public string ShipType { get; set; }
-		public string ShipTier { get; set; }
+		public int ShipTier { get; set; }
 		public int Frags { get; set; }
 		public double Wins { get; set; }
 		public double Battles { get; set; }

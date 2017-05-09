@@ -32,7 +32,16 @@ namespace MatchMakingMonitor.config
 		public double[] winLimits { get; set; }
 		public double[] fragsLimits { get; set; }
 		public double[] xpLimits { get; set; }
-		public double[] dmgLimits { get; set; }
+		public double[] dmgLimitsT1 { get; set; }
+		public double[] dmgLimitsT2 { get; set; }
+		public double[] dmgLimitsT3 { get; set; }
+		public double[] dmgLimitsT4 { get; set; }
+		public double[] dmgLimitsT5 { get; set; }
+		public double[] dmgLimitsT6 { get; set; }
+		public double[] dmgLimitsT7 { get; set; }
+		public double[] dmgLimitsT8 { get; set; }
+		public double[] dmgLimitsT9 { get; set; }
+		public double[] dmgLimitsT10 { get; set; }
 		public double? battleWeight { get; set; }
 		public double? fragsWeight { get; set; }
 		public double? xpWeight { get; set; }

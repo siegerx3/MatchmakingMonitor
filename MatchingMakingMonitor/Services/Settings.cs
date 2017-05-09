@@ -54,7 +54,16 @@ namespace MatchMakingMonitor.Services
 		public const string KeyWinLimits = nameof(SettingsJson.winLimits);
 		public const string KeyFragsLimits = nameof(SettingsJson.fragsLimits);
 		public const string KeyXpLimits = nameof(SettingsJson.xpLimits);
-		public const string KeyDmgLimits = nameof(SettingsJson.dmgLimits);
+		public const string KeyDmgLimitsT1 = nameof(SettingsJson.dmgLimitsT1);
+		public const string KeyDmgLimitsT2 = nameof(SettingsJson.dmgLimitsT2);
+		public const string KeyDmgLimitsT3 = nameof(SettingsJson.dmgLimitsT3);
+		public const string KeyDmgLimitsT4 = nameof(SettingsJson.dmgLimitsT4);
+		public const string KeyDmgLimitsT5 = nameof(SettingsJson.dmgLimitsT5);
+		public const string KeyDmgLimitsT6 = nameof(SettingsJson.dmgLimitsT6);
+		public const string KeyDmgLimitsT7 = nameof(SettingsJson.dmgLimitsT7);
+		public const string KeyDmgLimitsT8 = nameof(SettingsJson.dmgLimitsT8);
+		public const string KeyDmgLimitsT9 = nameof(SettingsJson.dmgLimitsT9);
+		public const string KeyDmgLimitsT10 = nameof(SettingsJson.dmgLimitsT10);
 
 		public const string KeyFontSize = nameof(SettingsJson.fontSize);
 
@@ -64,10 +73,10 @@ namespace MatchMakingMonitor.Services
 		public const string KeyXpWeight = nameof(SettingsJson.xpWeight);
 		public const string KeyDmgWeight = nameof(SettingsJson.dmgWeight);
 
-		public static string[] KeysColors = new string[] { KeyColor9, KeyColor8, KeyColor7, KeyColor6, KeyColor5, KeyColor4, KeyColor3, KeyColor2, KeyColor1 };
-		public static string[] KeysLimits = new string[] { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimits };
-		public static string[] KeysWeights = new string[] { KeyBattleWeight, KeyWinWeight, KeyFragsWeight, KeyXpWeight, KeyDmgWeight };
-		public static string[] KeysOthers = new string[] { KeyFontSize };
+		public static string[] KeysColors = { KeyColor9, KeyColor8, KeyColor7, KeyColor6, KeyColor5, KeyColor4, KeyColor3, KeyColor2, KeyColor1 };
+		public static string[] KeysLimits = { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimitsT1, KeyDmgLimitsT2, KeyDmgLimitsT3, KeyDmgLimitsT4, KeyDmgLimitsT5, KeyDmgLimitsT6, KeyDmgLimitsT7, KeyDmgLimitsT8, KeyDmgLimitsT9, KeyDmgLimitsT10 };
+		public static string[] KeysWeights = { KeyBattleWeight, KeyWinWeight, KeyFragsWeight, KeyXpWeight, KeyDmgWeight };
+		public static string[] KeysOthers = { KeyFontSize };
 		public static string[] KeysUiSettings = KeysColors.Concat(KeysLimits).Concat(KeysWeights).ToArray();
 
 		#endregion
@@ -245,20 +254,164 @@ namespace MatchMakingMonitor.Services
 			_instance.Set(KeyXpLimits, _xpLimits.ToArray(), true);
 		}
 
-		private ObservableCollection<double> _dmgLimits;
-		public ObservableCollection<double> DmgLimits
+		private ObservableCollection<double> _dmgLimitsT1;
+		public ObservableCollection<double> DmgLimitsT1
 		{
-			get => _dmgLimits ?? (_dmgLimits = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimits)));
+			get => _dmgLimitsT1 ?? (_dmgLimitsT1 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT1)));
 			set
 			{
-				_dmgLimits = null;
-				_instance.Set(KeyDmgLimits, value);
+				_dmgLimitsT1 = null;
+				_instance.Set(KeyDmgLimitsT1, value);
 			}
 		}
 
-		public void DmgLimitsChanged()
+		public void DmgLimitsT1Changed()
 		{
-			_instance.Set(KeyDmgLimits, _dmgLimits.ToArray(), true);
+			_instance.Set(KeyDmgLimitsT1, _dmgLimitsT1.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT2;
+		public ObservableCollection<double> DmgLimitsT2
+		{
+			get => _dmgLimitsT2 ?? (_dmgLimitsT2 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT2)));
+			set
+			{
+				_dmgLimitsT2 = null;
+				_instance.Set(KeyDmgLimitsT2, value);
+			}
+		}
+
+		public void DmgLimitsT2Changed()
+		{
+			_instance.Set(KeyDmgLimitsT2, _dmgLimitsT2.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT3;
+		public ObservableCollection<double> DmgLimitsT3
+		{
+			get => _dmgLimitsT3 ?? (_dmgLimitsT3 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT3)));
+			set
+			{
+				_dmgLimitsT3 = null;
+				_instance.Set(KeyDmgLimitsT3, value);
+			}
+		}
+
+		public void DmgLimitsT3Changed()
+		{
+			_instance.Set(KeyDmgLimitsT3, _dmgLimitsT3.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT4;
+		public ObservableCollection<double> DmgLimitsT4
+		{
+			get => _dmgLimitsT4 ?? (_dmgLimitsT4 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT4)));
+			set
+			{
+				_dmgLimitsT4 = null;
+				_instance.Set(KeyDmgLimitsT4, value);
+			}
+		}
+
+		public void DmgLimitsT4Changed()
+		{
+			_instance.Set(KeyDmgLimitsT4, _dmgLimitsT4.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT5;
+		public ObservableCollection<double> DmgLimitsT5
+		{
+			get => _dmgLimitsT5 ?? (_dmgLimitsT5 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT5)));
+			set
+			{
+				_dmgLimitsT5 = null;
+				_instance.Set(KeyDmgLimitsT5, value);
+			}
+		}
+
+		public void DmgLimitsT5Changed()
+		{
+			_instance.Set(KeyDmgLimitsT5, _dmgLimitsT5.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT6;
+		public ObservableCollection<double> DmgLimitsT6
+		{
+			get => _dmgLimitsT6 ?? (_dmgLimitsT6 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT6)));
+			set
+			{
+				_dmgLimitsT6 = null;
+				_instance.Set(KeyDmgLimitsT6, value);
+			}
+		}
+
+		public void DmgLimitsT6Changed()
+		{
+			_instance.Set(KeyDmgLimitsT6, _dmgLimitsT6.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT7;
+		public ObservableCollection<double> DmgLimitsT7
+		{
+			get => _dmgLimitsT7 ?? (_dmgLimitsT7 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT7)));
+			set
+			{
+				_dmgLimitsT7 = null;
+				_instance.Set(KeyDmgLimitsT7, value);
+			}
+		}
+
+		public void DmgLimitsT7Changed()
+		{
+			_instance.Set(KeyDmgLimitsT7, _dmgLimitsT7.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT8;
+		public ObservableCollection<double> DmgLimitsT8
+		{
+			get => _dmgLimitsT8 ?? (_dmgLimitsT8 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT8)));
+			set
+			{
+				_dmgLimitsT8 = null;
+				_instance.Set(KeyDmgLimitsT8, value);
+			}
+		}
+
+		public void DmgLimitsT8Changed()
+		{
+			_instance.Set(KeyDmgLimitsT8, _dmgLimitsT8.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT9;
+		public ObservableCollection<double> DmgLimitsT9
+		{
+			get => _dmgLimitsT9 ?? (_dmgLimitsT9 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT9)));
+			set
+			{
+				_dmgLimitsT9 = null;
+				_instance.Set(KeyDmgLimitsT9, value);
+			}
+		}
+
+		public void DmgLimitsT9Changed()
+		{
+			_instance.Set(KeyDmgLimitsT9, _dmgLimitsT9.ToArray(), true);
+		}
+
+		private ObservableCollection<double> _dmgLimitsT10;
+		public ObservableCollection<double> DmgLimitsT10
+		{
+			get => _dmgLimitsT10 ?? (_dmgLimitsT10 = new ObservableCollection<double>(_instance.Get<double[]>(KeyDmgLimitsT10)));
+			set
+			{
+				_dmgLimitsT10 = null;
+				_instance.Set(KeyDmgLimitsT10, value);
+			}
+		}
+
+		public void DmgLimitsT10Changed()
+		{
+			_instance.Set(KeyDmgLimitsT10, _dmgLimitsT10.ToArray(), true);
 		}
 
 		public double BattleWeight
@@ -331,7 +484,16 @@ namespace MatchMakingMonitor.Services
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(BattleLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => BattleLimitsChanged());
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(WinLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => WinLimitsChanged());
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(XpLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => XpLimitsChanged());
-			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsChanged());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT1, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT1Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT2, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT2Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT3, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT3Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT4, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT4Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT5, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT5Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT6, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT6Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT7, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT7Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT8, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT8Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT9, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT9Changed());
+			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(DmgLimitsT10, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => DmgLimitsT10Changed());
 			Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(FragsLimits, "CollectionChanged").Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(e => FragsLimitsChanged());
 		}
 
@@ -493,8 +655,26 @@ namespace MatchMakingMonitor.Services
 					return _fragsLimits;
 				case KeyXpLimits:
 					return _xpLimits;
-				case KeyDmgLimits:
-					return _dmgLimits;
+				case KeyDmgLimitsT1:
+					return _dmgLimitsT1;
+				case KeyDmgLimitsT2:
+					return _dmgLimitsT2;
+				case KeyDmgLimitsT3:
+					return _dmgLimitsT3;
+				case KeyDmgLimitsT4:
+					return _dmgLimitsT4;
+				case KeyDmgLimitsT5:
+					return _dmgLimitsT5;
+				case KeyDmgLimitsT6:
+					return _dmgLimitsT6;
+				case KeyDmgLimitsT7:
+					return _dmgLimitsT7;
+				case KeyDmgLimitsT8:
+					return _dmgLimitsT8;
+				case KeyDmgLimitsT9:
+					return _dmgLimitsT9;
+				case KeyDmgLimitsT10:
+					return _dmgLimitsT10;
 				default:
 					return null;
 			}
