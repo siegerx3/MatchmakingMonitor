@@ -24,7 +24,7 @@ namespace MatchMakingMonitor.Services
 		private SettingsJson _currentSettings;
 
 		#region Keys
-		public const string KeyInstallDirectory = nameof(SettingsJson.installDirectory);
+		public const string KeyInstallDirectory = nameof(SettingsJson.InstallDirectory);
 
 		public const string KeyAppIdNa = nameof(SettingsJson.appIdNA);
 		public const string KeyAppIdEu = nameof(SettingsJson.appIdEU);
@@ -36,24 +36,24 @@ namespace MatchMakingMonitor.Services
 		public const string KeyBaseUrlRu = nameof(SettingsJson.baseUrlRU);
 		public const string KeyBaseUrlSea = nameof(SettingsJson.baseUrlSEA);
 
-		public const string KeyRegion = nameof(SettingsJson.region);
+		public const string KeyRegion = nameof(SettingsJson.Region);
 
-		public const string KeyToken = nameof(SettingsJson.token);
+		public const string KeyToken = nameof(SettingsJson.Token);
 
-		public const string KeyColor9 = nameof(SettingsJson.color9);
-		public const string KeyColor8 = nameof(SettingsJson.color8);
-		public const string KeyColor7 = nameof(SettingsJson.color7);
-		public const string KeyColor6 = nameof(SettingsJson.color6);
-		public const string KeyColor5 = nameof(SettingsJson.color5);
-		public const string KeyColor4 = nameof(SettingsJson.color4);
-		public const string KeyColor3 = nameof(SettingsJson.color3);
-		public const string KeyColor2 = nameof(SettingsJson.color2);
-		public const string KeyColor1 = nameof(SettingsJson.color1);
+		public const string KeyColor9 = nameof(SettingsJson.Color9);
+		public const string KeyColor8 = nameof(SettingsJson.Color8);
+		public const string KeyColor7 = nameof(SettingsJson.Color7);
+		public const string KeyColor6 = nameof(SettingsJson.Color6);
+		public const string KeyColor5 = nameof(SettingsJson.Color5);
+		public const string KeyColor4 = nameof(SettingsJson.Color4);
+		public const string KeyColor3 = nameof(SettingsJson.Color3);
+		public const string KeyColor2 = nameof(SettingsJson.Color2);
+		public const string KeyColor1 = nameof(SettingsJson.Color1);
 
-		public const string KeyBattleLimits = nameof(SettingsJson.battleLimits);
-		public const string KeyWinLimits = nameof(SettingsJson.winLimits);
-		public const string KeyFragsLimits = nameof(SettingsJson.fragsLimits);
-		public const string KeyXpLimits = nameof(SettingsJson.xpLimits);
+		public const string KeyBattleLimits = nameof(SettingsJson.BattleLimits);
+		public const string KeyWinLimits = nameof(SettingsJson.WinLimits);
+		public const string KeyFragsLimits = nameof(SettingsJson.FragsLimits);
+		public const string KeyXpLimits = nameof(SettingsJson.XpLimits);
 		public const string KeyDmgLimitsT1 = nameof(SettingsJson.dmgLimitsT1);
 		public const string KeyDmgLimitsT2 = nameof(SettingsJson.dmgLimitsT2);
 		public const string KeyDmgLimitsT3 = nameof(SettingsJson.dmgLimitsT3);
@@ -65,13 +65,13 @@ namespace MatchMakingMonitor.Services
 		public const string KeyDmgLimitsT9 = nameof(SettingsJson.dmgLimitsT9);
 		public const string KeyDmgLimitsT10 = nameof(SettingsJson.dmgLimitsT10);
 
-		public const string KeyFontSize = nameof(SettingsJson.fontSize);
+		public const string KeyFontSize = nameof(SettingsJson.FontSize);
 
-		public const string KeyBattleWeight = nameof(SettingsJson.battleWeight);
-		public const string KeyWinWeight = nameof(SettingsJson.winWeight);
-		public const string KeyFragsWeight = nameof(SettingsJson.fragsWeight);
-		public const string KeyXpWeight = nameof(SettingsJson.xpWeight);
-		public const string KeyDmgWeight = nameof(SettingsJson.dmgWeight);
+		public const string KeyBattleWeight = nameof(SettingsJson.BattleWeight);
+		public const string KeyWinWeight = nameof(SettingsJson.WinWeight);
+		public const string KeyFragsWeight = nameof(SettingsJson.FragsWeight);
+		public const string KeyXpWeight = nameof(SettingsJson.XpWeight);
+		public const string KeyDmgWeight = nameof(SettingsJson.DmgWeight);
 
 		public static string[] KeysColors = { KeyColor9, KeyColor8, KeyColor7, KeyColor6, KeyColor5, KeyColor4, KeyColor3, KeyColor2, KeyColor1 };
 		public static string[] KeysLimits = { KeyBattleLimits, KeyWinLimits, KeyFragsLimits, KeyXpLimits, KeyDmgLimitsT1, KeyDmgLimitsT2, KeyDmgLimitsT3, KeyDmgLimitsT4, KeyDmgLimitsT5, KeyDmgLimitsT6, KeyDmgLimitsT7, KeyDmgLimitsT8, KeyDmgLimitsT9, KeyDmgLimitsT10 };

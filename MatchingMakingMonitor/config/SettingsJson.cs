@@ -1,74 +1,170 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
+﻿using MatchMakingMonitor.config.Reflection;
+using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.config
 {
-	[SuppressMessage("ReSharper", "InconsistentNaming")]
-	public class SettingsJson
+	public class SettingsJson : NotifySettingPropertyChanged
 	{
-		public string installDirectory { get; set; }
-		public string region { get; set; }
-		public string appIdNA { get; set; }
-		public string appIdEU { get; set; }
-		public string appIdRU { get; set; }
-		public string appIdSEA { get; set; }
-		public string baseUrlNA { get; set; }
-		public string baseUrlEU { get; set; }
-		public string baseUrlRU { get; set; }
-		public string baseUrlSEA { get; set; }
-		public string token { get; set; }
-		public string color1 { get; set; }
-		public string color2 { get; set; }
-		public string color3 { get; set; }
-		public string color4 { get; set; }
-		public string color5 { get; set; }
-		public string color6 { get; set; }
-		public string color7 { get; set; }
-		public string color8 { get; set; }
-		public string color9 { get; set; }
-		public int? fontSize { get; set; }
-		public double[] battleLimits { get; set; }
-		public double[] winLimits { get; set; }
-		public double[] fragsLimits { get; set; }
-		public double[] xpLimits { get; set; }
-		public double[] dmgLimitsT1 { get; set; }
-		public double[] dmgLimitsT2 { get; set; }
-		public double[] dmgLimitsT3 { get; set; }
-		public double[] dmgLimitsT4 { get; set; }
-		public double[] dmgLimitsT5 { get; set; }
-		public double[] dmgLimitsT6 { get; set; }
-		public double[] dmgLimitsT7 { get; set; }
-		public double[] dmgLimitsT8 { get; set; }
-		public double[] dmgLimitsT9 { get; set; }
-		public double[] dmgLimitsT10 { get; set; }
-		public double? battleWeight { get; set; }
-		public double? fragsWeight { get; set; }
-		public double? xpWeight { get; set; }
-		public double? dmgWeight { get; set; }
-		public double? winWeight { get; set; }
+		private Region _region;
+		private string _installDirectory;
+		private string _token;
+		private string _color1;
+		private string _color2;
+		private string _color3;
+		private string _color4;
+		private string _color5;
+		private string _color6;
+		private string _color7;
+		private string _color8;
+		private string _color9;
+		private double? _battleWeight;
+		private double? _fragsWeight;
+		private double? _xpWeight;
+		private double? _dmgWeight;
+		private double? _winWeight;
 
 
-		private readonly PropertyInfo[] properties;
-		public SettingsJson()
+		[JsonProperty("installDirectory")]
+		public string InstallDirectory
 		{
-			properties = GetType().GetProperties();
+			get => _installDirectory;
+			set { _installDirectory = value; FirePropertyChanged(); }
 		}
 
-		public void Set(string key, object value)
+		[JsonProperty("region")]
+		public Region Region
 		{
-			if (value != null)
-				properties.Single(p => p.Name == key).SetValue(this, value);
+			get => _region;
+			set { _region = value; FirePropertyChanged(); }
 		}
 
-		public T Get<T>(string key)
+		[JsonProperty("appIds")]
+		public AppId[] AppIds { get; set; }
+
+		[JsonProperty("baseUrls")]
+		public BaseUrl[] BaseUrls { get; set; }
+
+		[JsonProperty("token")]
+		public string Token
 		{
-			return (T)properties.Single(p => p.Name == key).GetValue(this);
+			get => _token;
+			set { _token = value; FirePropertyChanged(); }
 		}
 
-		public object Get(string key)
+		[JsonProperty("color1"), UiSetting]
+		public string Color1
 		{
-			return Get<object>(key);
+			get => _color1;
+			set { _color1 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color2"), UiSetting]
+		public string Color2
+		{
+			get => _color2;
+			set { _color2 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color3"), UiSetting]
+		public string Color3
+		{
+			get => _color3;
+			set { _color3 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color4"), UiSetting]
+		public string Color4
+		{
+			get => _color4;
+			set { _color4 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color5"), UiSetting]
+		public string Color5
+		{
+			get => _color5;
+			set { _color5 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color6"), UiSetting]
+		public string Color6
+		{
+			get => _color6;
+			set { _color6 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color7"), UiSetting]
+		public string Color7
+		{
+			get => _color7;
+			set { _color7 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color8"), UiSetting]
+		public string Color8
+		{
+			get => _color8;
+			set { _color8 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("color9"), UiSetting]
+		public string Color9
+		{
+			get => _color9;
+			set { _color9 = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("fontSize"), UiSetting]
+		public int? FontSize { get; set; }
+
+		[JsonProperty("battleLimits"), NestedSetting]
+		public LimitsTier[] BattleLimits { get; set; }
+
+		[JsonProperty("winLimits"), NestedSetting]
+		public LimitsTier[] WinLimits { get; set; }
+
+		[JsonProperty("fragsLimits"), NestedSetting]
+		public LimitsTier[] FragsLimits { get; set; }
+
+		[JsonProperty("xpLimits"), NestedSetting]
+		public LimitsTier[] XpLimits { get; set; }
+
+		[JsonProperty("dmgLimits"), NestedSetting]
+		public LimitsType DmgLimits { get; set; }
+
+		[JsonProperty("battleWeight"), UiSetting]
+		public double? BattleWeight
+		{
+			get => _battleWeight;
+			set { _battleWeight = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("fragsWeight"), UiSetting]
+		public double? FragsWeight
+		{
+			get => _fragsWeight;
+			set { _fragsWeight = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("xpWeight"), UiSetting]
+		public double? XpWeight
+		{
+			get => _xpWeight;
+			set { _xpWeight = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("dmgWeight"), UiSetting]
+		public double? DmgWeight
+		{
+			get => _dmgWeight;
+			set { _dmgWeight = value; FirePropertyChanged(); }
+		}
+
+		[JsonProperty("winWeight"), UiSetting]
+		public double? WinWeight
+		{
+			get => _winWeight;
+			set { _winWeight = value; FirePropertyChanged(); }
 		}
 	}
 }

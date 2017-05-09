@@ -137,7 +137,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="config\BaseUrl.cs" />
+    <Compile Include="config\AppId.cs" />
+    <Compile Include="config\LimitsType.cs" />
+    <Compile Include="config\LimitsTier.cs" />
+    <Compile Include="config\LimitValue.cs" />
+    <Compile Include="config\Reflection\NestedSetting.cs" />
+    <Compile Include="config\Reflection\NestedSettingAttribute.cs" />
+    <Compile Include="config\Reflection\NotifySettingPropertyChanged.cs" />
+    <Compile Include="config\Reflection\UiSettingAttribute.cs" />
+    <Compile Include="config\Region.cs" />
     <Compile Include="config\SettingsJson.cs" />
+    <Compile Include="config\ShipType.cs" />
+    <Compile Include="config\ShipTier.cs" />
     <Compile Include="Models\DisplayPlayerStats.cs" />
     <Compile Include="Models\MobileDisplayPlayerStats.cs" />
     <Compile Include="Models\MobileSettings.cs" />

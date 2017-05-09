@@ -1,0 +1,39 @@
+﻿using System.Linq;
+using System.Reactive.Subjects;
+using System.Reflection;
+
+namespace MatchMakingMonitor.config.Reflection
+{
+	public class NestedSetting
+	{
+		protected Subject<string> SettingChangedSubject;
+		protected void AttachListener(System.Type type, object instance, Subject<string> settingChangedSubject)
+		{
+			SettingChangedSubject = settingChangedSubject;
+			AttachListenerStatic(type, instance, settingChangedSubject);
+		}
+
+		public static void AttachListenerStatic(System.Type type, object instance, Subject<string> settingChangedSubject)
+		{
+			foreach (var prop in type.GetProperties().Where(p => p.GetCustomAttribute(typeof(NestedSettingAttribute), false) != null))
+			{
+				var value = prop.GetValue(instance);
+				if (value == null) continue;
+				var enumerable = value as object[];
+				if (!value.GetType().IsArray)
+				{
+					(value as NestedSetting)?.AttachListener(value.GetType(), value, settingChangedSubject);
+				}
+				else
+				{
+					if (enumerable == null) continue;
+					foreach (var entry in enumerable)
+					{
+						(entry as NestedSetting)?.AttachListener(value.GetType().GetElementType(), entry, settingChangedSubject);
+					}
+				}
+			}
+		}
+	}
+
+}
