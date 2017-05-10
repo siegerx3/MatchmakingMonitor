@@ -15,33 +15,33 @@ namespace MatchMakingMonitor.Models
 		public string color8 { get; set; }
 		public string color9 { get; set; }
 
-		public static MobileSettings FromSettings(Settings settings)
+		public static MobileSettings FromSettings(SettingsWrapper settingsWrapper)
 		{
 			return new MobileSettings()
 			{
-				color1 = settings.Color1,
-				color2 = settings.Color2,
-				color3 = settings.Color3,
-				color4 = settings.Color4,
-				color5 = settings.Color5,
-				color6 = settings.Color6,
-				color7 = settings.Color7,
-				color8 = settings.Color8,
-				color9 = settings.Color9
+				color1 = settingsWrapper.CurrentSettings.Color1,
+				color2 = settingsWrapper.CurrentSettings.Color2,
+				color3 = settingsWrapper.CurrentSettings.Color3,
+				color4 = settingsWrapper.CurrentSettings.Color4,
+				color5 = settingsWrapper.CurrentSettings.Color5,
+				color6 = settingsWrapper.CurrentSettings.Color6,
+				color7 = settingsWrapper.CurrentSettings.Color7,
+				color8 = settingsWrapper.CurrentSettings.Color8,
+				color9 = settingsWrapper.CurrentSettings.Color9
 			};
 		}
 
-		public void ToSettings(Settings settings)
+		public void ToSettings(SettingsWrapper settingsWrapper)
 		{
-			settings.Color1 = settings.Color1;
-			settings.Color2 = settings.Color2;
-			settings.Color3 = settings.Color3;
-			settings.Color4 = settings.Color4;
-			settings.Color5 = settings.Color5;
-			settings.Color6 = settings.Color6;
-			settings.Color7 = settings.Color7;
-			settings.Color8 = settings.Color8;
-			settings.Color9 = settings.Color9;
+			settingsWrapper.CurrentSettings.Color1 = settingsWrapper.CurrentSettings.Color1;
+			settingsWrapper.CurrentSettings.Color2 = settingsWrapper.CurrentSettings.Color2;
+			settingsWrapper.CurrentSettings.Color3 = settingsWrapper.CurrentSettings.Color3;
+			settingsWrapper.CurrentSettings.Color4 = settingsWrapper.CurrentSettings.Color4;
+			settingsWrapper.CurrentSettings.Color5 = settingsWrapper.CurrentSettings.Color5;
+			settingsWrapper.CurrentSettings.Color6 = settingsWrapper.CurrentSettings.Color6;
+			settingsWrapper.CurrentSettings.Color7 = settingsWrapper.CurrentSettings.Color7;
+			settingsWrapper.CurrentSettings.Color8 = settingsWrapper.CurrentSettings.Color8;
+			settingsWrapper.CurrentSettings.Color9 = settingsWrapper.CurrentSettings.Color9;
 		}
 	}
 }

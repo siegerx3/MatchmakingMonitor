@@ -8,6 +8,7 @@ namespace MatchMakingMonitor.config
 		private Region _region;
 		private string _installDirectory;
 		private string _token;
+		private int _fontSize;
 		private string _color1;
 		private string _color2;
 		private string _color3;
@@ -17,11 +18,11 @@ namespace MatchMakingMonitor.config
 		private string _color7;
 		private string _color8;
 		private string _color9;
-		private double? _battleWeight;
-		private double? _fragsWeight;
-		private double? _xpWeight;
-		private double? _dmgWeight;
-		private double? _winWeight;
+		private double _battleWeight;
+		private double _fragsWeight;
+		private double _xpWeight;
+		private double _dmgWeight;
+		private double _winWeight;
 
 
 		[JsonProperty("installDirectory")]
@@ -51,63 +52,63 @@ namespace MatchMakingMonitor.config
 			set { _token = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color1"), UiSetting]
+		[JsonProperty("color1"), UiSetting, ColorSetting]
 		public string Color1
 		{
 			get => _color1;
 			set { _color1 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color2"), UiSetting]
+		[JsonProperty("color2"), UiSetting, ColorSetting]
 		public string Color2
 		{
 			get => _color2;
 			set { _color2 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color3"), UiSetting]
+		[JsonProperty("color3"), UiSetting, ColorSetting]
 		public string Color3
 		{
 			get => _color3;
 			set { _color3 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color4"), UiSetting]
+		[JsonProperty("color4"), UiSetting, ColorSetting]
 		public string Color4
 		{
 			get => _color4;
 			set { _color4 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color5"), UiSetting]
+		[JsonProperty("color5"), UiSetting, ColorSetting]
 		public string Color5
 		{
 			get => _color5;
 			set { _color5 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color6"), UiSetting]
+		[JsonProperty("color6"), UiSetting, ColorSetting]
 		public string Color6
 		{
 			get => _color6;
 			set { _color6 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color7"), UiSetting]
+		[JsonProperty("color7"), UiSetting, ColorSetting]
 		public string Color7
 		{
 			get => _color7;
 			set { _color7 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color8"), UiSetting]
+		[JsonProperty("color8"), UiSetting, ColorSetting]
 		public string Color8
 		{
 			get => _color8;
 			set { _color8 = value; FirePropertyChanged(); }
 		}
 
-		[JsonProperty("color9"), UiSetting]
+		[JsonProperty("color9"), UiSetting, ColorSetting]
 		public string Color9
 		{
 			get => _color9;
@@ -115,7 +116,11 @@ namespace MatchMakingMonitor.config
 		}
 
 		[JsonProperty("fontSize"), UiSetting]
-		public int? FontSize { get; set; }
+		public int FontSize
+		{
+			get => _fontSize;
+			set { _fontSize = value; FirePropertyChanged(); }
+		}
 
 		[JsonProperty("battleLimits"), NestedSetting]
 		public LimitsTier[] BattleLimits { get; set; }
@@ -133,35 +138,35 @@ namespace MatchMakingMonitor.config
 		public LimitsType DmgLimits { get; set; }
 
 		[JsonProperty("battleWeight"), UiSetting]
-		public double? BattleWeight
+		public double BattleWeight
 		{
 			get => _battleWeight;
 			set { _battleWeight = value; FirePropertyChanged(); }
 		}
 
 		[JsonProperty("fragsWeight"), UiSetting]
-		public double? FragsWeight
+		public double FragsWeight
 		{
 			get => _fragsWeight;
 			set { _fragsWeight = value; FirePropertyChanged(); }
 		}
 
 		[JsonProperty("xpWeight"), UiSetting]
-		public double? XpWeight
+		public double XpWeight
 		{
 			get => _xpWeight;
 			set { _xpWeight = value; FirePropertyChanged(); }
 		}
 
 		[JsonProperty("dmgWeight"), UiSetting]
-		public double? DmgWeight
+		public double DmgWeight
 		{
 			get => _dmgWeight;
 			set { _dmgWeight = value; FirePropertyChanged(); }
 		}
 
 		[JsonProperty("winWeight"), UiSetting]
-		public double? WinWeight
+		public double WinWeight
 		{
 			get => _winWeight;
 			set { _winWeight = value; FirePropertyChanged(); }

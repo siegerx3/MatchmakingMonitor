@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using MatchMakingMonitor.config;
 using MatchMakingMonitor.Models.Replay;
 
 namespace MatchMakingMonitor.Services
@@ -15,11 +16,11 @@ namespace MatchMakingMonitor.Services
 	public class StatsService
 	{
 		private Replay _currentReplay;
-		private string _currentRegion;
+		private Region _currentRegion;
 
 		private readonly ILogger _logger;
 		private readonly ApiService _apiService;
-		private readonly Settings _settings;
+		private readonly SettingsWrapper _settingsWrapper;
 
 		private readonly BehaviorSubject<StatsStatus> _statsStatusChangedSubject;
 		public IObservable<StatsStatus> StatsStatusChanged => _statsStatusChangedSubject.AsObservable();
@@ -27,11 +28,11 @@ namespace MatchMakingMonitor.Services
 		private readonly BehaviorSubject<List<DisplayPlayerStats>> _statsSubject;
 		public IObservable<List<DisplayPlayerStats>> Stats => _statsSubject.Where(s => s != null).AsObservable();
 
-		public StatsService(ILogger logger, Settings settings, WatcherService watcherService, ApiService apiService)
+		public StatsService(ILogger logger, SettingsWrapper settingsWrapper, WatcherService watcherService, ApiService apiService)
 		{
 			_logger = logger;
 			_apiService = apiService;
-			_settings = settings;
+			_settingsWrapper = settingsWrapper;
 
 			_statsStatusChangedSubject = new BehaviorSubject<StatsStatus>(StatsStatus.Waiting);
 			_statsSubject = new BehaviorSubject<List<DisplayPlayerStats>>(null);
@@ -63,7 +64,7 @@ namespace MatchMakingMonitor.Services
 
 			if (replay != null)
 			{
-				var region = _settings.Region;
+				var region = _settingsWrapper.CurrentSettings.Region;
 				if (_currentReplay == null || region != _currentRegion ||
 				    (_currentReplay != null && replay.DateTime > _currentReplay.DateTime))
 				{
@@ -102,7 +103,7 @@ namespace MatchMakingMonitor.Services
 		private async Task<List<DisplayPlayerStats>> ComputeDisplayPlayer(IEnumerable<PlayerShip> players)
 		{
 			_logger.Info("Computing UI for players");
-			return await Task.Run(() => players.Select(p => new DisplayPlayerStats(_settings, p)).ToList());
+			return await Task.Run(() => players.Select(p => new DisplayPlayerStats(_settingsWrapper, p)).ToList());
 		}
 	}
 

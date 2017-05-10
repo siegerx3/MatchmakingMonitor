@@ -15,23 +15,23 @@ namespace MatchMakingMonitor.Services
 {
 	public class ApiService
 	{
-		private readonly Settings _settings;
+		private readonly SettingsWrapper _settingsWrapper;
 		private readonly ILogger _logger;
 
 		private List<WgShip> _wgShips;
 		public IReadOnlyList<WgShip> WgShips => _wgShips.AsReadOnly();
 
 		private HttpClient _httpClient;
-		public ApiService(ILogger logger, Settings settings)
+		public ApiService(ILogger logger, SettingsWrapper settingsWrapper)
 		{
-			_settings = settings;
+			_settingsWrapper = settingsWrapper;
 			_logger = logger;
 #pragma warning disable 4014
 			Ships();
 #pragma warning restore 4014
 		}
 
-		private string ApplicationId => _settings.Get<string>("appId" + _settings.Region);
+		private string ApplicationId => _settingsWrapper.AppId;
 
 		private static readonly Regex DateStart = new Regex("\"data\":{");
 		private static readonly Regex ShipIdRegex = new Regex("\"(\\d){10}\":");
@@ -41,7 +41,7 @@ namespace MatchMakingMonitor.Services
 		{
 			try
 			{
-				var baseUrl = _settings.Get<string>("baseUrl" + _settings.Region);
+				var baseUrl = _settingsWrapper.BaseUrl;
 				var client = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
 				var result = await client.PostAsync($"/wows/encyclopedia/ships/?application_id={ApplicationId}&fields=name%2C+tier%2C+type%2C+ship_id", null);
@@ -67,7 +67,7 @@ namespace MatchMakingMonitor.Services
 				{
 					await Task.Delay(1000);
 				}
-				var baseUrl = _settings.Get<string>("baseUrl" + _settings.Region);
+				var baseUrl = _settingsWrapper.BaseUrl;
 				_httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
 				var tasks = replay.Vehicles.Select(GetAsync).ToList();

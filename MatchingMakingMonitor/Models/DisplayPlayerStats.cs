@@ -1,6 +1,7 @@
 ﻿using MatchMakingMonitor.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using MatchMakingMonitor.View.Util;
@@ -108,7 +109,7 @@ namespace MatchMakingMonitor.Models
 		public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
 		public string TextName => $"{Player?.Nickname} | {AccountId}";
 
-		public string TextShipName => $"{ShipName} (Tier {TierStrings[Player.ShipTier == 0 ? 0 : Player.ShipTier - 1]})";
+		public string TextShipName => $"{ShipName} (Tier {Player.ShipTier})";
 
 
 		public string[] CommandParams => new[] { AccountId, Player.Nickname };
@@ -133,11 +134,11 @@ namespace MatchMakingMonitor.Models
 
 		public Visibility TextVisibility => !Player.IsPrivateOrHidden ? Visibility.Collapsed : Visibility.Visible;
 
-		public Settings Settings { get; set; }
-		public DisplayPlayerStats(Settings settings, PlayerShip player) : this()
+		public SettingsWrapper SettingsWrapper { get; set; }
+		public DisplayPlayerStats(SettingsWrapper settingsWrapper, PlayerShip player) : this()
 		{
 			Player = player;
-			Settings = settings;
+			SettingsWrapper = settingsWrapper;
 			WinRate = Math.Round(player.Wins / player.Battles * 100, 2);
 			AvgFrags = Math.Round(player.Frags / player.Battles, 2);
 			AvgXp = Math.Round(player.XpEarned / player.Battles, 0);
@@ -170,20 +171,20 @@ namespace MatchMakingMonitor.Models
 				double totalRating = 0;
 				if (!Player.IsPrivateOrHidden)
 				{
-					ColorWinRate = GetColor(WinRate, Settings.WinLimits, totalRating, Settings.WinWeight, out totalRating,
+					ColorWinRate = GetColor(WinRate, SettingsWrapper.CurrentSettings.WinLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.WinWeight, out totalRating,
 						out _colorWinRateKey);
-					ColorAvgFrags = GetColor(AvgFrags, Settings.FragsLimits, totalRating, Settings.FragsWeight, out totalRating,
+					ColorAvgFrags = GetColor(AvgFrags, SettingsWrapper.CurrentSettings.FragsLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.FragsWeight, out totalRating,
 						out _colorAvgFragsKey);
-					ColorAvgXp = GetColor(AvgXp, Settings.XpLimits, totalRating, Settings.XpWeight, out totalRating,
+					ColorAvgXp = GetColor(AvgXp, SettingsWrapper.CurrentSettings.XpLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.XpWeight, out totalRating,
 						out _colorAvgXpKey);
-					ColorAvgDamage = GetColor(AvgDamage, Settings.Get<double[]>("dmgLimitsT" + Player.ShipTier), totalRating,
-						Settings.DmgWeight, out totalRating, out _colorAvgDamageKey);
-					ColorBattles = GetColor(Player.Battles, Settings.BattleLimits, totalRating, Settings.BattleWeight, out totalRating,
+					ColorAvgDamage = GetColor(AvgDamage, SettingsWrapper.CurrentSettings.DmgLimits.GetLimits(Player.ShipType, Player.ShipTier).Select(v => v.Value), totalRating,
+						SettingsWrapper.CurrentSettings.DmgWeight, out totalRating, out _colorAvgDamageKey);
+					ColorBattles = GetColor(Player.Battles, SettingsWrapper.CurrentSettings.BattleLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.BattleWeight, out totalRating,
 						out _colorBattlesKey);
 
 					_colorNameKey = (int)Math.Floor(totalRating / 5);
 					if (_colorNameKey == 0) _colorNameKey = 1;
-					ColorName = Settings.Brushes[_colorNameKey - 1];
+					ColorName = SettingsWrapper.Brushes[_colorNameKey - 1];
 				}
 
 				var color = ColorName.CloneCurrentValue();
@@ -201,14 +202,15 @@ namespace MatchMakingMonitor.Models
 
 		#region Colors
 
-		private SolidColorBrush GetColor(double value, IReadOnlyList<double> limits, double oldTotal, double multiplier, out double total, out int key)
+		private SolidColorBrush GetColor(double value, IEnumerable<double> limits, double oldTotal, double multiplier, out double total, out int key)
 		{
-			for (var i = 0; i < limits.Count; i++)
+			var limitsList = limits.ToArray();
+			for (var i = 0; i < limitsList.Length; i++)
 			{
-				if (!(value >= limits[i])) continue;
+				if (!(value >= limitsList[i])) continue;
 				key = i + 1;
 				total = oldTotal + (key * multiplier);
-				return Settings.Brushes[i];
+				return SettingsWrapper.Brushes[i];
 			}
 			total = oldTotal + (9 * multiplier);
 			key = 9;

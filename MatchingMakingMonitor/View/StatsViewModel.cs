@@ -61,11 +61,11 @@ namespace MatchMakingMonitor.View
 			}
 		}
 
-		private readonly Settings _settings;
+		private readonly SettingsWrapper _settingsWrapper;
 		private List<DisplayPlayerStats> _stats;
-		public StatsViewModel(ILogger logger, StatsService statsService, Settings settings)
+		public StatsViewModel(ILogger logger, StatsService statsService, SettingsWrapper settingsWrapper)
 		{
-			_settings = settings;
+			_settingsWrapper = settingsWrapper;
 
 			DetailCommand = new RelayCommand(param => OpenPlayerDetail((string[])param));
 
@@ -80,11 +80,11 @@ namespace MatchMakingMonitor.View
 				});
 			});
 
-			_settings.UiSettingsChanged.Subscribe(async key =>
+			_settingsWrapper.UiSettingsChanged.Subscribe(async key =>
 			{
 				if (_stats == null) return;
 				logger.Info("Re-computing UI for players");
-				FontSize = _settings.FontSize;
+				FontSize = _settingsWrapper.CurrentSettings.FontSize;
 				foreach (var player in _stats)
 				{
 					await Task.Run(() =>
@@ -106,7 +106,7 @@ namespace MatchMakingMonitor.View
 		{
 			if (param[0] != "0")
 			{
-				System.Diagnostics.Process.Start($"https://{_settings.Region}.warships.today/player/{param[0]}/{param[1]}");
+				System.Diagnostics.Process.Start($"https://{_settingsWrapper.CurrentSettings.Region}.warships.today/player/{param[0]}/{param[1]}");
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MatchMakingMonitor.config.Reflection;
+using MatchMakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.config
@@ -32,7 +33,7 @@ namespace MatchMakingMonitor.config
 				case ShipType.Destroyer:
 					limitsTier = Destroyer;
 					break;
-				case ShipType.Cruiers:
+				case ShipType.Cruiser:
 					limitsTier = Destroyer;
 					break;
 				default:

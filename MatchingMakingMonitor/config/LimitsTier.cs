@@ -1,4 +1,5 @@
 ﻿using MatchMakingMonitor.config.Reflection;
+using MatchMakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.config

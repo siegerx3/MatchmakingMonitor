@@ -142,14 +142,15 @@
     <Compile Include="config\LimitsType.cs" />
     <Compile Include="config\LimitsTier.cs" />
     <Compile Include="config\LimitValue.cs" />
+    <Compile Include="config\Reflection\ColorSettingAttribute.cs" />
     <Compile Include="config\Reflection\NestedSetting.cs" />
     <Compile Include="config\Reflection\NestedSettingAttribute.cs" />
     <Compile Include="config\Reflection\NotifySettingPropertyChanged.cs" />
     <Compile Include="config\Reflection\UiSettingAttribute.cs" />
     <Compile Include="config\Region.cs" />
     <Compile Include="config\SettingsJson.cs" />
-    <Compile Include="config\ShipType.cs" />
-    <Compile Include="config\ShipTier.cs" />
+    <Compile Include="Models\ResponseTypes\ShipType.cs" />
+    <Compile Include="Models\ResponseTypes\ShipTier.cs" />
     <Compile Include="Models\DisplayPlayerStats.cs" />
     <Compile Include="Models\MobileDisplayPlayerStats.cs" />
     <Compile Include="Models\MobileSettings.cs" />
@@ -172,7 +173,7 @@
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\IocKernel.cs" />
     <Compile Include="Services\FileLogger.cs" />
-    <Compile Include="Services\Settings.cs" />
+    <Compile Include="Services\SettingsWrapper.cs" />
     <Compile Include="Services\StatsService.cs" />
     <Compile Include="Services\WatcherService.cs" />
     <Compile Include="SettingsWindow.xaml.cs">

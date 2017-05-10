@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using MatchMakingMonitor.config;
 using MatchMakingMonitor.Services;
 using MatchMakingMonitor.View.Util;
 
@@ -15,15 +16,15 @@ namespace MatchMakingMonitor.View
 
 		public ObservableCollection<string> Regions { get; } = new ObservableCollection<string>() { "NA", "EU", "RU", "SEA" };
 
-		private string _region = "NA";
+		private Region _region = Region.Na;
 
-		public string Region
+		public Region Region
 		{
 			get => _region;
 			set
 			{
 				_region = value;
-				_settings.Region = value;
+				_settingsWrapper.CurrentSettings.Region = value;
 				FirePropertyChanged();
 			}
 		}
@@ -99,15 +100,15 @@ namespace MatchMakingMonitor.View
 			}
 		}
 
-		private readonly Settings _settings;
+		private readonly SettingsWrapper _settingsWrapper;
 
-		public SubHeaderViewModel(Settings settings, StatsService statsService)
+		public SubHeaderViewModel(SettingsWrapper settingsWrapper, StatsService statsService)
 		{
-			_settings = settings;
+			_settingsWrapper = settingsWrapper;
 
 			PathClickCommand = new RelayCommand(PathClicked);
 
-			_settings.SettingChanged(Settings.KeyInstallDirectory).Subscribe(InitPath);
+			_settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(InitPath);
 			statsService.StatsStatusChanged.Subscribe(status =>
 			{
 				SetStatusText(status);
@@ -124,7 +125,7 @@ namespace MatchMakingMonitor.View
 			});
 
 
-			Region = _settings.Region;
+			Region = _settingsWrapper.CurrentSettings.Region;
 		}
 
 		public SubHeaderViewModel()
@@ -133,7 +134,7 @@ namespace MatchMakingMonitor.View
 
 		private void InitPath(string key)
 		{
-			var directory = _settings.Get<string>(key);
+			var directory = _settingsWrapper.CurrentSettings.InstallDirectory;
 			if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 			{
 				InstallDirectoryColor = Brushes.Green;
@@ -152,7 +153,7 @@ namespace MatchMakingMonitor.View
 			var result = folderBrowser.ShowDialog();
 			if (result == DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
 			{
-				_settings.InstallDirectory = folderBrowser.SelectedPath;
+				_settingsWrapper.CurrentSettings.InstallDirectory = folderBrowser.SelectedPath;
 			}
 		}
 

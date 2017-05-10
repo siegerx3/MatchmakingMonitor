@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using MatchMakingMonitor.config;
 
 namespace MatchMakingMonitor.Services
 {
@@ -9,15 +10,15 @@ namespace MatchMakingMonitor.Services
 	{
 		private bool _initialCheckDone;
 
-		private readonly Settings _settings;
+		private readonly SettingsWrapper _settingsWrapper;
 		private readonly ILogger _logger;
 
 		private readonly BehaviorSubject<string> _matchFoundSubject;
 
 		public IObservable<string> MatchFound => _matchFoundSubject.AsObservable();
-		public WatcherService(ILogger logger, Settings settings)
+		public WatcherService(ILogger logger, SettingsWrapper settingsWrapper)
 		{
-			_settings = settings;
+			_settingsWrapper = settingsWrapper;
 			_logger = logger;
 
 			_matchFoundSubject = new BehaviorSubject<string>(null);
@@ -38,9 +39,9 @@ namespace MatchMakingMonitor.Services
 			};
 
 
-			settings.SettingChanged(Settings.KeyInstallDirectory).Subscribe(key =>
+			settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(key =>
 			{
-				var directory = settings.InstallDirectory;
+				var directory = settingsWrapper.CurrentSettings.InstallDirectory;
 				if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 				{
 					fileSystemWatcher.Path = Path.Combine(directory, "replays");
@@ -55,7 +56,7 @@ namespace MatchMakingMonitor.Services
 				}
 			});
 
-			settings.SettingChanged(Settings.KeyRegion, false).Subscribe(key =>
+			settingsWrapper.SettingChanged(nameof(SettingsJson.Region), false).Subscribe(key =>
 			{
 				CheckStatic();
 			});
@@ -63,7 +64,7 @@ namespace MatchMakingMonitor.Services
 
 		private void CheckStatic()
 		{
-			var directory = _settings.InstallDirectory;
+			var directory = _settingsWrapper.CurrentSettings.InstallDirectory;
 			var path = Path.Combine(directory, "replays", "tempArenaInfo.json");
 			_logger.Info("Checking for match in path " + path);
 			if (File.Exists(path))

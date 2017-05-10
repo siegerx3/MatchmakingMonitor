@@ -21,7 +21,7 @@ namespace MatchMakingMonitor.View
 		private string _battleWeight;
 		public string BattleWeight
 		{
-			get => _battleWeight ?? (_battleWeight = Settings.BattleWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
+			get => _battleWeight ?? (_battleWeight = SettingsWrapper.CurrentSettings.BattleWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_battleWeight = value;
@@ -33,7 +33,7 @@ namespace MatchMakingMonitor.View
 		private string _fragsWeight;
 		public string FragsWeight
 		{
-			get => _fragsWeight ?? (_fragsWeight = Settings.FragsWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
+			get => _fragsWeight ?? (_fragsWeight = SettingsWrapper.CurrentSettings.FragsWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_fragsWeight = value;
@@ -45,7 +45,7 @@ namespace MatchMakingMonitor.View
 		private string _xpWeight;
 		public string XpWeight
 		{
-			get => _xpWeight ?? (_xpWeight = Settings.XpWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
+			get => _xpWeight ?? (_xpWeight = SettingsWrapper.CurrentSettings.XpWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_xpWeight = value;
@@ -57,7 +57,7 @@ namespace MatchMakingMonitor.View
 		private string _dmgWeight;
 		public string DmgWeight
 		{
-			get => _dmgWeight ?? (_dmgWeight = Settings.DmgWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
+			get => _dmgWeight ?? (_dmgWeight = SettingsWrapper.CurrentSettings.DmgWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_dmgWeight = value;
@@ -69,7 +69,7 @@ namespace MatchMakingMonitor.View
 		private string _winWeight;
 		public string WinWeight
 		{
-			get => _winWeight ?? (_winWeight = Settings.WinWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
+			get => _winWeight ?? (_winWeight = SettingsWrapper.CurrentSettings.WinWeight.ToString(CultureInfo.InvariantCulture).Replace('.', ','));
 			set
 			{
 				_winWeight = value;
@@ -105,12 +105,12 @@ namespace MatchMakingMonitor.View
 		}
 
 
-		public Settings Settings { get; set; }
+		public SettingsWrapper SettingsWrapper { get; set; }
 
 		[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
-		public SettingsWindowViewModel(Settings settings)
+		public SettingsWindowViewModel(SettingsWrapper settingsWrapper)
 		{
-			Settings = settings;
+			SettingsWrapper = settingsWrapper;
 
 			ExportCommand = new RelayCommand(Export);
 			ImportCommand = new RelayCommand(Import);
@@ -124,7 +124,7 @@ namespace MatchMakingMonitor.View
 				_fragsWeight = null;
 				_xpWeight = null;
 				_dmgWeight = null;
-				await Settings.ResetUiSettings();
+				await SettingsWrapper.ResetUiSettings();
 				FirePropertyChanged(nameof(WinWeight));
 				FirePropertyChanged(nameof(BattleWeight));
 				FirePropertyChanged(nameof(FragsWeight));
@@ -151,7 +151,7 @@ namespace MatchMakingMonitor.View
 			};
 			if (ofd.ShowDialog() == true)
 			{
-				await Settings.ImportUiSettings(ofd.FileName);
+				await SettingsWrapper.ImportUiSettings(ofd.FileName);
 			}
 		}
 
@@ -165,7 +165,7 @@ namespace MatchMakingMonitor.View
 			};
 			if (sfd.ShowDialog() == true)
 			{
-				await Settings.ExportUiSettings(sfd.FileName);
+				await SettingsWrapper.ExportUiSettings(sfd.FileName);
 			}
 		}
 
@@ -184,11 +184,11 @@ namespace MatchMakingMonitor.View
 
 				if (valid)
 				{
-					Settings.WinWeight = winWeightD;
-					Settings.BattleWeight = battleWeightD;
-					Settings.FragsWeight = fragsWeightD;
-					Settings.XpWeight = xpWeightD;
-					Settings.DmgWeight = dmgWeightD;
+					SettingsWrapper.CurrentSettings.WinWeight = winWeightD;
+					SettingsWrapper.CurrentSettings.BattleWeight = battleWeightD;
+					SettingsWrapper.CurrentSettings.FragsWeight = fragsWeightD;
+					SettingsWrapper.CurrentSettings.XpWeight = xpWeightD;
+					SettingsWrapper.CurrentSettings.DmgWeight = dmgWeightD;
 					WeightsErrorVisibility = Visibility.Hidden;
 				}
 				else

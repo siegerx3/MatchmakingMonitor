@@ -6,14 +6,14 @@ namespace MatchMakingMonitor.config.Reflection
 {
 	public class NestedSetting
 	{
-		protected Subject<string> SettingChangedSubject;
-		protected void AttachListener(System.Type type, object instance, Subject<string> settingChangedSubject)
+		protected BehaviorSubject<string> SettingChangedSubject;
+		protected void AttachListener(System.Type type, object instance, BehaviorSubject<string> settingChangedSubject)
 		{
 			SettingChangedSubject = settingChangedSubject;
 			AttachListenerStatic(type, instance, settingChangedSubject);
 		}
 
-		public static void AttachListenerStatic(System.Type type, object instance, Subject<string> settingChangedSubject)
+		public static void AttachListenerStatic(System.Type type, object instance, BehaviorSubject<string> settingChangedSubject)
 		{
 			foreach (var prop in type.GetProperties().Where(p => p.GetCustomAttribute(typeof(NestedSettingAttribute), false) != null))
 			{

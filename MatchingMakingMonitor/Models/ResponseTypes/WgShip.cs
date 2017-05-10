@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MatchMakingMonitor.Models.ResponseTypes
 {
@@ -8,9 +9,9 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 		public long ShipId { get; set; }
 		[JsonProperty("name")]
 		public string Name { get; set; }
-		[JsonProperty("type")]
-		public string Type { get; set; }
+		[JsonProperty("type"), JsonConverter(typeof(StringEnumConverter))]
+		public ShipType Type { get; set; }
 		[JsonProperty("tier")]
-		public int Tier { get; set; }
+		public ShipTier Tier { get; set; }
 	}
 }

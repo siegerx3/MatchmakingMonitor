@@ -5,10 +5,10 @@ namespace MatchMakingMonitor.config
 {
 	public class LimitValue : NotifySettingPropertyChanged
 	{
-		private int _value;
+		private double _value;
 
 		[JsonProperty("value"), UiSetting]
-		public int Value
+		public double Value
 		{
 			get => _value;
 			set { _value = value; FirePropertyChanged(); }
