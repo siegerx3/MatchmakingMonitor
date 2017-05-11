@@ -123,13 +123,13 @@ namespace MatchMakingMonitor.config
 		}
 
 		[JsonProperty("battleLimits"), NestedSetting]
-		public LimitsTier[] BattleLimits { get; set; }
+		public LimitValue[] BattleLimits { get; set; }
 
-		[JsonProperty("winLimits"), NestedSetting]
-		public LimitsTier[] WinLimits { get; set; }
+		[JsonProperty("winRateLimits"), NestedSetting]
+		public LimitValue[] WinRateLimits { get; set; }
 
 		[JsonProperty("fragsLimits"), NestedSetting]
-		public LimitsTier[] FragsLimits { get; set; }
+		public LimitValue[] FragsLimits { get; set; }
 
 		[JsonProperty("xpLimits"), NestedSetting]
 		public LimitsTier[] XpLimits { get; set; }

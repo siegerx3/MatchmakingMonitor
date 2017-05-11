@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -18,9 +17,7 @@ namespace MatchMakingMonitor.Services
 {
 	public class SettingsWrapper : BaseViewBinding
 	{
-		private static SettingsWrapper _instance;
-
-		private static JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+		private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
 		{
 			NullValueHandling = NullValueHandling.Ignore
 		};
@@ -28,35 +25,32 @@ namespace MatchMakingMonitor.Services
 		private static readonly string SettingsPath =
 			Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.json");
 
-		private readonly ILogger _logger;
-		private readonly List<PropertyInfo> _uiSettings;
-		public IReadOnlyList<PropertyInfo> UiSettings => _uiSettings.AsReadOnly();
+		private static readonly Type SettingsType = typeof(SettingsJson);
 		private readonly List<PropertyInfo> _colorSettings;
-		public IReadOnlyList<PropertyInfo> ColorSettings => _colorSettings.AsReadOnly();
+
+		private readonly ILogger _logger;
 		private readonly BehaviorSubject<string> _settingChangedSubject;
+		private readonly List<PropertyInfo> _uiSettings;
 
 		private readonly Subject<string> _uiSettingsChangedSubject;
 
-		private SettingsJson _currentSettings;
-		[NestedSetting]
-		public SettingsJson CurrentSettings => _currentSettings;
-		private static readonly Type SettingsType = typeof(SettingsJson);
-
-		public string AppId => _currentSettings.AppIds.Single(appId => appId.Region == _currentSettings.Region).Id;
-		public string BaseUrl => _currentSettings.BaseUrls.Single(baseUrl => baseUrl.Region == _currentSettings.Region).Url;
+		private readonly Subject<object> _saveQueueSubject;
 
 		public SettingsWrapper(ILogger logger)
 		{
-			_instance = this;
 			_logger = logger;
 
 			Init();
+
+			_saveQueueSubject = new Subject<object>();
+
+			_saveQueueSubject.Throttle(TimeSpan.FromSeconds(30)).Subscribe(async _ => { await InternalSave(); });
 
 			_settingChangedSubject = new BehaviorSubject<string>(string.Empty);
 			_settingChangedSubject.Where(key => key != null)
 				.Do(key => _logger.Info($"Setting ({key}) changed"))
 				.Throttle(TimeSpan.FromSeconds(2))
-				.Subscribe(async key => { await Save(); });
+				.Subscribe(key => Save());
 
 			NestedSetting.AttachListenerStatic(GetType(), this, _settingChangedSubject);
 
@@ -76,6 +70,15 @@ namespace MatchMakingMonitor.Services
 			});
 			SetBrushes();
 		}
+
+		public IReadOnlyList<PropertyInfo> UiSettings => _uiSettings.AsReadOnly();
+		public IReadOnlyList<PropertyInfo> ColorSettings => _colorSettings.AsReadOnly();
+
+		[NestedSetting]
+		public SettingsJson CurrentSettings { get; private set; }
+
+		public string AppId => CurrentSettings.AppIds.Single(appId => appId.Region == CurrentSettings.Region).Id;
+		public string BaseUrl => CurrentSettings.BaseUrls.Single(baseUrl => baseUrl.Region == CurrentSettings.Region).Url;
 
 		public IObservable<string> UiSettingsChanged => _uiSettingsChangedSubject.AsObservable();
 
@@ -110,20 +113,28 @@ namespace MatchMakingMonitor.Services
 
 		private void FromJson()
 		{
-			_currentSettings = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsPath));
+			CurrentSettings = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsPath), JsonSerializerSettings);
 		}
 
 		public async Task ExportUiSettings(string path)
 		{
-			// TODO
-			//var export = KeysUiSettings.Concat(KeysOthers).ToDictionary(key => key, key => _currentSettings.Get(key));
+			var export = new Dictionary<string, object>();
+			var props = GetUiSettingsFromType(SettingsType);
+			foreach (var prop in props)
+			{
+				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null ||
+						(prop.PropertyType.IsArray && prop.GetCustomAttribute(typeof(NestedSettingAttribute)) != null))
+				{
+					export.Add(FirstLetterToLower(prop.Name), prop.GetValue(CurrentSettings));
+				}
+			}
 
-			//var exportJson = await Task.Run(() => JsonConvert.SerializeObject(export));
+			var exportJson = await Task.Run(() => JsonConvert.SerializeObject(export, JsonSerializerSettings));
 
-			//using (var f = File.CreateText(path))
-			//{
-			//	await f.WriteAsync(exportJson);
-			//}
+			using (var f = File.CreateText(path))
+			{
+				await f.WriteAsync(exportJson);
+			}
 		}
 
 		public async Task ImportUiSettings(string path)
@@ -132,8 +143,9 @@ namespace MatchMakingMonitor.Services
 				try
 				{
 					var importJson = File.ReadAllText(path);
-					var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson));
-					await ResetUiSettings(import);
+					var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson, JsonSerializerSettings));
+					await Task.Run(() => ResetUiSettings(CurrentSettings, import));
+					await InternalSave();
 				}
 				catch (Exception e)
 				{
@@ -141,11 +153,16 @@ namespace MatchMakingMonitor.Services
 				}
 		}
 
-		public async Task Save()
+		public void Save()
+		{
+			_saveQueueSubject.Next();
+		}
+
+		private async Task InternalSave()
 		{
 			try
 			{
-				await Task.Run(() => { File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(_currentSettings)); });
+				await Task.Run(() => { File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(CurrentSettings, JsonSerializerSettings)); });
 			}
 			catch (Exception e)
 			{
@@ -163,8 +180,7 @@ namespace MatchMakingMonitor.Services
 
 		private static IEnumerable<PropertyInfo> GetUiSettings(Type type, ICollection<PropertyInfo> settings)
 		{
-			var props = type.GetProperties().Where(p => p.GetCustomAttributes()
-				.Any(a => a is UiSettingAttribute || a is NestedSettingAttribute));
+			var props = GetUiSettingsFromType(type);
 			foreach (var prop in props)
 			{
 				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null)
@@ -182,39 +198,54 @@ namespace MatchMakingMonitor.Services
 			var props = type.GetProperties().Where(p => p.GetCustomAttributes()
 				.Any(a => a is ColorSettingAttribute));
 			foreach (var prop in props)
-			{
 				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null)
 					settings.Add(prop);
-			}
 			return settings;
 		}
 
 		[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
-		public async Task ResetUiSettings(SettingsJson sourceSettings = null)
+		public static void ResetUiSettings(object targetSettings, object sourceSettings = null, Type type = null)
 		{
-			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults());
-			await Task.Run(() =>
+			if (type == null) type = SettingsType;
+			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults(), JsonSerializerSettings);
+
+			var props = GetUiSettingsFromType(type);
+			foreach (var prop in props)
 			{
-				// TODO
-			});
-			await Save();
+				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null || (prop.PropertyType.IsArray && prop.GetCustomAttribute(typeof(NestedSettingAttribute)) != null)) { }
+				prop.SetValue(targetSettings, prop.GetValue(sourceSettings));
+				if (typeof(NestedSetting).IsAssignableFrom(prop.PropertyType))
+					ResetUiSettings(prop.GetValue(targetSettings), prop.GetValue(sourceSettings), prop.PropertyType);
+			}
 		}
 
-		private void FireSettingChanged(string key)
+		private static IEnumerable<PropertyInfo> GetUiSettingsFromType(Type type)
 		{
-			_settingChangedSubject.OnNext(key);
+			return type.GetProperties().Where(p => p.GetCustomAttributes()
+				.Any(a => a is UiSettingAttribute || a is NestedSettingAttribute));
 		}
 
 		private void SetBrushes()
 		{
 			Brushes = _colorSettings.Select(prop =>
 			{
-				var convertFromString = ColorConverter.ConvertFromString((string)prop.GetValue(_currentSettings));
+				var convertFromString = ColorConverter.ConvertFromString((string)prop.GetValue(CurrentSettings));
 				if (convertFromString == null) return System.Windows.Media.Brushes.Black;
 				var brush = new SolidColorBrush((Color)convertFromString);
 				brush.Freeze();
 				return brush;
 			}).ToArray();
+		}
+
+		private static string FirstLetterToLower(string str)
+		{
+			if (str == null)
+				return null;
+
+			if (str.Length > 1)
+				return char.ToLower(str[0]) + str.Substring(1);
+
+			return str.ToLower();
 		}
 	}
 }

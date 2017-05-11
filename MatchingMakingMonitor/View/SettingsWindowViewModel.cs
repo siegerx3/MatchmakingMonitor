@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows;
 using MatchMakingMonitor.Services;
 using MatchMakingMonitor.View.Util;
@@ -124,7 +125,7 @@ namespace MatchMakingMonitor.View
 				_fragsWeight = null;
 				_xpWeight = null;
 				_dmgWeight = null;
-				await SettingsWrapper.ResetUiSettings();
+				await Task.Run(() => SettingsWrapper.ResetUiSettings(settingsWrapper.CurrentSettings));
 				FirePropertyChanged(nameof(WinWeight));
 				FirePropertyChanged(nameof(BattleWeight));
 				FirePropertyChanged(nameof(FragsWeight));

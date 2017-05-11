@@ -171,15 +171,15 @@ namespace MatchMakingMonitor.Models
 				double totalRating = 0;
 				if (!Player.IsPrivateOrHidden)
 				{
-					ColorWinRate = GetColor(WinRate, SettingsWrapper.CurrentSettings.WinLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.WinWeight, out totalRating,
+					ColorWinRate = GetColor(WinRate, SettingsWrapper.CurrentSettings.WinRateLimits.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.WinWeight, out totalRating,
 						out _colorWinRateKey);
-					ColorAvgFrags = GetColor(AvgFrags, SettingsWrapper.CurrentSettings.FragsLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.FragsWeight, out totalRating,
+					ColorAvgFrags = GetColor(AvgFrags, SettingsWrapper.CurrentSettings.FragsLimits.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.FragsWeight, out totalRating,
 						out _colorAvgFragsKey);
 					ColorAvgXp = GetColor(AvgXp, SettingsWrapper.CurrentSettings.XpLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.XpWeight, out totalRating,
 						out _colorAvgXpKey);
 					ColorAvgDamage = GetColor(AvgDamage, SettingsWrapper.CurrentSettings.DmgLimits.GetLimits(Player.ShipType, Player.ShipTier).Select(v => v.Value), totalRating,
 						SettingsWrapper.CurrentSettings.DmgWeight, out totalRating, out _colorAvgDamageKey);
-					ColorBattles = GetColor(Player.Battles, SettingsWrapper.CurrentSettings.BattleLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.BattleWeight, out totalRating,
+					ColorBattles = GetColor(Player.Battles, SettingsWrapper.CurrentSettings.BattleLimits.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.BattleWeight, out totalRating,
 						out _colorBattlesKey);
 
 					_colorNameKey = (int)Math.Floor(totalRating / 5);
