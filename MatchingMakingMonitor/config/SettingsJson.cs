@@ -29,14 +29,24 @@ namespace MatchMakingMonitor.config
 		public string InstallDirectory
 		{
 			get => _installDirectory;
-			set { _installDirectory = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _installDirectory;
+				_installDirectory = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("region")]
 		public Region Region
 		{
 			get => _region;
-			set { _region = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _region;
+				_region = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("appIds")]
@@ -49,77 +59,132 @@ namespace MatchMakingMonitor.config
 		public string Token
 		{
 			get => _token;
-			set { _token = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _token;
+				_token = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color1"), UiSetting, ColorSetting]
 		public string Color1
 		{
 			get => _color1;
-			set { _color1 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color1;
+				_color1 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color2"), UiSetting, ColorSetting]
 		public string Color2
 		{
 			get => _color2;
-			set { _color2 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color2;
+				_color2 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color3"), UiSetting, ColorSetting]
 		public string Color3
 		{
 			get => _color3;
-			set { _color3 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color3;
+				_color3 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color4"), UiSetting, ColorSetting]
 		public string Color4
 		{
 			get => _color4;
-			set { _color4 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color4;
+				_color4 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color5"), UiSetting, ColorSetting]
 		public string Color5
 		{
 			get => _color5;
-			set { _color5 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color5;
+				_color5 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color6"), UiSetting, ColorSetting]
 		public string Color6
 		{
 			get => _color6;
-			set { _color6 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color6;
+				_color6 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color7"), UiSetting, ColorSetting]
 		public string Color7
 		{
 			get => _color7;
-			set { _color7 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color7;
+				_color7 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color8"), UiSetting, ColorSetting]
 		public string Color8
 		{
 			get => _color8;
-			set { _color8 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color8;
+				_color8 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("color9"), UiSetting, ColorSetting]
 		public string Color9
 		{
 			get => _color9;
-			set { _color9 = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _color9;
+				_color9 = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("fontSize"), UiSetting]
 		public int FontSize
 		{
 			get => _fontSize;
-			set { _fontSize = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _fontSize;
+				_fontSize = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("battleLimits"), NestedSetting]
@@ -141,35 +206,60 @@ namespace MatchMakingMonitor.config
 		public double BattleWeight
 		{
 			get => _battleWeight;
-			set { _battleWeight = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _battleWeight;
+				_battleWeight = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("fragsWeight"), UiSetting]
 		public double FragsWeight
 		{
 			get => _fragsWeight;
-			set { _fragsWeight = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _fragsWeight;
+				_fragsWeight = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("xpWeight"), UiSetting]
 		public double XpWeight
 		{
 			get => _xpWeight;
-			set { _xpWeight = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _xpWeight;
+				_xpWeight = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("dmgWeight"), UiSetting]
 		public double DmgWeight
 		{
 			get => _dmgWeight;
-			set { _dmgWeight = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _dmgWeight;
+				_dmgWeight = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 
 		[JsonProperty("winWeight"), UiSetting]
 		public double WinWeight
 		{
 			get => _winWeight;
-			set { _winWeight = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _winWeight;
+				_winWeight = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 	}
 }

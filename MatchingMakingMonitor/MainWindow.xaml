@@ -52,7 +52,7 @@
 					<TextBlock Text="Region:" Margin="0,0,10,0" VerticalAlignment="Center" Height="19" />
 					<ComboBox VerticalAlignment="Center" Width="90" 
 										ItemsSource="{Binding Regions}"
-										SelectedValue="{Binding Region}"
+										SelectedValue="{Binding SettingsWrapper.CurrentSettings.Region}"
 										IsEnabled="{Binding EnableUi}">
 					</ComboBox>
 				</StackPanel>

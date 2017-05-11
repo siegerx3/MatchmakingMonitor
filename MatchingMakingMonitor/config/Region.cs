@@ -1,10 +1,11 @@
-﻿namespace MatchMakingMonitor.config
+﻿// ReSharper disable InconsistentNaming
+namespace MatchMakingMonitor.config
 {
 	public enum Region
 	{
-		Eu,
-		Na,
-		Ru,
-		Sea
+		EU,
+		NA,
+		RU,
+		SEA
 	}
 }

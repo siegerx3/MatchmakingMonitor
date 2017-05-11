@@ -29,10 +29,10 @@ namespace MatchMakingMonitor.Services
 		private readonly List<PropertyInfo> _colorSettings;
 
 		private readonly ILogger _logger;
-		private readonly BehaviorSubject<string> _settingChangedSubject;
+		private readonly BehaviorSubject<ChangedSetting> _settingChangedSubject;
 		private readonly List<PropertyInfo> _uiSettings;
 
-		private readonly Subject<string> _uiSettingsChangedSubject;
+		private readonly Subject<ChangedSetting> _uiSettingsChangedSubject;
 
 		private readonly Subject<object> _saveQueueSubject;
 
@@ -46,9 +46,9 @@ namespace MatchMakingMonitor.Services
 
 			_saveQueueSubject.Throttle(TimeSpan.FromSeconds(30)).Subscribe(async _ => { await InternalSave(); });
 
-			_settingChangedSubject = new BehaviorSubject<string>(string.Empty);
-			_settingChangedSubject.Where(key => key != null)
-				.Do(key => _logger.Info($"Setting ({key}) changed"))
+			_settingChangedSubject = new BehaviorSubject<ChangedSetting>(null);
+			_settingChangedSubject.Where(setting => setting?.Key != null && setting.HasChanged)
+				.Do(setting => _logger.Info($"Setting ({setting.Key}) changed from '{setting.OldValue}' to '{setting.NewValue}'"))
 				.Throttle(TimeSpan.FromSeconds(2))
 				.Subscribe(key => Save());
 
@@ -58,15 +58,15 @@ namespace MatchMakingMonitor.Services
 
 			_uiSettings = GetUiSettings(SettingsType, new List<PropertyInfo>(10)).ToList();
 
-			_uiSettingsChangedSubject = new Subject<string>();
+			_uiSettingsChangedSubject = new Subject<ChangedSetting>();
 
 			var uiSettingsChangedInternal = _uiSettings.Select(prop => SettingChanged(prop.Name, false)).Merge()
 				.Throttle(TimeSpan.FromMilliseconds(500));
 
-			uiSettingsChangedInternal.Subscribe(key =>
+			uiSettingsChangedInternal.Subscribe(changedSetting =>
 			{
 				SetBrushes();
-				_uiSettingsChangedSubject.OnNext(key);
+				_uiSettingsChangedSubject.OnNext(changedSetting);
 			});
 			SetBrushes();
 		}
@@ -80,7 +80,7 @@ namespace MatchMakingMonitor.Services
 		public string AppId => CurrentSettings.AppIds.Single(appId => appId.Region == CurrentSettings.Region).Id;
 		public string BaseUrl => CurrentSettings.BaseUrls.Single(baseUrl => baseUrl.Region == CurrentSettings.Region).Url;
 
-		public IObservable<string> UiSettingsChanged => _uiSettingsChangedSubject.AsObservable();
+		public IObservable<ChangedSetting> UiSettingsChanged => _uiSettingsChangedSubject.AsObservable();
 
 		public SolidColorBrush[] Brushes { get; private set; }
 
@@ -170,11 +170,11 @@ namespace MatchMakingMonitor.Services
 			}
 		}
 
-		public IObservable<string> SettingChanged(string key, bool initial = true)
+		public IObservable<ChangedSetting> SettingChanged(string key, bool initial = true)
 		{
-			var obs = _settingChangedSubject.AsObservable().Where(k => key == k);
+			var obs = _settingChangedSubject.AsObservable().Where(s => s != null && (s.Key == key && s.HasChanged || s.Initial));
 			if (initial)
-				_settingChangedSubject.OnNext(key);
+				_settingChangedSubject.OnNext(new ChangedSetting(null, null, key) { Initial = true });
 			return obs;
 		}
 

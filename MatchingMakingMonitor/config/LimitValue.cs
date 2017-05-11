@@ -11,7 +11,12 @@ namespace MatchMakingMonitor.config
 		public double Value
 		{
 			get => _value;
-			set { _value = value; FirePropertyChanged(); }
+			set
+			{
+				var oldValue = _value;
+				_value = value;
+				FirePropertyChanged(oldValue, value);
+			}
 		}
 	}
 }

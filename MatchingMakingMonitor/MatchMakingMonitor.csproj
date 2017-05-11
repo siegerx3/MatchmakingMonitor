@@ -142,6 +142,7 @@
     <Compile Include="config\LimitsType.cs" />
     <Compile Include="config\LimitsTier.cs" />
     <Compile Include="config\LimitValue.cs" />
+    <Compile Include="config\Reflection\ChangedSetting.cs" />
     <Compile Include="config\Reflection\ColorSettingAttribute.cs" />
     <Compile Include="config\Reflection\NestedSetting.cs" />
     <Compile Include="config\Reflection\NestedSettingAttribute.cs" />

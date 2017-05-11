@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:config="clr-namespace:MatchMakingMonitor.config"
         mc:Ignorable="d"
 				Icon="Images/favicon.ico" 
         Title="UI Settings" MinHeight="720" MinWidth="700" Height="720" Width="800"
@@ -49,8 +50,21 @@
 				<RowDefinition Height="1*"></RowDefinition>
 				<RowDefinition Height="1*"></RowDefinition>
 			</Grid.RowDefinitions>
+			<Grid.Resources>
+				<ResourceDictionary>
+					<DataTemplate x:Key="ValueInt" DataType="config:LimitValue">
+						<TextBox Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" ></TextBox>
+					</DataTemplate>
+					<DataTemplate x:Key="ValueDouble" DataType="config:LimitValue">
+						<TextBox Margin="5" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" ></TextBox>
+					</DataTemplate>
+					<DataTemplate x:Key="ValuePercent" DataType="config:LimitValue">
+
+					</DataTemplate>
+				</ResourceDictionary>
+			</Grid.Resources>
 			<!--#region Row 0-->
-			<!--
+			
 			<TextBlock Grid.Column="1" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Super-unicum"  />
 			<TextBlock Grid.Column="2" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Unicum"  />
 			<TextBlock Grid.Column="3" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Great"  />
@@ -60,10 +74,10 @@
 			<TextBlock Grid.Column="7" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Below average"  />
 			<TextBlock Grid.Column="8" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Bad"  />
 			<TextBlock Grid.Column="9" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Very bad"  />
-			-->
+			
 			<!--#endregion-->
 			<!--#region Row 1-->
-			<!--
+			
 			<TextBlock Grid.Column="0" Grid.Row="1" FontWeight="Bold" Text="Colors" VerticalAlignment="Center"></TextBlock>
 			<StackPanel Grid.Column="1" Grid.Row="1" Margin="5">
 				<xctk:ColorPicker SelectedColor="{Binding SettingsWrapper.Color9}"></xctk:ColorPicker>
@@ -92,7 +106,7 @@
 			<StackPanel Grid.Column="9" Grid.Row="1" Margin="5">
 				<xctk:ColorPicker SelectedColor="{Binding SettingsWrapper.Color1}"></xctk:ColorPicker>
 			</StackPanel>
-			-->
+			
 			<!--#endregion-->
 			<!--#region Row 2-->
 			<!--
