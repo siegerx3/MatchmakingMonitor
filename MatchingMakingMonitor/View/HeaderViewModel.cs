@@ -5,7 +5,7 @@ using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.View
 {
-	public class HeaderViewModel : BaseViewBinding
+	public class HeaderViewModel : ViewModelBase
 	{
 		public RelayCommand LogoClickCommand { get; set; }
 		public RelayCommand SettingsCommand { get; set; }

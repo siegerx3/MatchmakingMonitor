@@ -11,7 +11,7 @@ using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.View
 {
-	public class SubHeaderViewModel : BaseViewBinding
+	public class SubHeaderViewModel : ViewModelBase
 	{
 		public RelayCommand PathClickCommand { get; set; }
 

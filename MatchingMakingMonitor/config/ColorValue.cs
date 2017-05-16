@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.config
 {
-	public class LimitValue
+	public class ColorValue
 	{
 		[JsonProperty("value"), UiSetting]
-		public double Value { get; set; }
+		public string Value { get; set; }
 	}
 }

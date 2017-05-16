@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using MatchMakingMonitor.Services;
+using MatchMakingMonitor.View.Settings;
 
 namespace MatchMakingMonitor.View.Util
 {

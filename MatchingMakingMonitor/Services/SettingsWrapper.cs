@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Services
 {
-	public class SettingsWrapper : BaseViewBinding
+	public class SettingsWrapper : ViewModelBase
 	{
 		private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
 		{
@@ -29,7 +29,7 @@ namespace MatchMakingMonitor.Services
 		private readonly List<PropertyInfo> _colorSettings;
 
 		private readonly ILogger _logger;
-		private readonly BehaviorSubject<ChangedSetting> _settingChangedSubject;
+		public readonly BehaviorSubject<ChangedSetting> SettingChangedSubject;
 		private readonly List<PropertyInfo> _uiSettings;
 
 		private readonly Subject<ChangedSetting> _uiSettingsChangedSubject;
@@ -46,13 +46,11 @@ namespace MatchMakingMonitor.Services
 
 			_saveQueueSubject.Throttle(TimeSpan.FromSeconds(30)).Subscribe(async _ => { await InternalSave(); });
 
-			_settingChangedSubject = new BehaviorSubject<ChangedSetting>(null);
-			_settingChangedSubject.Where(setting => setting?.Key != null && setting.HasChanged)
+			SettingChangedSubject = new BehaviorSubject<ChangedSetting>(null);
+			SettingChangedSubject.Where(setting => setting?.Key != null && setting.HasChanged)
 				.Do(setting => _logger.Info($"Setting ({setting.Key}) changed from '{setting.OldValue}' to '{setting.NewValue}'"))
 				.Throttle(TimeSpan.FromSeconds(2))
 				.Subscribe(key => Save());
-
-			NestedSetting.AttachListenerStatic(GetType(), this, _settingChangedSubject);
 
 			_colorSettings = GetColorSettings(SettingsType, new List<PropertyInfo>(10)).ToList();
 
@@ -172,9 +170,9 @@ namespace MatchMakingMonitor.Services
 
 		public IObservable<ChangedSetting> SettingChanged(string key, bool initial = true)
 		{
-			var obs = _settingChangedSubject.AsObservable().Where(s => s != null && (s.Key == key && s.HasChanged || s.Initial));
+			var obs = SettingChangedSubject.AsObservable().Where(s => s != null && (s.Key == key && s.HasChanged || s.Initial));
 			if (initial)
-				_settingChangedSubject.OnNext(new ChangedSetting(null, null, key) { Initial = true });
+				SettingChangedSubject.OnNext(new ChangedSetting(null, null, key) { Initial = true });
 			return obs;
 		}
 

@@ -37,7 +37,7 @@ namespace MatchMakingMonitor.Services
 			_statsStatusChangedSubject = new BehaviorSubject<StatsStatus>(StatsStatus.Waiting);
 			_statsSubject = new BehaviorSubject<List<DisplayPlayerStats>>(null);
 
-			watcherService.MatchFound.Subscribe(path =>
+			watcherService.MatchFound.Where(path => path != null).Subscribe(path =>
 			{
 				Task.Run(async () =>
 				{
@@ -66,7 +66,7 @@ namespace MatchMakingMonitor.Services
 			{
 				var region = _settingsWrapper.CurrentSettings.Region;
 				if (_currentReplay == null || region != _currentRegion ||
-				    (_currentReplay != null && replay.DateTime > _currentReplay.DateTime))
+						(_currentReplay != null && replay.DateTime > _currentReplay.DateTime))
 				{
 					_logger.Info("Valid replay found. Fetching stats");
 					_currentReplay = replay;

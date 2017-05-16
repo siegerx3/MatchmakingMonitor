@@ -141,12 +141,12 @@
     <Compile Include="config\AppId.cs" />
     <Compile Include="config\LimitsType.cs" />
     <Compile Include="config\LimitsTier.cs" />
+    <Compile Include="config\ColorValue.cs" />
     <Compile Include="config\LimitValue.cs" />
     <Compile Include="config\Reflection\ChangedSetting.cs" />
     <Compile Include="config\Reflection\ColorSettingAttribute.cs" />
     <Compile Include="config\Reflection\NestedSetting.cs" />
     <Compile Include="config\Reflection\NestedSettingAttribute.cs" />
-    <Compile Include="config\Reflection\NotifySettingPropertyChanged.cs" />
     <Compile Include="config\Reflection\UiSettingAttribute.cs" />
     <Compile Include="config\Region.cs" />
     <Compile Include="config\SettingsJson.cs" />
@@ -182,14 +182,18 @@
     </Compile>
     <Compile Include="SocketIO\LiveMatchSocket.cs" />
     <Compile Include="SocketIO\SocketIOService.cs" />
-    <Compile Include="View\Util\BaseViewBinding.cs" />
-    <Compile Include="View\Util\PercentageStringFormatConverter.cs" />
+    <Compile Include="View\Settings\ColorEditor.cs" />
+    <Compile Include="View\Settings\ILimitsEditor.cs" />
+    <Compile Include="View\Settings\DoubleLimitsEditor.cs" />
+    <Compile Include="View\Settings\LimitsViewModel.cs" />
+    <Compile Include="View\Settings\WeightEditor.cs" />
+    <Compile Include="View\Util\ViewModelBase.cs" />
     <Compile Include="View\SubHeaderViewModel.cs" />
     <Compile Include="View\HeaderViewModel.cs" />
     <Compile Include="View\MainWindowViewModel.cs" />
     <Compile Include="View\QrCodeViewModel.cs" />
     <Compile Include="View\Util\RelayCommand.cs" />
-    <Compile Include="View\SettingsWindowViewModel.cs" />
+    <Compile Include="View\Settings\SettingsWindowViewModel.cs" />
     <Compile Include="View\StatsViewModel.cs" />
     <Compile Include="View\Util\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">

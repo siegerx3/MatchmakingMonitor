@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.config
 {
-	public class LimitsType
+	public class LimitsType : NestedSetting
 	{
 		[JsonProperty("destroyer"), NestedSetting]
 		public LimitsTier[] Destroyer { get; set; }

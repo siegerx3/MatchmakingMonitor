@@ -10,7 +10,7 @@ using MatchMakingMonitor.View.Util;
 
 namespace MatchMakingMonitor.View
 {
-	public class StatsViewModel : BaseViewBinding
+	public class StatsViewModel : ViewModelBase
 	{
 		public RelayCommand DetailCommand { get; set; }
 

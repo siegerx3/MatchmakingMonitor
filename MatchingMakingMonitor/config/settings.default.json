@@ -38,15 +38,17 @@
 		}
 	],
 	"token": "",
-	"color1": "#930d0d",
-	"color2": "#cd3333",
-	"color3": "#cc7a00",
-	"color4": "#ccb800",
-	"color5": "#4d7326",
-	"color6": "#4099bf",
-	"color7": "#3972c6",
-	"color8": "#793db6",
-	"color9": "#401070",
+	"colors": [
+		{ "value": "#930d0d" },
+		{ "value": "#cd3333" },
+		{ "value": "#cc7a00" },
+		{ "value": "#ccb800" },
+		{ "value": "#4d7326" },
+		{ "value": "#4099bf" },
+		{ "value": "#3972c6" },
+		{ "value": "#793db6" },
+		{ "value": "#401070" }
+	],
 	"fontSize": 12,
 	"battleLimits": [
 		{ "value": 150 },
@@ -70,7 +72,7 @@
 		{ "value": 20 },
 		{ "value": 0 }
 	],
-	"fragsLimits": [
+	"avgFragsLimits": [
 		{ "value": 1.5 },
 		{ "value": 1.3 },
 		{ "value": 1.1 },
@@ -81,7 +83,7 @@
 		{ "value": 0.2 },
 		{ "value": 0 }
 	],
-	"xpLimits": [
+	"avgXpLimits": [
 		{
 			"tier": 1,
 			"values": [
@@ -223,7 +225,7 @@
 			]
 		}
 	],
-	"dmgLimits": {
+	"avgDmgLimits": {
 		"destroyer": [
 			{
 				"tier": 1,
@@ -793,9 +795,9 @@
 			}
 		]
 	},
-	"battleWeight": 1.2,
-	"fragsWeight": 1.1,
-	"xpWeight": 0.8,
-	"dmgWeight": 0.9,
+	"BattleWeight": 1.2,
+	"avgFragsWeight": 1.1,
+	"avgXpWeight": 0.8,
+	"avgDmgWeight": 0.9,
 	"winWeight": 1
 }
