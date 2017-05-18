@@ -23,10 +23,10 @@ namespace MatchMakingMonitor.View.Settings
 
 
 		private readonly BehaviorSubject<ChangedSetting> _changedSubject;
-		private readonly LimitValue[] _values;
+		private readonly double[] _values;
 		private Action _valuesChanged;
 		private readonly bool _initial;
-		public DoubleLimitsEditor(BehaviorSubject<ChangedSetting> changedSubject, LimitValue[] values)
+		public DoubleLimitsEditor(BehaviorSubject<ChangedSetting> changedSubject, double[] values)
 		{
 			_changedSubject = changedSubject;
 			_values = values;
@@ -38,19 +38,19 @@ namespace MatchMakingMonitor.View.Settings
 
 		public void LoadValues()
 		{
-			_value1 = _values.ElementAt(0).Value;
-			_value2 = _values.ElementAt(1).Value;
-			_value3 = _values.ElementAt(2).Value;
-			_value4 = _values.ElementAt(3).Value;
-			_value5 = _values.ElementAt(4).Value;
-			_value6 = _values.ElementAt(5).Value;
-			_value7 = _values.ElementAt(6).Value;
-			_value8 = _values.ElementAt(7).Value;
-			_value9 = _values.ElementAt(8).Value;
+			_value1 = _values[0];
+			_value2 = _values[1];
+			_value3 = _values[2];
+			_value4 = _values[3];
+			_value5 = _values[4];
+			_value6 = _values[5];
+			_value7 = _values[6];
+			_value8 = _values[7];
+			_value9 = _values[8];
 			_valuesChanged?.Invoke();
 			if (!_initial)
 			{
-				_changedSubject.OnNext(new ChangedSetting(null, null, "UISetting"));
+				_changedSubject.OnNext(new ChangedSetting(true, false));
 			}
 		}
 
@@ -59,19 +59,14 @@ namespace MatchMakingMonitor.View.Settings
 			_valuesChanged = action;
 		}
 
-		public ILimitsEditor Init(LimitValue[] values)
-		{
-
-			return this;
-		}
-
-		private bool UpdateValue(string value, ref double field)
+		private bool UpdateValue(string value, int index, ref double field)
 		{
 			var oldValue = field;
 			double newValue;
 			if (!double.TryParse(value, out newValue)) return false;
 			field = newValue;
-			_changedSubject.OnNext(new ChangedSetting(oldValue, newValue, "Value"));
+			_values[index] = newValue;
+			_changedSubject.OnNext(new ChangedSetting(oldValue, newValue));
 			return true;
 		}
 
@@ -87,47 +82,47 @@ namespace MatchMakingMonitor.View.Settings
 
 		public bool UpdateValue1(string value)
 		{
-			return UpdateValue(value, ref _value1);
+			return UpdateValue(value, 0, ref _value1);
 		}
 
 		public bool UpdateValue2(string value)
 		{
-			return UpdateValue(value, ref _value2);
+			return UpdateValue(value, 1, ref _value2);
 		}
 
 		public bool UpdateValue3(string value)
 		{
-			return UpdateValue(value, ref _value3);
+			return UpdateValue(value, 2, ref _value3);
 		}
 
 		public bool UpdateValue4(string value)
 		{
-			return UpdateValue(value, ref _value4);
+			return UpdateValue(value, 3, ref _value4);
 		}
 
 		public bool UpdateValue5(string value)
 		{
-			return UpdateValue(value, ref _value5);
+			return UpdateValue(value, 4, ref _value5);
 		}
 
 		public bool UpdateValue6(string value)
 		{
-			return UpdateValue(value, ref _value6);
+			return UpdateValue(value, 5, ref _value6);
 		}
 
 		public bool UpdateValue7(string value)
 		{
-			return UpdateValue(value, ref _value7);
+			return UpdateValue(value, 6, ref _value7);
 		}
 
 		public bool UpdateValue8(string value)
 		{
-			return UpdateValue(value, ref _value8);
+			return UpdateValue(value, 7, ref _value8);
 		}
 
 		public bool UpdateValue9(string value)
 		{
-			return UpdateValue(value, ref _value9);
+			return UpdateValue(value, 8, ref _value9);
 		}
 	}
 }

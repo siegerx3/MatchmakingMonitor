@@ -67,7 +67,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value2 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value2);
+					_limitsEditor.UpdateValue2(_value2);
 				FirePropertyChanged();
 			}
 		}
@@ -81,7 +81,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value3 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value3);
+					_limitsEditor.UpdateValue3(_value3);
 				FirePropertyChanged();
 			}
 		}
@@ -95,7 +95,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value4 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value4);
+					_limitsEditor.UpdateValue4(_value4);
 				FirePropertyChanged();
 			}
 		}
@@ -109,7 +109,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value5 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value5);
+					_limitsEditor.UpdateValue5(_value5);
 				FirePropertyChanged();
 			}
 		}
@@ -123,7 +123,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value6 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value6);
+					_limitsEditor.UpdateValue6(_value6);
 				FirePropertyChanged();
 			}
 		}
@@ -137,7 +137,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value7 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value7);
+					_limitsEditor.UpdateValue7(_value7);
 				FirePropertyChanged();
 			}
 		}
@@ -151,7 +151,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value8 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value8);
+					_limitsEditor.UpdateValue8(_value8);
 				FirePropertyChanged();
 			}
 		}
@@ -165,7 +165,7 @@ namespace MatchMakingMonitor.View.Settings
 			{
 				_value9 = value;
 				if (!suppressUpdate)
-					_limitsEditor.UpdateValue1(_value9);
+					_limitsEditor.UpdateValue9(_value9);
 				FirePropertyChanged();
 			}
 		}

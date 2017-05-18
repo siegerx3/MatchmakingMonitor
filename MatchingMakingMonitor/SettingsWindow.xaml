@@ -41,14 +41,14 @@
 		</ResourceDictionary>
 	</Window.Resources>
 	<StackPanel Orientation="Vertical" Margin="10" Height="Auto">
-		<!--<StackPanel x:Name="TextPanel" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true">
+		<StackPanel x:Name="TextPanel" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="auto" Height="auto" CanVerticallyScroll="true">
 			<TextBlock Text="Text Size" />
 			<ComboBox x:Name="ComboTextSizes" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
 								ItemsSource="{Binding FontSizes}"
-								SelectedValue="{Binding SettingsWrapper.CurrentSettings.FontSize}"
+								SelectedValue="{Binding FontSize}"
 								>
 			</ComboBox>
-		</StackPanel>-->
+		</StackPanel>
 		<Grid Name="SettingsGrid" VerticalAlignment="Top" Margin="0,10,0,10">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1.3*"></ColumnDefinition>
@@ -77,38 +77,53 @@
 			<TextBlock Grid.Column="7" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Below average"  />
 			<TextBlock Grid.Column="8" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Bad"  />
 			<TextBlock Grid.Column="9" Grid.Row="0" FontSize="11" HorizontalAlignment="Center" Text="Very bad"  />
-
-			<!--
-			<TextBlock Grid.Column="0" Grid.Row="2" FontSize="10" FontWeight="Bold" Text="Battle limits" VerticalAlignment="Center"></TextBlock>
-			<TextBox Grid.Column="1" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[0], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="2" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[1], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="3" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[2], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="4" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[3], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="5" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[4], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="6" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[5], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="7" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[6], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="8" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[7], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			<TextBox Grid.Column="9" Grid.Row="2" Margin="5" TextAlignment="Center" PreviewTextInput="IntValidationTextBox" Text="{Binding SettingsWrapper.BattleLimits[8], UpdateSourceTrigger=PropertyChanged}" ></TextBox>
-			-->
-			<!--#endregion-->
 		</Grid>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1.3*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0" FontSize="10" FontWeight="Bold" Text="Colors" VerticalAlignment="Center"></TextBlock>
+			<xctk:ColorPicker Grid.Column="1" Margin="5" SelectedColor="{Binding ColorsViewModel.Color9}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="2" Margin="5" SelectedColor="{Binding ColorsViewModel.Color8}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="3" Margin="5" SelectedColor="{Binding ColorsViewModel.Color7}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="4" Margin="5" SelectedColor="{Binding ColorsViewModel.Color6}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="5" Margin="5" SelectedColor="{Binding ColorsViewModel.Color5}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="6" Margin="5" SelectedColor="{Binding ColorsViewModel.Color4}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="7" Margin="5" SelectedColor="{Binding ColorsViewModel.Color3}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="8" Margin="5" SelectedColor="{Binding ColorsViewModel.Color2}"></xctk:ColorPicker>
+			<xctk:ColorPicker Grid.Column="9" Margin="5" SelectedColor="{Binding ColorsViewModel.Color1}"></xctk:ColorPicker>
+		</Grid>
+		<!--<StackPanel>
+			
+		</StackPanel>-->
 		<ItemsControl ItemsSource="{Binding StaticViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
-		<ItemsControl ItemsSource="{Binding AvgXpViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
 		<TabControl BorderThickness="0" Margin="0" Padding="0">
-			<TabItem Header="Battleship" Margin="0">
+			<TabItem Header="Avg Xp">
+				<ItemsControl ItemsSource="{Binding AvgXpViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
+			</TabItem>
+			<TabItem Header="Avg Dmg Battleship">
 				<ItemsControl ItemsSource="{Binding AvgDmgBattleshipViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
 			</TabItem>
-			<TabItem Header="Cruiser">
+			<TabItem Header="Avg Dmg Cruiser">
 				<ItemsControl ItemsSource="{Binding AvgDmgCruiserViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
 			</TabItem>
-			<TabItem Header="Destroyer">
+			<TabItem Header="Avg Dmg Destroyer">
 				<ItemsControl ItemsSource="{Binding AvgDmgDestroyerViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
 			</TabItem>
-			<TabItem Header="AirCarrier">
+			<TabItem Header="Avg Dmg AirCarrier">
 				<ItemsControl ItemsSource="{Binding AvgDmgAirCarrierViewModels}" ItemTemplate="{StaticResource LimitValuesEditor}" />
 			</TabItem>
 		</TabControl>
-		<!--<Grid Margin="0,10,0,10">
+		<Grid Margin="0,10,0,10">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
@@ -128,18 +143,18 @@
 			<TextBlock Grid.Column="5" Grid.Row="0" FontSize="10" HorizontalAlignment="Center" Text="Damage"  />
 
 			<TextBlock Grid.Column="0" Grid.Row="1" FontSize="10" FontWeight="Bold" Text="Calculation weights" VerticalAlignment="Center"></TextBlock>
-			<TextBox Grid.Row="1" Grid.Column="1" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding BattleWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-			<TextBox Grid.Row="1" Grid.Column="2" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding WinWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-			<TextBox Grid.Row="1" Grid.Column="3" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding FragsWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-			<TextBox Grid.Row="1" Grid.Column="4" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding XpWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-			<TextBox Grid.Row="1" Grid.Column="5" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding DmgWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-		</Grid>-->
-		<!--<TextBlock Visibility="{Binding WeightsErrorVisibility}" Foreground="OrangeRed" HorizontalAlignment="Center" Text="{Binding WeightsErrorText}"></TextBlock>
+			<TextBox Grid.Row="1" Grid.Column="1" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding WeightsViewModel.BattleWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+			<TextBox Grid.Row="1" Grid.Column="2" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding WeightsViewModel.WinRateWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+			<TextBox Grid.Row="1" Grid.Column="3" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding WeightsViewModel.AvgFragsWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+			<TextBox Grid.Row="1" Grid.Column="4" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding WeightsViewModel.AvgXpWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+			<TextBox Grid.Row="1" Grid.Column="5" Width="50" TextAlignment="Center" PreviewTextInput="DoubleValidationTextBox" Text="{Binding WeightsViewModel.AvgDmgWeight, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+		</Grid>
+		<TextBlock Visibility="{Binding WeightsViewModel.ValidationError}" Foreground="OrangeRed" HorizontalAlignment="Center" Text="{Binding WeightsViewModel.ValidationErrorText}"></TextBlock>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
 			<Button VerticalAlignment="Bottom" HorizontalContentAlignment="Right" Margin="0,0,5,0" Padding="5,2" Content="Import settings" Command="{Binding ImportCommand}"></Button>
 			<Button VerticalAlignment="Bottom" HorizontalContentAlignment="Right" Margin="5,0,5,0" Padding="5,2"  Content="Export settings" Command="{Binding ExportCommand}"></Button>
 			<Button VerticalAlignment="Bottom" HorizontalContentAlignment="Right" Margin="5,0,0,0" Padding="5,2" Content="Reset settings" Command="{Binding ResetCommand}"></Button>
-		</StackPanel>-->
+		</StackPanel>
 
 	</StackPanel>
 </Window>

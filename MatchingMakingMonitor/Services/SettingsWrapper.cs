@@ -26,11 +26,9 @@ namespace MatchMakingMonitor.Services
 			Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "settings.json");
 
 		private static readonly Type SettingsType = typeof(SettingsJson);
-		private readonly List<PropertyInfo> _colorSettings;
 
 		private readonly ILogger _logger;
 		public readonly BehaviorSubject<ChangedSetting> SettingChangedSubject;
-		private readonly List<PropertyInfo> _uiSettings;
 
 		private readonly Subject<ChangedSetting> _uiSettingsChangedSubject;
 
@@ -52,13 +50,9 @@ namespace MatchMakingMonitor.Services
 				.Throttle(TimeSpan.FromSeconds(2))
 				.Subscribe(key => Save());
 
-			_colorSettings = GetColorSettings(SettingsType, new List<PropertyInfo>(10)).ToList();
-
-			_uiSettings = GetUiSettings(SettingsType, new List<PropertyInfo>(10)).ToList();
-
 			_uiSettingsChangedSubject = new Subject<ChangedSetting>();
 
-			var uiSettingsChangedInternal = _uiSettings.Select(prop => SettingChanged(prop.Name, false)).Merge()
+			var uiSettingsChangedInternal = SettingChanged("UISetting")
 				.Throttle(TimeSpan.FromMilliseconds(500));
 
 			uiSettingsChangedInternal.Subscribe(changedSetting =>
@@ -69,10 +63,6 @@ namespace MatchMakingMonitor.Services
 			SetBrushes();
 		}
 
-		public IReadOnlyList<PropertyInfo> UiSettings => _uiSettings.AsReadOnly();
-		public IReadOnlyList<PropertyInfo> ColorSettings => _colorSettings.AsReadOnly();
-
-		[NestedSetting]
 		public SettingsJson CurrentSettings { get; private set; }
 
 		public string AppId => CurrentSettings.AppIds.Single(appId => appId.Region == CurrentSettings.Region).Id;
@@ -117,14 +107,9 @@ namespace MatchMakingMonitor.Services
 		public async Task ExportUiSettings(string path)
 		{
 			var export = new Dictionary<string, object>();
-			var props = GetUiSettingsFromType(SettingsType);
-			foreach (var prop in props)
+			foreach (var field in GetExportSettings(SettingsType))
 			{
-				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null ||
-						(prop.PropertyType.IsArray && prop.GetCustomAttribute(typeof(NestedSettingAttribute)) != null))
-				{
-					export.Add(FirstLetterToLower(prop.Name), prop.GetValue(CurrentSettings));
-				}
+				export.Add(FirstLetterToLower(field.Name), field.GetValue(CurrentSettings));
 			}
 
 			var exportJson = await Task.Run(() => JsonConvert.SerializeObject(export, JsonSerializerSettings));
@@ -176,58 +161,87 @@ namespace MatchMakingMonitor.Services
 			return obs;
 		}
 
-		private static IEnumerable<PropertyInfo> GetUiSettings(Type type, ICollection<PropertyInfo> settings)
-		{
-			var props = GetUiSettingsFromType(type);
-			foreach (var prop in props)
-			{
-				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null)
-					settings.Add(prop);
-				if (prop.PropertyType.IsArray)
-					GetUiSettings(prop.PropertyType.GetElementType(), settings);
-				if (typeof(NestedSetting).IsAssignableFrom(prop.PropertyType))
-					GetUiSettings(prop.PropertyType, settings);
-			}
-			return settings;
-		}
-
-		private static IEnumerable<PropertyInfo> GetColorSettings(Type type, ICollection<PropertyInfo> settings)
-		{
-			var props = type.GetProperties().Where(p => p.GetCustomAttributes()
-				.Any(a => a is ColorSettingAttribute));
-			foreach (var prop in props)
-				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null)
-					settings.Add(prop);
-			return settings;
-		}
-
 		[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
-		public static void ResetUiSettings(object targetSettings, object sourceSettings = null, Type type = null)
+		public static void ResetUiSettings(SettingsJson targetSettings, SettingsJson sourceSettings = null)
 		{
-			if (type == null) type = SettingsType;
 			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults(), JsonSerializerSettings);
 
-			var props = GetUiSettingsFromType(type);
-			foreach (var prop in props)
+			targetSettings.FontSize = sourceSettings.FontSize;
+
+			for (var i = 0; i < sourceSettings.Colors.Length; i++)
 			{
-				if (prop.GetCustomAttribute(typeof(UiSettingAttribute)) != null || (prop.PropertyType.IsArray && prop.GetCustomAttribute(typeof(NestedSettingAttribute)) != null)) { }
-				prop.SetValue(targetSettings, prop.GetValue(sourceSettings));
-				if (typeof(NestedSetting).IsAssignableFrom(prop.PropertyType))
-					ResetUiSettings(prop.GetValue(targetSettings), prop.GetValue(sourceSettings), prop.PropertyType);
+				targetSettings.Colors[i] = sourceSettings.Colors[i];
 			}
+
+			for (var i = 0; i < sourceSettings.BattleLimits.Length; i++)
+			{
+				targetSettings.BattleLimits[i] = sourceSettings.BattleLimits[i];
+			}
+
+			for (var i = 0; i < sourceSettings.AvgFragsLimits.Length; i++)
+			{
+				targetSettings.AvgFragsLimits[i] = sourceSettings.AvgFragsLimits[i];
+			}
+
+			for (var i = 0; i < sourceSettings.WinRateLimits.Length; i++)
+			{
+				targetSettings.WinRateLimits[i] = sourceSettings.WinRateLimits[i];
+			}
+
+			for (var i = 0; i < sourceSettings.AvgXpLimits.Length; i++)
+			{
+				for (var x = 0; x < sourceSettings.AvgXpLimits[i].Values.Length; x++)
+				{
+					targetSettings.AvgXpLimits[i].Values[x] = sourceSettings.AvgXpLimits[i].Values[x];
+				}
+			}
+
+			for (var i = 0; i < sourceSettings.AvgDmgLimits.Battleship.Length; i++)
+			{
+				for (var x = 0; x < sourceSettings.AvgDmgLimits.Battleship[i].Values.Length; x++)
+				{
+					targetSettings.AvgDmgLimits.Battleship[i].Values[x] = sourceSettings.AvgDmgLimits.Battleship[i].Values[x];
+				}
+			}
+			for (var i = 0; i < sourceSettings.AvgDmgLimits.Cruiser.Length; i++)
+			{
+				for (var x = 0; x < sourceSettings.AvgDmgLimits.Cruiser[i].Values.Length; x++)
+				{
+					targetSettings.AvgDmgLimits.Cruiser[i].Values[x] = sourceSettings.AvgDmgLimits.Cruiser[i].Values[x];
+				}
+			}
+			for (var i = 0; i < sourceSettings.AvgDmgLimits.Destroyer.Length; i++)
+			{
+				for (var x = 0; x < sourceSettings.AvgDmgLimits.Destroyer[i].Values.Length; x++)
+				{
+					targetSettings.AvgDmgLimits.Destroyer[i].Values[x] = sourceSettings.AvgDmgLimits.Destroyer[i].Values[x];
+				}
+			}
+			for (var i = 0; i < sourceSettings.AvgDmgLimits.AirCarrier.Length; i++)
+			{
+				for (var x = 0; x < sourceSettings.AvgDmgLimits.AirCarrier[i].Values.Length; x++)
+				{
+					targetSettings.AvgDmgLimits.AirCarrier[i].Values[x] = sourceSettings.AvgDmgLimits.AirCarrier[i].Values[x];
+				}
+			}
+
+			targetSettings.BattleWeight = sourceSettings.BattleWeight;
+			targetSettings.AvgDmgWeight = sourceSettings.AvgDmgWeight;
+			targetSettings.AvgFragsWeight = sourceSettings.AvgFragsWeight;
+			targetSettings.AvgXpWeight = sourceSettings.AvgXpWeight;
+			targetSettings.AvgFragsWeight = sourceSettings.AvgFragsWeight;
 		}
 
-		private static IEnumerable<PropertyInfo> GetUiSettingsFromType(Type type)
+		private static IEnumerable<FieldInfo> GetExportSettings(Type type)
 		{
-			return type.GetProperties().Where(p => p.GetCustomAttributes()
-				.Any(a => a is UiSettingAttribute || a is NestedSettingAttribute));
+			return type.GetFields().Where(field => field.GetCustomAttribute(typeof(ExportSettingAttribute)) != null);
 		}
 
 		private void SetBrushes()
 		{
-			Brushes = _colorSettings.Select(prop =>
+			Brushes = CurrentSettings.Colors.Select(colorValue =>
 			{
-				var convertFromString = ColorConverter.ConvertFromString((string)prop.GetValue(CurrentSettings));
+				var convertFromString = ColorConverter.ConvertFromString(colorValue);
 				if (convertFromString == null) return System.Windows.Media.Brushes.Black;
 				var brush = new SolidColorBrush((Color)convertFromString);
 				brush.Freeze();

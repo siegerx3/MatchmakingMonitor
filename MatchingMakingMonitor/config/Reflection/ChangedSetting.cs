@@ -15,7 +15,7 @@ namespace MatchMakingMonitor.config.Reflection
 		public bool Initial { get; set; }
 		public bool HasChanged => !Initial && !OldValue.Equals(NewValue);
 
-		public ChangedSetting(object oldvalue, object newValue, [CallerMemberName] string key = null)
+		public ChangedSetting(object oldvalue, object newValue, string key = "UISetting")
 		{
 			Key = key;
 			OldValue = oldvalue;

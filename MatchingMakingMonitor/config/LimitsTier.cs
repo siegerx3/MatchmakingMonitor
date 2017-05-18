@@ -7,9 +7,9 @@ namespace MatchMakingMonitor.config
 	public class LimitsTier
 	{
 		[JsonProperty("tier")]
-		public ShipTier ShipTier { get; set; }
+		public ShipTier ShipTier;
 
-		[JsonProperty("values"), NestedSetting]
-		public LimitValue[] Values { get; set; }
+		[JsonProperty("values")]
+		public double[] Values;
 	}
 }

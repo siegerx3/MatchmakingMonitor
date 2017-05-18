@@ -5,21 +5,21 @@ using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.config
 {
-	public class LimitsType : NestedSetting
+	public class LimitsType
 	{
-		[JsonProperty("destroyer"), NestedSetting]
-		public LimitsTier[] Destroyer { get; set; }
+		[JsonProperty("destroyer")]
+		public LimitsTier[] Destroyer;
 
-		[JsonProperty("battleship"), NestedSetting]
-		public LimitsTier[] Battleship { get; set; }
+		[JsonProperty("battleship")]
+		public LimitsTier[] Battleship;
 
-		[JsonProperty("cruiser"), NestedSetting]
-		public LimitsTier[] Cruiser { get; set; }
+		[JsonProperty("cruiser")]
+		public LimitsTier[] Cruiser;
 
-		[JsonProperty("airCarrier"), NestedSetting]
-		public LimitsTier[] AirCarrier { get; set; }
+		[JsonProperty("airCarrier")]
+		public LimitsTier[] AirCarrier;
 
-		public LimitValue[] GetLimits(ShipType shipType, ShipTier shipTier)
+		public double[] GetLimits(ShipType shipType, ShipTier shipTier)
 		{
 			LimitsTier[] limitsTier;
 			switch (shipType)

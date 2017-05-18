@@ -7,54 +7,53 @@ namespace MatchMakingMonitor.config
 	{
 
 		[JsonProperty("installDirectory")]
-		public string InstallDirectory { get; set; }
+		public string InstallDirectory;
 
 		[JsonProperty("region")]
-		public Region Region { get; set; }
+		public Region Region;
 
 		[JsonProperty("appIds")]
-		public AppId[] AppIds { get; set; }
+		public AppId[] AppIds;
 
 		[JsonProperty("baseUrls")]
-		public BaseUrl[] BaseUrls { get; set; }
+		public BaseUrl[] BaseUrls;
 
 		[JsonProperty("token")]
-		public string Token { get; set; }
+		public string Token;
 
-		[JsonProperty("colors"), NestedSetting]
-		public ColorValue[] Colors { get; set; }
+		[JsonProperty("colors"), ExportSetting]
+		public string[] Colors;
 
-		[JsonProperty("fontSize"), UiSetting]
-		public int FontSize { get; set; }
+		[JsonProperty("fontSize"), ExportSetting]
+		public int FontSize;
 
-		[JsonProperty("battleLimits"), NestedSetting]
-		public LimitValue[] BattleLimits { get; set; }
+		[JsonProperty("battleLimits"), ExportSetting]
+		public double[] BattleLimits;
+		[JsonProperty("winRateLimits"), ExportSetting]
+		public double[] WinRateLimits;
 
-		[JsonProperty("winRateLimits"), NestedSetting]
-		public LimitValue[] WinRateLimits { get; set; }
+		[JsonProperty("avgFragsLimits"), ExportSetting]
+		public double[] AvgFragsLimits;
 
-		[JsonProperty("avgFragsLimits"), NestedSetting]
-		public LimitValue[] AvgFragsLimits { get; set; }
+		[JsonProperty("avgXpLimits"), ExportSetting]
+		public LimitsTier[] AvgXpLimits;
 
-		[JsonProperty("avgXpLimits"), NestedSetting]
-		public LimitsTier[] AvgXpLimits { get; set; }
+		[JsonProperty("avgDmgLimits"), ExportSetting]
+		public LimitsType AvgDmgLimits;
 
-		[JsonProperty("avgDmgLimits"), NestedSetting]
-		public LimitsType AvgDmgLimits { get; set; }
+		[JsonProperty("battleWeight"), ExportSetting]
+		public double BattleWeight;
 
-		[JsonProperty("battleWeight"), UiSetting]
-		public double BattleWeight { get; set; }
+		[JsonProperty("avgFragsWeight"), ExportSetting]
+		public double AvgFragsWeight;
 
-		[JsonProperty("avgFragsWeight"), UiSetting]
-		public double AvgFragsWeight { get; set; }
+		[JsonProperty("avgXpWeight"), ExportSetting]
+		public double AvgXpWeight;
 
-		[JsonProperty("avgXpWeight"), UiSetting]
-		public double AvgXpWeight { get; set; }
+		[JsonProperty("avgDmgWeight"), ExportSetting]
+		public double AvgDmgWeight;
 
-		[JsonProperty("avgDmgWeight"), UiSetting]
-		public double AvgDmgWeight { get; set; }
-
-		[JsonProperty("winRateWeight"), UiSetting]
-		public double WinRateWeight { get; set; }
+		[JsonProperty("winRateWeight"), ExportSetting]
+		public double WinRateWeight;
 	}
 }

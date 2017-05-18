@@ -141,13 +141,8 @@
     <Compile Include="config\AppId.cs" />
     <Compile Include="config\LimitsType.cs" />
     <Compile Include="config\LimitsTier.cs" />
-    <Compile Include="config\ColorValue.cs" />
-    <Compile Include="config\LimitValue.cs" />
     <Compile Include="config\Reflection\ChangedSetting.cs" />
-    <Compile Include="config\Reflection\ColorSettingAttribute.cs" />
-    <Compile Include="config\Reflection\NestedSetting.cs" />
-    <Compile Include="config\Reflection\NestedSettingAttribute.cs" />
-    <Compile Include="config\Reflection\UiSettingAttribute.cs" />
+    <Compile Include="config\Reflection\ExportSettingAttribute.cs" />
     <Compile Include="config\Region.cs" />
     <Compile Include="config\SettingsJson.cs" />
     <Compile Include="Models\ResponseTypes\ShipType.cs" />
@@ -182,11 +177,13 @@
     </Compile>
     <Compile Include="SocketIO\LiveMatchSocket.cs" />
     <Compile Include="SocketIO\SocketIOService.cs" />
-    <Compile Include="View\Settings\ColorEditor.cs" />
+    <Compile Include="View\Settings\ColorsEditor.cs" />
+    <Compile Include="View\Settings\ColorsViewModel.cs" />
     <Compile Include="View\Settings\ILimitsEditor.cs" />
     <Compile Include="View\Settings\DoubleLimitsEditor.cs" />
     <Compile Include="View\Settings\LimitsViewModel.cs" />
-    <Compile Include="View\Settings\WeightEditor.cs" />
+    <Compile Include="View\Settings\WeightsEditor.cs" />
+    <Compile Include="View\Settings\WeightsViewModel.cs" />
     <Compile Include="View\Util\ViewModelBase.cs" />
     <Compile Include="View\SubHeaderViewModel.cs" />
     <Compile Include="View\HeaderViewModel.cs" />

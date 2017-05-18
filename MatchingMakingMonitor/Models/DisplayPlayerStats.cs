@@ -171,15 +171,15 @@ namespace MatchMakingMonitor.Models
 				double totalRating = 0;
 				if (!Player.IsPrivateOrHidden)
 				{
-					ColorWinRate = GetColor(WinRate, SettingsWrapper.CurrentSettings.WinRateLimits.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.WinRateWeight, out totalRating,
+					ColorWinRate = GetColor(WinRate, SettingsWrapper.CurrentSettings.WinRateLimits, totalRating, SettingsWrapper.CurrentSettings.WinRateWeight, out totalRating,
 						out _colorWinRateKey);
-					ColorAvgFrags = GetColor(AvgFrags, SettingsWrapper.CurrentSettings.AvgFragsLimits.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.AvgFragsWeight, out totalRating,
+					ColorAvgFrags = GetColor(AvgFrags, SettingsWrapper.CurrentSettings.AvgFragsLimits, totalRating, SettingsWrapper.CurrentSettings.AvgFragsWeight, out totalRating,
 						out _colorAvgFragsKey);
-					ColorAvgXp = GetColor(AvgXp, SettingsWrapper.CurrentSettings.AvgXpLimits.Single(l => l.ShipTier == Player.ShipTier).Values.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.AvgXpWeight, out totalRating,
+					ColorAvgXp = GetColor(AvgXp, SettingsWrapper.CurrentSettings.AvgXpLimits.Single(l => l.ShipTier == Player.ShipTier).Values, totalRating, SettingsWrapper.CurrentSettings.AvgXpWeight, out totalRating,
 						out _colorAvgXpKey);
-					ColorAvgDamage = GetColor(AvgDamage, SettingsWrapper.CurrentSettings.AvgDmgLimits.GetLimits(Player.ShipType, Player.ShipTier).Select(v => v.Value), totalRating,
+					ColorAvgDamage = GetColor(AvgDamage, SettingsWrapper.CurrentSettings.AvgDmgLimits.GetLimits(Player.ShipType, Player.ShipTier), totalRating,
 						SettingsWrapper.CurrentSettings.AvgDmgWeight, out totalRating, out _colorAvgDamageKey);
-					ColorBattles = GetColor(Player.Battles, SettingsWrapper.CurrentSettings.BattleLimits.Select(v => v.Value), totalRating, SettingsWrapper.CurrentSettings.BattleWeight, out totalRating,
+					ColorBattles = GetColor(Player.Battles, SettingsWrapper.CurrentSettings.BattleLimits, totalRating, SettingsWrapper.CurrentSettings.BattleWeight, out totalRating,
 						out _colorBattlesKey);
 
 					_colorNameKey = (int)Math.Floor(totalRating / 5);
