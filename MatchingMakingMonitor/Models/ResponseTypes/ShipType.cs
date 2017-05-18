@@ -3,8 +3,8 @@
 	public enum ShipType
 	{
 		Destroyer,
-		Battleship,
 		Cruiser,
+		Battleship,
 		AirCarrier
 	}
 }

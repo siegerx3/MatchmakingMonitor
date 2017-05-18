@@ -64,13 +64,13 @@ namespace MatchMakingMonitor.Services
 			{
 				var region = _settingsWrapper.CurrentSettings.Region;
 				if (_currentReplay == null || region != _currentRegion ||
-				    _currentReplay != null && replay.DateTime > _currentReplay.DateTime)
+						_currentReplay != null && replay.DateTime > _currentReplay.DateTime)
 				{
 					_logger.Info("Valid replay found. Fetching stats");
 					_currentReplay = replay;
 					_currentRegion = region;
 					_statsStatusChangedSubject.OnNext(StatsStatus.Fetching);
-					var players = (await _apiService.Players(_currentReplay)).ToArray();
+					var players = (await _apiService.Players(_currentReplay)).OrderByDescending(p => p.ShipType).ThenByDescending(p => p.ShipTier).ToArray();
 					if (players.Count(p => p.AccountId != 0) > 6)
 					{
 						try
