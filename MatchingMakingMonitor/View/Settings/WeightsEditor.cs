@@ -66,16 +66,25 @@ namespace MatchMakingMonitor.View.Settings
 			}
 		}
 
+		private void SetSettings()
+		{
+			_settings.BattleWeight = _battleWeight;
+			_settings.AvgFragsWeight = _avgFragsWeight;
+			_settings.AvgXpWeight = _avgXpWeight;
+			_settings.AvgDmgWeight = _avgDmgWeight;
+			_settings.WinRateWeight = _winRateWeight;
+		}
+
 		public bool UpdateBattleWeight(string value, out double actualSum)
 		{
 			var oldValue = _battleWeight;
 			double newValue;
 			actualSum = 0;
 			if (!double.TryParse(value, out newValue)) return false;
+			_battleWeight = newValue;
 			if (!ValidateWeights(_winRateWeight, newValue, _avgFragsWeight, _avgXpWeight, _avgDmgWeight,
 				out actualSum)) return false;
-			_battleWeight = newValue;
-			_settings.BattleWeight = newValue;
+			SetSettings();
 			_changedSubject.OnNext(new ChangedSetting(oldValue, _battleWeight));
 			return true;
 		}
@@ -86,10 +95,10 @@ namespace MatchMakingMonitor.View.Settings
 			double newValue;
 			actualSum = 0;
 			if (!double.TryParse(value, out newValue)) return false;
+			_avgFragsWeight = newValue;
 			if (!ValidateWeights(_winRateWeight, _battleWeight, newValue, _avgXpWeight, _avgDmgWeight,
 				out actualSum)) return false;
-			_avgFragsWeight = newValue;
-			_settings.AvgFragsWeight = newValue;
+			SetSettings();
 			_changedSubject.OnNext(new ChangedSetting(oldValue, _avgFragsWeight));
 			return true;
 		}
@@ -100,10 +109,10 @@ namespace MatchMakingMonitor.View.Settings
 			double newValue;
 			actualSum = 0;
 			if (!double.TryParse(value, out newValue)) return false;
+			_avgXpWeight = newValue;
 			if (!ValidateWeights(_winRateWeight, _battleWeight, _avgFragsWeight, newValue, _avgDmgWeight,
 				out actualSum)) return false;
-			_avgXpWeight = newValue;
-			_settings.AvgXpWeight = newValue;
+			SetSettings();
 			_changedSubject.OnNext(new ChangedSetting(oldValue, _avgXpWeight));
 			return true;
 		}
@@ -114,10 +123,10 @@ namespace MatchMakingMonitor.View.Settings
 			double newValue;
 			actualSum = 0;
 			if (!double.TryParse(value, out newValue)) return false;
+			_avgDmgWeight = newValue;
 			if (!ValidateWeights(_winRateWeight, _battleWeight, _avgFragsWeight, _avgXpWeight, newValue,
 				out actualSum)) return false;
-			_avgDmgWeight = newValue;
-			_settings.AvgDmgWeight = newValue;
+			SetSettings();
 			_changedSubject.OnNext(new ChangedSetting(oldValue, _avgDmgWeight));
 			return true;
 		}
@@ -128,10 +137,10 @@ namespace MatchMakingMonitor.View.Settings
 			double newValue;
 			actualSum = 0;
 			if (!double.TryParse(value, out newValue)) return false;
+			_winRateWeight = newValue;
 			if (!ValidateWeights(newValue, _battleWeight, _avgFragsWeight, _avgXpWeight, _avgDmgWeight,
 				out actualSum)) return false;
-			_winRateWeight = newValue;
-			_settings.WinRateWeight = newValue;
+			SetSettings();
 			_changedSubject.OnNext(new ChangedSetting(oldValue, _winRateWeight));
 			return true;
 		}
