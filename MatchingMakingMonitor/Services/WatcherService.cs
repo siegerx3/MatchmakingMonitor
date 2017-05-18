@@ -8,14 +8,13 @@ namespace MatchMakingMonitor.Services
 {
 	public class WatcherService
 	{
-		private bool _initialCheckDone;
-
-		private readonly SettingsWrapper _settingsWrapper;
 		private readonly ILogger _logger;
 
 		private readonly BehaviorSubject<string> _matchFoundSubject;
 
-		public IObservable<string> MatchFound => _matchFoundSubject.AsObservable();
+		private readonly SettingsWrapper _settingsWrapper;
+		private bool _initialCheckDone;
+
 		public WatcherService(ILogger logger, SettingsWrapper settingsWrapper)
 		{
 			_settingsWrapper = settingsWrapper;
@@ -27,22 +26,17 @@ namespace MatchMakingMonitor.Services
 			{
 				Filter = "tempArenaInfo.json",
 				NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.Attributes |
-											 NotifyFilters.LastAccess
+				               NotifyFilters.LastAccess
 			};
-			fileSystemWatcher.Created += (obj, args) =>
-			{
-				CallMatchFound(args.FullPath);
-			};
-			fileSystemWatcher.Changed += (obj, args) =>
-			{
-				CallMatchFound(args.FullPath);
-			};
+			fileSystemWatcher.Created += (obj, args) => { CallMatchFound(args.FullPath); };
+			fileSystemWatcher.Changed += (obj, args) => { CallMatchFound(args.FullPath); };
 
 
 			settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(key =>
 			{
 				var directory = settingsWrapper.CurrentSettings.InstallDirectory;
-				if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
+				if (Directory.Exists(Path.Combine(directory, "replays")) &&
+				    File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 				{
 					fileSystemWatcher.Path = Path.Combine(directory, "replays");
 					fileSystemWatcher.EnableRaisingEvents = true;
@@ -56,11 +50,10 @@ namespace MatchMakingMonitor.Services
 				}
 			});
 
-			settingsWrapper.SettingChanged(nameof(SettingsJson.Region), false).Subscribe(key =>
-			{
-				CheckStatic();
-			});
+			settingsWrapper.SettingChanged(nameof(SettingsJson.Region), false).Subscribe(key => { CheckStatic(); });
 		}
+
+		public IObservable<string> MatchFound => _matchFoundSubject.AsObservable();
 
 		private void CheckStatic()
 		{
@@ -68,9 +61,7 @@ namespace MatchMakingMonitor.Services
 			var path = Path.Combine(directory, "replays", "tempArenaInfo.json");
 			_logger.Info("Checking for match in path " + path);
 			if (File.Exists(path))
-			{
 				CallMatchFound(path);
-			}
 		}
 
 		private void CallMatchFound(string path)

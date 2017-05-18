@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MatchMakingMonitor.config;
-using Newtonsoft.Json.Bson;
 
 namespace MatchMakingMonitor.View.Settings
 {

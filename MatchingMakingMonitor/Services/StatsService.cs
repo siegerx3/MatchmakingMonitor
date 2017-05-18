@@ -1,7 +1,4 @@
-﻿using MatchMakingMonitor.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,26 +6,28 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using MatchMakingMonitor.config;
+using MatchMakingMonitor.Models;
 using MatchMakingMonitor.Models.Replay;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MatchMakingMonitor.Services
 {
 	public class StatsService
 	{
-		private Replay _currentReplay;
-		private Region _currentRegion;
+		private readonly ApiService _apiService;
 
 		private readonly ILogger _logger;
-		private readonly ApiService _apiService;
 		private readonly SettingsWrapper _settingsWrapper;
 
 		private readonly BehaviorSubject<StatsStatus> _statsStatusChangedSubject;
-		public IObservable<StatsStatus> StatsStatusChanged => _statsStatusChangedSubject.AsObservable();
 
 		private readonly BehaviorSubject<List<DisplayPlayerStats>> _statsSubject;
-		public IObservable<List<DisplayPlayerStats>> Stats => _statsSubject.Where(s => s != null).AsObservable();
+		private Region _currentRegion;
+		private Replay _currentReplay;
 
-		public StatsService(ILogger logger, SettingsWrapper settingsWrapper, WatcherService watcherService, ApiService apiService)
+		public StatsService(ILogger logger, SettingsWrapper settingsWrapper, WatcherService watcherService,
+			ApiService apiService)
 		{
 			_logger = logger;
 			_apiService = apiService;
@@ -37,14 +36,12 @@ namespace MatchMakingMonitor.Services
 			_statsStatusChangedSubject = new BehaviorSubject<StatsStatus>(StatsStatus.Waiting);
 			_statsSubject = new BehaviorSubject<List<DisplayPlayerStats>>(null);
 
-			watcherService.MatchFound.Where(path => path != null).Subscribe(path =>
-			{
-				Task.Run(async () =>
-				{
-					await StatsFound(path);
-				});
-			});
+			watcherService.MatchFound.Where(path => path != null)
+				.Subscribe(path => { Task.Run(async () => { await StatsFound(path); }); });
 		}
+
+		public IObservable<StatsStatus> StatsStatusChanged => _statsStatusChangedSubject.AsObservable();
+		public IObservable<List<DisplayPlayerStats>> Stats => _statsSubject.Where(s => s != null).AsObservable();
 
 		private async Task StatsFound(string path)
 		{
@@ -54,7 +51,8 @@ namespace MatchMakingMonitor.Services
 			try
 			{
 				// ReSharper disable once AccessToDisposedClosure
-				replay = await Task.Run(async () => JsonConvert.DeserializeObject<Replay>(await sr.ReadToEndAsync(), new IsoDateTimeConverter()));
+				replay = await Task.Run(
+					async () => JsonConvert.DeserializeObject<Replay>(await sr.ReadToEndAsync(), new IsoDateTimeConverter()));
 			}
 			catch (Exception e)
 			{
@@ -66,7 +64,7 @@ namespace MatchMakingMonitor.Services
 			{
 				var region = _settingsWrapper.CurrentSettings.Region;
 				if (_currentReplay == null || region != _currentRegion ||
-						(_currentReplay != null && replay.DateTime > _currentReplay.DateTime))
+				    _currentReplay != null && replay.DateTime > _currentReplay.DateTime)
 				{
 					_logger.Info("Valid replay found. Fetching stats");
 					_currentReplay = replay;

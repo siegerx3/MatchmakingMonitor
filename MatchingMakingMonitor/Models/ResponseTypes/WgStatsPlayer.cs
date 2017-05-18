@@ -6,8 +6,10 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 	{
 		[JsonProperty("nickname")]
 		public string Nickname { get; set; }
+
 		[JsonProperty("account_id")]
 		public long AccountId { get; set; }
+
 		[JsonProperty("Region")]
 		public string Region { get; set; }
 	}

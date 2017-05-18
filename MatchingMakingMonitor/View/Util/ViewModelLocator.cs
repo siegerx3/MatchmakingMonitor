@@ -8,7 +8,10 @@ namespace MatchMakingMonitor.View.Util
 	public class ViewModelLocator
 	{
 		private readonly DependencyObject _dummy = new DependencyObject();
-		public MainWindowViewModel MainWindowViewModel => IsInDesignMode() ? new MainWindowViewModel() : IoCKernel.Get<MainWindowViewModel>();
+
+		public MainWindowViewModel MainWindowViewModel => IsInDesignMode()
+			? new MainWindowViewModel()
+			: IoCKernel.Get<MainWindowViewModel>();
 
 		public HeaderViewModel HeaderViewModel => IsInDesignMode() ? new HeaderViewModel() : IoCKernel.Get<HeaderViewModel>();
 
@@ -17,14 +20,14 @@ namespace MatchMakingMonitor.View.Util
 			get
 			{
 				if (IsInDesignMode())
-				{
 					return new SubHeaderViewModel();
-				}
 				return IoCKernel.Get<SubHeaderViewModel>();
 			}
 		}
 
-		public SettingsWindowViewModel SettingsViewModel => IsInDesignMode() ? new SettingsWindowViewModel() : IoCKernel.Get<SettingsWindowViewModel>();
+		public SettingsWindowViewModel SettingsViewModel => IsInDesignMode()
+			? new SettingsWindowViewModel()
+			: IoCKernel.Get<SettingsWindowViewModel>();
 
 		public StatsViewModel StatsViewModel => IsInDesignMode() ? new StatsViewModel() : IoCKernel.Get<StatsViewModel>();
 

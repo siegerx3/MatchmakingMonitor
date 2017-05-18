@@ -1,6 +1,4 @@
-﻿using MatchMakingMonitor.Models;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,20 +6,25 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MatchMakingMonitor.Models;
 using MatchMakingMonitor.Models.Replay;
 using MatchMakingMonitor.Models.ResponseTypes;
+using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.Services
 {
 	public class ApiService
 	{
-		private readonly SettingsWrapper _settingsWrapper;
+		private static readonly Regex DateStart = new Regex("\"data\":{");
+		private static readonly Regex ShipIdRegex = new Regex("\"(\\d){10}\":");
+		private static readonly Regex DataEnd = new Regex("}}$");
 		private readonly ILogger _logger;
-
-		private List<WgShip> _wgShips;
-		public IReadOnlyList<WgShip> WgShips => _wgShips.AsReadOnly();
+		private readonly SettingsWrapper _settingsWrapper;
 
 		private HttpClient _httpClient;
+
+		private List<WgShip> _wgShips;
+
 		public ApiService(ILogger logger, SettingsWrapper settingsWrapper)
 		{
 			_settingsWrapper = settingsWrapper;
@@ -31,20 +34,20 @@ namespace MatchMakingMonitor.Services
 #pragma warning restore 4014
 		}
 
-		private string ApplicationId => _settingsWrapper.AppId;
+		public IReadOnlyList<WgShip> WgShips => _wgShips.AsReadOnly();
 
-		private static readonly Regex DateStart = new Regex("\"data\":{");
-		private static readonly Regex ShipIdRegex = new Regex("\"(\\d){10}\":");
-		private static readonly Regex DataEnd = new Regex("}}$");
+		private string ApplicationId => _settingsWrapper.AppId;
 
 		private async void Ships()
 		{
 			try
 			{
 				var baseUrl = _settingsWrapper.BaseUrl;
-				var client = new HttpClient { BaseAddress = new Uri(baseUrl) };
+				var client = new HttpClient {BaseAddress = new Uri(baseUrl)};
 
-				var result = await client.PostAsync($"/wows/encyclopedia/ships/?application_id={ApplicationId}&fields=name%2C+tier%2C+type%2C+ship_id", null);
+				var result =
+					await client.PostAsync(
+						$"/wows/encyclopedia/ships/?application_id={ApplicationId}&fields=name%2C+tier%2C+type%2C+ship_id", null);
 				if (result.StatusCode != HttpStatusCode.OK) return;
 				var shipsJson = await result.Content.ReadAsStringAsync();
 				shipsJson = DateStart.Replace(shipsJson, "\"data\":[");
@@ -64,11 +67,9 @@ namespace MatchMakingMonitor.Services
 			try
 			{
 				while (_wgShips == null)
-				{
 					await Task.Delay(1000);
-				}
 				var baseUrl = _settingsWrapper.BaseUrl;
-				_httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
+				_httpClient = new HttpClient {BaseAddress = new Uri(baseUrl)};
 
 				var tasks = replay.Vehicles.Select(GetAsync).ToList();
 				var list = await Task.WhenAll(tasks);
@@ -86,7 +87,8 @@ namespace MatchMakingMonitor.Services
 		{
 			var wgShip = WgShips.SingleOrDefault(s => s.ShipId == replayVehicle.ShipId);
 
-			var playerResponse = await _httpClient.GetAsync($"wows/account/list/?application_id={ApplicationId}&search={replayVehicle.Name}");
+			var playerResponse =
+				await _httpClient.GetAsync($"wows/account/list/?application_id={ApplicationId}&search={replayVehicle.Name}");
 			if (playerResponse.StatusCode == HttpStatusCode.OK)
 			{
 				var playerJson = await playerResponse.Content.ReadAsStringAsync();
@@ -95,7 +97,8 @@ namespace MatchMakingMonitor.Services
 				var player = players.Data.SingleOrDefault(p => p.Nickname == replayVehicle.Name);
 				if (player != null)
 				{
-					var shipStatsResponse = await _httpClient.GetAsync($"wows/ships/stats/?application_id={ApplicationId}&account_id={player.AccountId}&ship_id={replayVehicle.ShipId}");
+					var shipStatsResponse = await _httpClient.GetAsync(
+						$"wows/ships/stats/?application_id={ApplicationId}&account_id={player.AccountId}&ship_id={replayVehicle.ShipId}");
 					if (shipStatsResponse.StatusCode == HttpStatusCode.OK)
 					{
 						var shipStatsJson = await shipStatsResponse.Content.ReadAsStringAsync();

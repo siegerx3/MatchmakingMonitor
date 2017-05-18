@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,62 +13,23 @@ namespace MatchMakingMonitor.View
 {
 	public class StatsViewModel : ViewModelBase
 	{
-		public RelayCommand DetailCommand { get; set; }
-
-		private ObservableCollection<DisplayPlayerStats> _friendlyPlayers;
-		public ObservableCollection<DisplayPlayerStats> FriendlyPlayers
-		{
-			get => _friendlyPlayers;
-			set
-			{
-				_friendlyPlayers = value;
-				FirePropertyChanged();
-			}
-		}
+		private readonly SettingsWrapper _settingsWrapper;
 
 		private ObservableCollection<DisplayPlayerStats> _enemyPlayers;
-		public ObservableCollection<DisplayPlayerStats> EnemyPlayers
-		{
-			get => _enemyPlayers;
-			set
-			{
-				_enemyPlayers = value;
-				FirePropertyChanged();
-			}
-		}
 
 		private int _fontSize;
 
-		public int FontSize
-		{
-			get => _fontSize;
-			set
-			{
-				_fontSize = value;
-				FirePropertyChanged();
-			}
-		}
+		private ObservableCollection<DisplayPlayerStats> _friendlyPlayers;
 
 
 		private Visibility _listVisibility = Visibility.Collapsed;
-
-		public Visibility ListVisibility
-		{
-			get => _listVisibility;
-			set
-			{
-				_listVisibility = value;
-				FirePropertyChanged();
-			}
-		}
-
-		private readonly SettingsWrapper _settingsWrapper;
 		private List<DisplayPlayerStats> _stats;
+
 		public StatsViewModel(ILogger logger, StatsService statsService, SettingsWrapper settingsWrapper)
 		{
 			_settingsWrapper = settingsWrapper;
 
-			DetailCommand = new RelayCommand(param => OpenPlayerDetail((string[])param));
+			DetailCommand = new RelayCommand(param => OpenPlayerDetail((string[]) param));
 
 			statsService.Stats.Subscribe(async stats =>
 			{
@@ -86,28 +48,67 @@ namespace MatchMakingMonitor.View
 				logger.Info("Re-computing UI for players");
 				FontSize = _settingsWrapper.CurrentSettings.FontSize;
 				foreach (var player in _stats)
-				{
-					await Task.Run(() =>
-					{
-						player.ComputeUi();
-					});
-				}
+					await Task.Run(() => { player.ComputeUi(); });
 			});
 		}
 
 		public StatsViewModel()
 		{
-			FriendlyPlayers = new ObservableCollection<DisplayPlayerStats>(new List<DisplayPlayerStats>() { DisplayPlayerStats.MockPlayer(), DisplayPlayerStats.MockPlayer(0) });
-			EnemyPlayers = new ObservableCollection<DisplayPlayerStats>(new List<DisplayPlayerStats>() { DisplayPlayerStats.MockPlayer(2), DisplayPlayerStats.MockPlayer(2, true) });
+			FriendlyPlayers =
+				new ObservableCollection<DisplayPlayerStats>(
+					new List<DisplayPlayerStats> {DisplayPlayerStats.MockPlayer(), DisplayPlayerStats.MockPlayer(0)});
+			EnemyPlayers =
+				new ObservableCollection<DisplayPlayerStats>(
+					new List<DisplayPlayerStats> {DisplayPlayerStats.MockPlayer(2), DisplayPlayerStats.MockPlayer(2, true)});
 			ListVisibility = Visibility.Visible;
+		}
+
+		public RelayCommand DetailCommand { get; set; }
+
+		public ObservableCollection<DisplayPlayerStats> FriendlyPlayers
+		{
+			get => _friendlyPlayers;
+			set
+			{
+				_friendlyPlayers = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public ObservableCollection<DisplayPlayerStats> EnemyPlayers
+		{
+			get => _enemyPlayers;
+			set
+			{
+				_enemyPlayers = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public int FontSize
+		{
+			get => _fontSize;
+			set
+			{
+				_fontSize = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public Visibility ListVisibility
+		{
+			get => _listVisibility;
+			set
+			{
+				_listVisibility = value;
+				FirePropertyChanged();
+			}
 		}
 
 		private void OpenPlayerDetail(IReadOnlyList<string> param)
 		{
 			if (param[0] != "0")
-			{
-				System.Diagnostics.Process.Start($"https://{_settingsWrapper.CurrentSettings.Region}.warships.today/player/{param[0]}/{param[1]}");
-			}
+				Process.Start($"https://{_settingsWrapper.CurrentSettings.Region}.warships.today/player/{param[0]}/{param[1]}");
 		}
 	}
 }

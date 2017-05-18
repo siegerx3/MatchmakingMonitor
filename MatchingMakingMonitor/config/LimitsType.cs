@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using MatchMakingMonitor.config.Reflection;
 using MatchMakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
 
@@ -7,17 +6,13 @@ namespace MatchMakingMonitor.config
 {
 	public class LimitsType
 	{
-		[JsonProperty("destroyer")]
-		public LimitsTier[] Destroyer;
+		[JsonProperty("airCarrier")] public LimitsTier[] AirCarrier;
 
-		[JsonProperty("battleship")]
-		public LimitsTier[] Battleship;
+		[JsonProperty("battleship")] public LimitsTier[] Battleship;
 
-		[JsonProperty("cruiser")]
-		public LimitsTier[] Cruiser;
+		[JsonProperty("cruiser")] public LimitsTier[] Cruiser;
 
-		[JsonProperty("airCarrier")]
-		public LimitsTier[] AirCarrier;
+		[JsonProperty("destroyer")] public LimitsTier[] Destroyer;
 
 		public double[] GetLimits(ShipType shipType, ShipTier shipTier)
 		{

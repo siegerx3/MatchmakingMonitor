@@ -5,56 +5,39 @@ namespace MatchMakingMonitor.config
 {
 	public class SettingsJson
 	{
+		[JsonProperty("appIds")] public AppId[] AppIds;
 
-		[JsonProperty("installDirectory")]
-		public string InstallDirectory;
+		[JsonProperty("avgDmgLimits")] [ExportSetting] public LimitsType AvgDmgLimits;
 
-		[JsonProperty("region")]
-		public Region Region;
+		[JsonProperty("avgDmgWeight")] [ExportSetting] public double AvgDmgWeight;
 
-		[JsonProperty("appIds")]
-		public AppId[] AppIds;
+		[JsonProperty("avgFragsLimits")] [ExportSetting] public double[] AvgFragsLimits;
 
-		[JsonProperty("baseUrls")]
-		public BaseUrl[] BaseUrls;
+		[JsonProperty("avgFragsWeight")] [ExportSetting] public double AvgFragsWeight;
 
-		[JsonProperty("token")]
-		public string Token;
+		[JsonProperty("avgXpLimits")] [ExportSetting] public LimitsTier[] AvgXpLimits;
 
-		[JsonProperty("colors"), ExportSetting]
-		public string[] Colors;
+		[JsonProperty("avgXpWeight")] [ExportSetting] public double AvgXpWeight;
 
-		[JsonProperty("fontSize"), ExportSetting]
-		public int FontSize;
+		[JsonProperty("baseUrls")] public BaseUrl[] BaseUrls;
 
-		[JsonProperty("battleLimits"), ExportSetting]
-		public double[] BattleLimits;
-		[JsonProperty("winRateLimits"), ExportSetting]
-		public double[] WinRateLimits;
+		[JsonProperty("battleLimits")] [ExportSetting] public double[] BattleLimits;
 
-		[JsonProperty("avgFragsLimits"), ExportSetting]
-		public double[] AvgFragsLimits;
+		[JsonProperty("battleWeight")] [ExportSetting] public double BattleWeight;
 
-		[JsonProperty("avgXpLimits"), ExportSetting]
-		public LimitsTier[] AvgXpLimits;
+		[JsonProperty("colors")] [ExportSetting] public string[] Colors;
 
-		[JsonProperty("avgDmgLimits"), ExportSetting]
-		public LimitsType AvgDmgLimits;
+		[JsonProperty("fontSize")] [ExportSetting] public int FontSize;
 
-		[JsonProperty("battleWeight"), ExportSetting]
-		public double BattleWeight;
+		[JsonProperty("installDirectory")] public string InstallDirectory;
 
-		[JsonProperty("avgFragsWeight"), ExportSetting]
-		public double AvgFragsWeight;
+		[JsonProperty("region")] public Region Region;
 
-		[JsonProperty("avgXpWeight"), ExportSetting]
-		public double AvgXpWeight;
+		[JsonProperty("token")] public string Token;
 
-		[JsonProperty("avgDmgWeight"), ExportSetting]
-		public double AvgDmgWeight;
+		[JsonProperty("winRateLimits")] [ExportSetting] public double[] WinRateLimits;
 
-		[JsonProperty("winRateWeight"), ExportSetting]
-		public double WinRateWeight;
+		[JsonProperty("winRateWeight")] [ExportSetting] public double WinRateWeight;
 
 		public static SettingsJson Empty()
 		{

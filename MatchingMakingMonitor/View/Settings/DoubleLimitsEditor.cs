@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
-using MatchMakingMonitor.config;
 using MatchMakingMonitor.config.Reflection;
 
 namespace MatchMakingMonitor.View.Settings
 {
 	public class DoubleLimitsEditor : ILimitsEditor
 	{
+		private readonly BehaviorSubject<ChangedSetting> _changedSubject;
+		private readonly bool _initial;
+		private readonly double[] _values;
 		private double _value1;
 		private double _value2;
 		private double _value3;
@@ -20,12 +18,8 @@ namespace MatchMakingMonitor.View.Settings
 		private double _value7;
 		private double _value8;
 		private double _value9;
-
-
-		private readonly BehaviorSubject<ChangedSetting> _changedSubject;
-		private readonly double[] _values;
 		private Action _valuesChanged;
-		private readonly bool _initial;
+
 		public DoubleLimitsEditor(BehaviorSubject<ChangedSetting> changedSubject, double[] values)
 		{
 			_changedSubject = changedSubject;
@@ -49,25 +43,12 @@ namespace MatchMakingMonitor.View.Settings
 			_value9 = _values[8];
 			_valuesChanged?.Invoke();
 			if (!_initial)
-			{
 				_changedSubject.OnNext(new ChangedSetting(true, false));
-			}
 		}
 
 		public void RegisterValuesChanged(Action action)
 		{
 			_valuesChanged = action;
-		}
-
-		private bool UpdateValue(string value, int index, ref double field)
-		{
-			var oldValue = field;
-			double newValue;
-			if (!double.TryParse(value, out newValue)) return false;
-			field = newValue;
-			_values[index] = newValue;
-			_changedSubject.OnNext(new ChangedSetting(oldValue, newValue));
-			return true;
 		}
 
 		public double Value1 => _value1;
@@ -123,6 +104,17 @@ namespace MatchMakingMonitor.View.Settings
 		public bool UpdateValue9(string value)
 		{
 			return UpdateValue(value, 8, ref _value9);
+		}
+
+		private bool UpdateValue(string value, int index, ref double field)
+		{
+			var oldValue = field;
+			double newValue;
+			if (!double.TryParse(value, out newValue)) return false;
+			field = newValue;
+			_values[index] = newValue;
+			_changedSubject.OnNext(new ChangedSetting(oldValue, newValue));
+			return true;
 		}
 	}
 }

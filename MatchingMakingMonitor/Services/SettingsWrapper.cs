@@ -29,11 +29,11 @@ namespace MatchMakingMonitor.Services
 		private static readonly Type SettingsType = typeof(SettingsJson);
 
 		private readonly ILogger _logger;
-		public readonly BehaviorSubject<ChangedSetting> SettingChangedSubject;
-
-		private readonly Subject<ChangedSetting> _uiSettingsChangedSubject;
 
 		private readonly Subject<object> _saveQueueSubject;
+
+		private readonly Subject<ChangedSetting> _uiSettingsChangedSubject;
+		public readonly BehaviorSubject<ChangedSetting> SettingChangedSubject;
 
 		public SettingsWrapper(ILogger logger)
 		{
@@ -103,16 +103,15 @@ namespace MatchMakingMonitor.Services
 
 		private void FromJson()
 		{
-			CurrentSettings = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsPath), JsonSerializerSettings);
+			CurrentSettings =
+				JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsPath), JsonSerializerSettings);
 		}
 
 		public async Task ExportUiSettings(string path)
 		{
 			var export = new Dictionary<string, object>();
 			foreach (var field in GetExportSettings(SettingsType))
-			{
 				export.Add(FirstLetterToLower(field.Name), field.GetValue(CurrentSettings));
-			}
 
 			var exportJson = await Task.Run(() => JsonConvert.SerializeObject(export, JsonSerializerSettings));
 
@@ -154,7 +153,10 @@ namespace MatchMakingMonitor.Services
 		{
 			try
 			{
-				await Task.Run(() => { File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(CurrentSettings, JsonSerializerSettings)); });
+				await Task.Run(() =>
+				{
+					File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(CurrentSettings, JsonSerializerSettings));
+				});
 			}
 			catch (Exception e)
 			{
@@ -166,79 +168,48 @@ namespace MatchMakingMonitor.Services
 		{
 			var obs = SettingChangedSubject.AsObservable().Where(s => s != null && (s.Key == key && s.HasChanged || s.Initial));
 			if (initial)
-				SettingChangedSubject.OnNext(new ChangedSetting(null, null, key) { Initial = true });
+				SettingChangedSubject.OnNext(new ChangedSetting(null, null, key) {Initial = true});
 			return obs;
 		}
 
 		[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
 		private static void CopyUiSettings(SettingsJson targetSettings, SettingsJson sourceSettings = null)
 		{
-			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults(), JsonSerializerSettings);
+			if (sourceSettings == null)
+				sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults(), JsonSerializerSettings);
 
 			if (sourceSettings.FontSize != 0)
-			{
 				targetSettings.FontSize = sourceSettings.FontSize;
-			}
 
 			if (sourceSettings.Colors != null && sourceSettings.Colors.Length == targetSettings.Colors.Length)
-			{
 				for (var i = 0; i < sourceSettings.Colors.Length; i++)
-				{
 					targetSettings.Colors[i] = sourceSettings.Colors[i];
-				}
-			}
 
 			for (var i = 0; i < sourceSettings.BattleLimits.Length; i++)
-			{
 				targetSettings.BattleLimits[i] = sourceSettings.BattleLimits[i];
-			}
 
 			for (var i = 0; i < sourceSettings.AvgFragsLimits.Length; i++)
-			{
 				targetSettings.AvgFragsLimits[i] = sourceSettings.AvgFragsLimits[i];
-			}
 
 			for (var i = 0; i < sourceSettings.WinRateLimits.Length; i++)
-			{
 				targetSettings.WinRateLimits[i] = sourceSettings.WinRateLimits[i];
-			}
 
 			for (var i = 0; i < sourceSettings.AvgXpLimits.Length; i++)
-			{
-				for (var x = 0; x < sourceSettings.AvgXpLimits[i].Values.Length; x++)
-				{
-					targetSettings.AvgXpLimits[i].Values[x] = sourceSettings.AvgXpLimits[i].Values[x];
-				}
-			}
+			for (var x = 0; x < sourceSettings.AvgXpLimits[i].Values.Length; x++)
+				targetSettings.AvgXpLimits[i].Values[x] = sourceSettings.AvgXpLimits[i].Values[x];
 
 			for (var i = 0; i < sourceSettings.AvgDmgLimits.Battleship.Length; i++)
-			{
-				for (var x = 0; x < sourceSettings.AvgDmgLimits.Battleship[i].Values.Length; x++)
-				{
-					targetSettings.AvgDmgLimits.Battleship[i].Values[x] = sourceSettings.AvgDmgLimits.Battleship[i].Values[x];
-				}
-			}
+			for (var x = 0; x < sourceSettings.AvgDmgLimits.Battleship[i].Values.Length; x++)
+				targetSettings.AvgDmgLimits.Battleship[i].Values[x] = sourceSettings.AvgDmgLimits.Battleship[i].Values[x];
 			for (var i = 0; i < sourceSettings.AvgDmgLimits.Cruiser.Length; i++)
-			{
-				for (var x = 0; x < sourceSettings.AvgDmgLimits.Cruiser[i].Values.Length; x++)
-				{
-					targetSettings.AvgDmgLimits.Cruiser[i].Values[x] = sourceSettings.AvgDmgLimits.Cruiser[i].Values[x];
-				}
-			}
+			for (var x = 0; x < sourceSettings.AvgDmgLimits.Cruiser[i].Values.Length; x++)
+				targetSettings.AvgDmgLimits.Cruiser[i].Values[x] = sourceSettings.AvgDmgLimits.Cruiser[i].Values[x];
 			for (var i = 0; i < sourceSettings.AvgDmgLimits.Destroyer.Length; i++)
-			{
-				for (var x = 0; x < sourceSettings.AvgDmgLimits.Destroyer[i].Values.Length; x++)
-				{
-					targetSettings.AvgDmgLimits.Destroyer[i].Values[x] = sourceSettings.AvgDmgLimits.Destroyer[i].Values[x];
-				}
-			}
+			for (var x = 0; x < sourceSettings.AvgDmgLimits.Destroyer[i].Values.Length; x++)
+				targetSettings.AvgDmgLimits.Destroyer[i].Values[x] = sourceSettings.AvgDmgLimits.Destroyer[i].Values[x];
 			for (var i = 0; i < sourceSettings.AvgDmgLimits.AirCarrier.Length; i++)
-			{
-				for (var x = 0; x < sourceSettings.AvgDmgLimits.AirCarrier[i].Values.Length; x++)
-				{
-					targetSettings.AvgDmgLimits.AirCarrier[i].Values[x] = sourceSettings.AvgDmgLimits.AirCarrier[i].Values[x];
-				}
-			}
+			for (var x = 0; x < sourceSettings.AvgDmgLimits.AirCarrier[i].Values.Length; x++)
+				targetSettings.AvgDmgLimits.AirCarrier[i].Values[x] = sourceSettings.AvgDmgLimits.AirCarrier[i].Values[x];
 
 			if (sourceSettings.BattleWeight > 0)
 				targetSettings.BattleWeight = sourceSettings.BattleWeight;
@@ -263,7 +234,7 @@ namespace MatchMakingMonitor.Services
 			{
 				var convertFromString = ColorConverter.ConvertFromString(colorValue);
 				if (convertFromString == null) return System.Windows.Media.Brushes.Black;
-				var brush = new SolidColorBrush((Color)convertFromString);
+				var brush = new SolidColorBrush((Color) convertFromString);
 				brush.Freeze();
 				return brush;
 			}).ToArray();

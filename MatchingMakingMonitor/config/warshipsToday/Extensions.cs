@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MatchMakingMonitor.Models.ResponseTypes;
 
 namespace MatchMakingMonitor.config.warshipsToday
@@ -21,12 +19,14 @@ namespace MatchMakingMonitor.config.warshipsToday
 
 		public static IEnumerable<double> AvgWinRate(this IEnumerable<WarshipsTodayEntry> entries)
 		{
-			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.Wins / s.Statistics.ShipStatistics.Battles * 100, 2));
+			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.Wins / s.Statistics.ShipStatistics.Battles * 100,
+				2));
 		}
 
 		public static IEnumerable<double> AvgFrags(this IEnumerable<WarshipsTodayEntry> entries)
 		{
-			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.Frags / s.Statistics.ShipStatistics.Battles * 100, 2));
+			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.Frags / s.Statistics.ShipStatistics.Battles * 100,
+				2));
 		}
 
 		public static IEnumerable<double> AvgXp(this IEnumerable<WarshipsTodayEntry> entries)
@@ -36,7 +36,8 @@ namespace MatchMakingMonitor.config.warshipsToday
 
 		public static IEnumerable<double> AvgDmg(this IEnumerable<WarshipsTodayEntry> entries)
 		{
-			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.DamageDealt / s.Statistics.ShipStatistics.Battles, 2));
+			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.DamageDealt / s.Statistics.ShipStatistics.Battles,
+				2));
 		}
 
 		public static double[] OrderedArray(this IEnumerable<double> entries)
@@ -48,11 +49,10 @@ namespace MatchMakingMonitor.config.warshipsToday
 		{
 			var arr = new double[9];
 
-			if (!values.Any()) return new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+			if (!values.Any()) return new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-			var indexStep = (int)Math.Floor((double)values.Length / 7);
-			bool skiplast = indexStep * 7 == values.Length;
-
+			var indexStep = (int) Math.Floor((double) values.Length / 7);
+			var skiplast = indexStep * 7 == values.Length;
 
 
 			for (var i = 0; i < 9; i++)
@@ -68,16 +68,12 @@ namespace MatchMakingMonitor.config.warshipsToday
 						continue;
 					default:
 						if (i == 7 && skiplast)
-						{
 							val = values[values.Length - 1];
-						}
 						else
-						{
 							val = values[indexStep * i];
-						}
 						break;
 				}
-				var multi = 1 + (double)i;
+				var multi = 1 + (double) i;
 				if (!useDecimal)
 				{
 					if (i <= 4) val = Math.Floor(val) - coef;
@@ -98,7 +94,7 @@ namespace MatchMakingMonitor.config.warshipsToday
 		{
 			return new LimitsTier
 			{
-				ShipTier = (ShipTier)tier,
+				ShipTier = (ShipTier) tier,
 				Values = values
 			};
 		}

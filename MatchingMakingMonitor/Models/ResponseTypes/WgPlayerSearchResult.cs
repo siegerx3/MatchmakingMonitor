@@ -7,7 +7,9 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 	{
 		[JsonProperty("status")]
 		public string Status { get; set; }
+
 		public Dictionary<string, int> Meta { get; set; }
+
 		[JsonProperty("data")]
 		public List<WgStatsPlayer> Data { get; set; }
 	}

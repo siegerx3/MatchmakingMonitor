@@ -7,6 +7,7 @@ namespace MatchMakingMonitor.config.warshipsToday
 	{
 		[JsonProperty(PropertyName = "tier")]
 		public int Tier { get; set; }
+
 		[JsonProperty(PropertyName = "type")]
 		public ShipType Type { get; set; }
 	}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -14,97 +13,22 @@ namespace MatchMakingMonitor.View
 {
 	public class SubHeaderViewModel : ViewModelBase
 	{
-		public RelayCommand PathClickCommand { get; set; }
+		private readonly SettingsWrapper _settingsWrapper;
 
-		public IEnumerable<Region> Regions { get; } = new List<Region> { Region.NA, Region.EU, Region.RU, Region.ASIA };
+		private bool _enableUi = true;
 
-		private Region _region;
-
-		public Region Region
-		{
-			get => _region;
-			set
-			{
-				var oldValue = _region;
-				_region = value;
-				FirePropertyChanged();
-				_settingsWrapper.CurrentSettings.Region = _region;
-				_settingsWrapper.SettingChangedSubject.OnNext(new ChangedSetting(oldValue, _region, nameof(SettingsJson.Region)));
-			}
-		}
+		private SolidColorBrush _installDirectoryColor;
 
 
 		private string _installDirectoryText = "Check install directory";
 
-		public string InstallDirectoryText
-		{
-			get => _installDirectoryText;
-			set
-			{
-				_installDirectoryText = value;
-				FirePropertyChanged();
-			}
-		}
+		private Region _region;
 
-		private SolidColorBrush _installDirectoryColor;
-
-		public SolidColorBrush InstallDirectoryColor
-		{
-			get => _installDirectoryColor;
-			set
-			{
-				_installDirectoryColor = value;
-				FirePropertyChanged();
-			}
-		}
-
-		private string _statusText = "Not currently in Battle...";
-
-		public string StatusText
-		{
-			get => _statusText;
-			set
-			{
-				_statusText = value;
-				FirePropertyChanged();
-			}
-		}
+		private Visibility _showProgress = Visibility.Collapsed;
 
 		private SolidColorBrush _statusColor = Brushes.Black;
 
-		public SolidColorBrush StatusColor
-		{
-			get => _statusColor;
-			set
-			{
-				_statusColor = value;
-				FirePropertyChanged();
-			}
-		}
-
-		private bool _enableUi = true;
-		public bool EnableUi
-		{
-			get => _enableUi;
-			set
-			{
-				_enableUi = value;
-				FirePropertyChanged();
-			}
-		}
-
-		private Visibility _showProgress = Visibility.Collapsed;
-		public Visibility ShowProgress
-		{
-			get => _showProgress;
-			set
-			{
-				_showProgress = value;
-				FirePropertyChanged();
-			}
-		}
-
-		private readonly SettingsWrapper _settingsWrapper;
+		private string _statusText = "Not currently in Battle...";
 
 		public SubHeaderViewModel(SettingsWrapper settingsWrapper, StatsService statsService)
 		{
@@ -135,10 +59,88 @@ namespace MatchMakingMonitor.View
 		{
 		}
 
+		public RelayCommand PathClickCommand { get; set; }
+
+		public IEnumerable<Region> Regions { get; } = new List<Region> {Region.NA, Region.EU, Region.RU, Region.ASIA};
+
+		public Region Region
+		{
+			get => _region;
+			set
+			{
+				var oldValue = _region;
+				_region = value;
+				FirePropertyChanged();
+				_settingsWrapper.CurrentSettings.Region = _region;
+				_settingsWrapper.SettingChangedSubject.OnNext(new ChangedSetting(oldValue, _region, nameof(SettingsJson.Region)));
+			}
+		}
+
+		public string InstallDirectoryText
+		{
+			get => _installDirectoryText;
+			set
+			{
+				_installDirectoryText = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public SolidColorBrush InstallDirectoryColor
+		{
+			get => _installDirectoryColor;
+			set
+			{
+				_installDirectoryColor = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public string StatusText
+		{
+			get => _statusText;
+			set
+			{
+				_statusText = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public SolidColorBrush StatusColor
+		{
+			get => _statusColor;
+			set
+			{
+				_statusColor = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public bool EnableUi
+		{
+			get => _enableUi;
+			set
+			{
+				_enableUi = value;
+				FirePropertyChanged();
+			}
+		}
+
+		public Visibility ShowProgress
+		{
+			get => _showProgress;
+			set
+			{
+				_showProgress = value;
+				FirePropertyChanged();
+			}
+		}
+
 		private void InitPath()
 		{
 			var directory = _settingsWrapper.CurrentSettings.InstallDirectory;
-			if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
+			if (Directory.Exists(Path.Combine(directory, "replays")) &&
+			    File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 			{
 				InstallDirectoryColor = Brushes.Green;
 				InstallDirectoryText = directory;
@@ -158,7 +160,8 @@ namespace MatchMakingMonitor.View
 			{
 				var oldValue = _settingsWrapper.CurrentSettings.InstallDirectory;
 				_settingsWrapper.CurrentSettings.InstallDirectory = folderBrowser.SelectedPath;
-				_settingsWrapper.SettingChangedSubject.OnNext(new ChangedSetting(oldValue, _settingsWrapper.CurrentSettings.InstallDirectory, nameof(SettingsJson.InstallDirectory)));
+				_settingsWrapper.SettingChangedSubject.OnNext(new ChangedSetting(oldValue,
+					_settingsWrapper.CurrentSettings.InstallDirectory, nameof(SettingsJson.InstallDirectory)));
 			}
 		}
 

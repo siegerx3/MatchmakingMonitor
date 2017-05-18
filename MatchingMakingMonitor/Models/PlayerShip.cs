@@ -4,6 +4,33 @@ namespace MatchMakingMonitor.Models
 {
 	public class PlayerShip
 	{
+		public PlayerShip(WgStatsShip wgStatsShip, WgStatsPlayer player, WgShip wgShip, int relationship) : this(wgShip)
+		{
+			if (wgStatsShip == null || player == null) return;
+			ShipId = wgStatsShip.ShipId;
+			AccountId = wgStatsShip.AccountId;
+			Nickname = player.Nickname;
+			Relation = relationship;
+			Frags = wgStatsShip.Pvp.Frags;
+			Wins = wgStatsShip.Pvp.Wins;
+			Battles = wgStatsShip.Pvp.Battles;
+			DamageDealt = wgStatsShip.Pvp.DamageDealt;
+			XpEarned = wgStatsShip.Pvp.Xp;
+			IsPrivateOrHidden = wgStatsShip.Private != null;
+		}
+
+		public PlayerShip(WgShip wgShip)
+		{
+			if (wgShip == null) return;
+			ShipName = wgShip.Name;
+			ShipType = wgShip.Type;
+			ShipTier = wgShip.Tier;
+		}
+
+		public PlayerShip()
+		{
+		}
+
 		public long ShipId { get; set; }
 		public long AccountId { get; set; }
 		public string Nickname { get; set; }
@@ -19,6 +46,7 @@ namespace MatchMakingMonitor.Models
 		public bool IsPrivateOrHidden { get; set; }
 
 		#region unused
+
 		//public int MaxFrags { get; set; }
 		//public int DamageToBuildings { get; set; }
 		//public int SuppressionCount { get; set; }
@@ -70,34 +98,7 @@ namespace MatchMakingMonitor.Models
 
 		//public int ShipRating { get; set; }
 		//public int Passiveness { get; set; }
+
 		#endregion
-
-		public PlayerShip(WgStatsShip wgStatsShip, WgStatsPlayer player, WgShip wgShip, int relationship) : this(wgShip)
-		{
-			if (wgStatsShip == null || player == null) return;
-			ShipId = wgStatsShip.ShipId;
-			AccountId = wgStatsShip.AccountId;
-			Nickname = player.Nickname;
-			Relation = relationship;
-			Frags = wgStatsShip.Pvp.Frags;
-			Wins = wgStatsShip.Pvp.Wins;
-			Battles = wgStatsShip.Pvp.Battles;
-			DamageDealt = wgStatsShip.Pvp.DamageDealt;
-			XpEarned = wgStatsShip.Pvp.Xp;
-			IsPrivateOrHidden = wgStatsShip.Private != null;
-		}
-
-		public PlayerShip(WgShip wgShip)
-		{
-			if (wgShip == null) return;
-			ShipName = wgShip.Name;
-			ShipType = wgShip.Type;
-			ShipTier = wgShip.Tier;
-		}
-
-		public PlayerShip()
-		{
-
-		}
 	} //end class
 } //end namespace
