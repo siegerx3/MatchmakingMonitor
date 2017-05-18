@@ -6,6 +6,6 @@ namespace MatchMakingMonitor.config
 		EU,
 		NA,
 		RU,
-		SEA
+		ASIA
 	}
 }

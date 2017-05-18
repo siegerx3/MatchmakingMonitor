@@ -122,7 +122,7 @@ namespace MatchMakingMonitor.View.Settings
 		{
 			var result = MessageBox.Show("Are you sure you want to reset all Settings?", "Reset Settings", MessageBoxButton.YesNo);
 			if (result != MessageBoxResult.Yes) return;
-			await Task.Run(() => SettingsWrapper.ResetUiSettings(_settingsWrapper.CurrentSettings));
+			await _settingsWrapper.SyncWithRemoteSettings();
 			LoadValues();
 		}
 

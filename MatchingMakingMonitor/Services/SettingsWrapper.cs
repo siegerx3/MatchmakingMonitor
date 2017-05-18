@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using MatchMakingMonitor.config;
 using MatchMakingMonitor.config.Reflection;
+using MatchMakingMonitor.config.warshipsToday;
 using MatchMakingMonitor.View.Util;
 using Newtonsoft.Json;
 
@@ -42,7 +43,7 @@ namespace MatchMakingMonitor.Services
 
 			_saveQueueSubject = new Subject<object>();
 
-			_saveQueueSubject.Throttle(TimeSpan.FromSeconds(30)).Subscribe(async _ => { await InternalSave(); });
+			_saveQueueSubject.Throttle(TimeSpan.FromSeconds(10)).Subscribe(async _ => { await InternalSave(); });
 
 			SettingChangedSubject = new BehaviorSubject<ChangedSetting>(null);
 			SettingChangedSubject.Where(setting => setting?.Key != null && setting.HasChanged)
@@ -72,7 +73,7 @@ namespace MatchMakingMonitor.Services
 
 		public SolidColorBrush[] Brushes { get; private set; }
 
-		private void Init()
+		private async void Init()
 		{
 			if (!File.Exists(SettingsPath))
 			{
@@ -84,6 +85,7 @@ namespace MatchMakingMonitor.Services
 				}
 			}
 			FromJson();
+			await SyncWithRemoteSettings();
 		}
 
 		private static string Defaults()
@@ -127,7 +129,7 @@ namespace MatchMakingMonitor.Services
 				{
 					var importJson = File.ReadAllText(path);
 					var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson, JsonSerializerSettings));
-					await Task.Run(() => ResetUiSettings(CurrentSettings, import));
+					await Task.Run(() => CopyUiSettings(CurrentSettings, import));
 					await InternalSave();
 				}
 				catch (Exception e)
@@ -136,9 +138,16 @@ namespace MatchMakingMonitor.Services
 				}
 		}
 
+		public async Task SyncWithRemoteSettings()
+		{
+			var sourceSettings = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(Defaults()));
+			await RemoteStats.Get(sourceSettings);
+			CopyUiSettings(CurrentSettings, sourceSettings);
+		}
+
 		public void Save()
 		{
-			_saveQueueSubject.Next();
+			_saveQueueSubject.OnNext(null);
 		}
 
 		private async Task InternalSave()
@@ -162,15 +171,21 @@ namespace MatchMakingMonitor.Services
 		}
 
 		[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
-		public static void ResetUiSettings(SettingsJson targetSettings, SettingsJson sourceSettings = null)
+		private static void CopyUiSettings(SettingsJson targetSettings, SettingsJson sourceSettings = null)
 		{
 			if (sourceSettings == null) sourceSettings = JsonConvert.DeserializeObject<SettingsJson>(Defaults(), JsonSerializerSettings);
 
-			targetSettings.FontSize = sourceSettings.FontSize;
-
-			for (var i = 0; i < sourceSettings.Colors.Length; i++)
+			if (sourceSettings.FontSize != 0)
 			{
-				targetSettings.Colors[i] = sourceSettings.Colors[i];
+				targetSettings.FontSize = sourceSettings.FontSize;
+			}
+
+			if (sourceSettings.Colors != null && sourceSettings.Colors.Length == targetSettings.Colors.Length)
+			{
+				for (var i = 0; i < sourceSettings.Colors.Length; i++)
+				{
+					targetSettings.Colors[i] = sourceSettings.Colors[i];
+				}
 			}
 
 			for (var i = 0; i < sourceSettings.BattleLimits.Length; i++)
@@ -225,11 +240,16 @@ namespace MatchMakingMonitor.Services
 				}
 			}
 
-			targetSettings.BattleWeight = sourceSettings.BattleWeight;
-			targetSettings.AvgDmgWeight = sourceSettings.AvgDmgWeight;
-			targetSettings.AvgFragsWeight = sourceSettings.AvgFragsWeight;
-			targetSettings.AvgXpWeight = sourceSettings.AvgXpWeight;
-			targetSettings.AvgFragsWeight = sourceSettings.AvgFragsWeight;
+			if (sourceSettings.BattleWeight > 0)
+				targetSettings.BattleWeight = sourceSettings.BattleWeight;
+			if (sourceSettings.AvgDmgWeight > 0)
+				targetSettings.AvgDmgWeight = sourceSettings.AvgDmgWeight;
+			if (sourceSettings.AvgFragsWeight > 0)
+				targetSettings.AvgFragsWeight = sourceSettings.AvgFragsWeight;
+			if (sourceSettings.AvgXpWeight > 0)
+				targetSettings.AvgXpWeight = sourceSettings.AvgXpWeight;
+			if (sourceSettings.AvgFragsWeight > 0)
+				targetSettings.AvgFragsWeight = sourceSettings.AvgFragsWeight;
 		}
 
 		private static IEnumerable<FieldInfo> GetExportSettings(Type type)

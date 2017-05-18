@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using MatchMakingMonitor.config;
+using MatchMakingMonitor.config.Reflection;
 using MatchMakingMonitor.Services;
 using MatchMakingMonitor.View.Util;
 
@@ -15,7 +16,23 @@ namespace MatchMakingMonitor.View
 	{
 		public RelayCommand PathClickCommand { get; set; }
 
-		public IEnumerable<Region> Regions { get; } = new List<Region> { Region.NA, Region.EU, Region.RU, Region.SEA };
+		public IEnumerable<Region> Regions { get; } = new List<Region> { Region.NA, Region.EU, Region.RU, Region.ASIA };
+
+		private Region _region;
+
+		public Region Region
+		{
+			get => _region;
+			set
+			{
+				var oldValue = _region;
+				_region = value;
+				FirePropertyChanged();
+				_settingsWrapper.CurrentSettings.Region = _region;
+				_settingsWrapper.SettingChangedSubject.OnNext(new ChangedSetting(oldValue, _region, nameof(SettingsJson.Region)));
+			}
+		}
+
 
 		private string _installDirectoryText = "Check install directory";
 
@@ -87,15 +104,17 @@ namespace MatchMakingMonitor.View
 			}
 		}
 
-		public SettingsWrapper SettingsWrapper { get; }
+		private readonly SettingsWrapper _settingsWrapper;
 
 		public SubHeaderViewModel(SettingsWrapper settingsWrapper, StatsService statsService)
 		{
-			SettingsWrapper = settingsWrapper;
+			_settingsWrapper = settingsWrapper;
 
 			PathClickCommand = new RelayCommand(PathClicked);
 
-			SettingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(s => InitPath());
+			_region = _settingsWrapper.CurrentSettings.Region;
+
+			_settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(s => InitPath());
 			statsService.StatsStatusChanged.Subscribe(status =>
 			{
 				SetStatusText(status);
@@ -118,7 +137,7 @@ namespace MatchMakingMonitor.View
 
 		private void InitPath()
 		{
-			var directory = SettingsWrapper.CurrentSettings.InstallDirectory;
+			var directory = _settingsWrapper.CurrentSettings.InstallDirectory;
 			if (Directory.Exists(Path.Combine(directory, "replays")) && File.Exists(Path.Combine(directory, "WorldOfWarships.exe")))
 			{
 				InstallDirectoryColor = Brushes.Green;
@@ -137,7 +156,9 @@ namespace MatchMakingMonitor.View
 			var result = folderBrowser.ShowDialog();
 			if (result == DialogResult.OK && !string.IsNullOrEmpty(folderBrowser.SelectedPath))
 			{
-				SettingsWrapper.CurrentSettings.InstallDirectory = folderBrowser.SelectedPath;
+				var oldValue = _settingsWrapper.CurrentSettings.InstallDirectory;
+				_settingsWrapper.CurrentSettings.InstallDirectory = folderBrowser.SelectedPath;
+				_settingsWrapper.SettingChangedSubject.OnNext(new ChangedSetting(oldValue, _settingsWrapper.CurrentSettings.InstallDirectory, nameof(SettingsJson.InstallDirectory)));
 			}
 		}
 

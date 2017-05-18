@@ -55,5 +55,13 @@ namespace MatchMakingMonitor.config
 
 		[JsonProperty("winRateWeight"), ExportSetting]
 		public double WinRateWeight;
+
+		public static SettingsJson Empty()
+		{
+			return new SettingsJson
+			{
+				AvgDmgLimits = new LimitsType()
+			};
+		}
 	}
 }
