@@ -123,7 +123,7 @@
 												           Text="No stats or hidden" />
 											</DockPanel>
 											<DockPanel Grid.Column="1" Grid.ColumnSpan="3" Visibility="{Binding HideLowBattlesVisibility}">
-												<TextBlock Margin="5" VerticalAlignment="Center" Foreground="{Binding ColorAvgDamage}"
+												<TextBlock Margin="5" VerticalAlignment="Center" Foreground="{Binding Color}"
 												           Text="Player has less than 10 battles in the current ship" />
 											</DockPanel>
 										</Grid>
