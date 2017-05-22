@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using MatchMakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
+using MatchMakingMonitor.Services;
 
 namespace MatchMakingMonitor.config.warshipsToday
 {
@@ -11,12 +12,12 @@ namespace MatchMakingMonitor.config.warshipsToday
 	{
 		private static readonly int[] Tiers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-		public static async Task Get(SettingsJson settings)
+		public static async Task Get(SettingsJson settings, ILogger logger)
 		{
-			var allRegions = (await GetEntries(Region.EU))
-				.Concat(await GetEntries(Region.RU))
-				.Concat(await GetEntries(Region.NA))
-				.Concat(await GetEntries(Region.ASIA)).ToList();
+			var allRegions = (await GetEntries(Region.EU, logger))
+				.Concat(await GetEntries(Region.RU, logger))
+				.Concat(await GetEntries(Region.NA, logger))
+				.Concat(await GetEntries(Region.ASIA, logger)).ToList();
 
 			if (allRegions.Any())
 			{
@@ -40,7 +41,7 @@ namespace MatchMakingMonitor.config.warshipsToday
 			}
 		}
 
-		private static async Task<WarshipsTodayEntry[]> GetEntries(Region region)
+		private static async Task<WarshipsTodayEntry[]> GetEntries(Region region, ILogger logger)
 		{
 			try
 			{
@@ -56,8 +57,9 @@ namespace MatchMakingMonitor.config.warshipsToday
 				var json = await response.Content.ReadAsStringAsync();
 				return await Task.Run(() => JsonConvert.DeserializeObject<WarshipsTodayEntry[]>(json));
 			}
-			catch
+			catch (Exception e)
 			{
+        logger.Error($"Error retreiving data from url 'https://api.{region}.warships.today'", e);
 				return new WarshipsTodayEntry[0];
 			}
 		}
