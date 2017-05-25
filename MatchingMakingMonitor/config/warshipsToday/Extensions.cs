@@ -25,7 +25,7 @@ namespace MatchMakingMonitor.config.warshipsToday
 
 		public static IEnumerable<double> AvgFrags(this IEnumerable<WarshipsTodayEntry> entries)
 		{
-			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.Frags / s.Statistics.ShipStatistics.Battles * 100,
+			return entries.Select(s => Math.Round(s.Statistics.ShipStatistics.Frags / s.Statistics.ShipStatistics.Battles,
 				2));
 		}
 
