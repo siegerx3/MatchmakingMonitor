@@ -114,7 +114,7 @@ namespace MatchMakingMonitor.Services
 		private static string Defaults()
 		{
 			var stream = Assembly.GetExecutingAssembly()
-				.GetManifestResourceStream("MatchMakingMonitor.config.settings.default.json");
+				.GetManifestResourceStream("MatchmakingMonitor.config.settings.default.json");
 			var result = string.Empty;
 			if (stream == null) return result;
 			using (var sr = new StreamReader(stream))

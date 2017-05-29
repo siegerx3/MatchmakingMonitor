@@ -1,6 +1,8 @@
 <md-toolbar color="primary">
-  Matchmaking Monitor
-  <a md-button routerLink="download/latest">Download latest ({{api.latestVersion}})</a>
+	<a class="unstyled" routerLink="/">Matchmaking Monitor</a>
+	<span class="app-toolbar-filler"></span>
+	<a md-button routerLink="download/latest"><i class="material-icons">file_download</i> Download latest ({{api.latestVersion}})</a>
 </md-toolbar>
-
-<router-outlet></router-outlet>
+<div class="app-inner">
+	<router-outlet></router-outlet>
+</div>

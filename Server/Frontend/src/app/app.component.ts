@@ -7,5 +7,5 @@ import { ApiService } from './services/api.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  constructor(private api: ApiService) { }
+  constructor(public api: ApiService) { }
 }
