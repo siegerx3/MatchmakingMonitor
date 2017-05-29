@@ -1,0 +1,18 @@
+<div *ngIf="downloading">
+  <ng-container *ngIf="remaining > 0">
+    Download starting in {{remaining}} seconds.
+  </ng-container>
+  <ng-container *ngIf="remaining <= 0">
+    Download started.
+  </ng-container>
+  Click <a href="{{link}}">here</a> if the download does not start automatically.
+</div>
+
+<div *ngIf="!downloading">
+  <md-select placeholder="Select version">
+    <md-option *ngFor="let version of allVersions" [value]="version">
+      {{version}}
+    </md-option>
+  </md-select>
+  <button md-button (click)="downloading = true">Download</button>
+</div>

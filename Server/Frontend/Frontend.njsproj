@@ -38,6 +38,8 @@
     <Content Include="package.json" />
     <Content Include="proxy.conf.json" />
     <Content Include="src\app\app.component.html" />
+    <Content Include="src\app\download\download.component.html" />
+    <Content Include="src\app\home\home.component.html" />
     <Content Include="src\assets\.gitkeep" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
@@ -49,12 +51,19 @@
   <ItemGroup>
     <Folder Include="src\" />
     <Folder Include="src\app\" />
+    <Folder Include="src\app\home\" />
+    <Folder Include="src\app\download\" />
+    <Folder Include="src\app\services\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\environments\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\app\app.component.ts" />
+    <TypeScriptCompile Include="src\app\app-routing.module.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\download\download.component.ts" />
+    <TypeScriptCompile Include="src\app\home\home.component.ts" />
+    <TypeScriptCompile Include="src\app\services\api.service.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />
