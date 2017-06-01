@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog } from '@angular/material';
 
 import { ApiService } from '../services/api.service';
 
@@ -32,15 +32,15 @@ export class DownloadComponent {
 	}
 
 	public selectVersion(version: string) {
-		if (version == 'latest') {
+		if (version === 'latest') {
 			this.link = '/api/download/latest';
 		} else {
-			this.link = '/api/download/specific/' + version;
+			this.link = `/api/download/specific/${version}`;
 		}
 	}
 
-	timeout: any;
-	interval: any;
+	public timeout: any;
+	public interval: any;
 
 	public startDownloading() {
 		clearTimeout(this.timeout);
@@ -51,12 +51,12 @@ export class DownloadComponent {
 		this.remaining = time;
 		this.timeout = setTimeout(() => this.downloadLink(), time * 1000);
 		this.interval = setInterval(() => {
-			if (this.remaining > 0) {
-				this.remaining--;
-			} else {
-				clearInterval(this.interval);
-			}
-		},
+				if (this.remaining > 0) {
+					this.remaining--;
+				} else {
+					clearInterval(this.interval);
+				}
+			},
 			1000);
 	}
 
@@ -67,12 +67,13 @@ export class DownloadComponent {
 
 	public openChangelog(changelog: string) {
 		this.api.getChangelog(changelog).subscribe(c => {
-			let dialogRef = this.dialog.open(ChangelogDialog, {
-				data: {
-					text: c,
-					title: `Changelog for version ${changelog}`
-				},
-			});
+			this.dialog.open(ChangelogDialog,
+				{
+					data: {
+						text: c,
+						title: `Changelog for version ${changelog}`
+					}
+				});
 		});
 	}
 }

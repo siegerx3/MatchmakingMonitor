@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Backend.Models;
-using System.Text.RegularExpressions;
 
 namespace Backend.Controllers
 {
@@ -33,10 +31,11 @@ namespace Backend.Controllers
 				return false;
 			}
 		}
+
 		private static string EncodeAsFileName(string text)
 		{
 			return Regex.Replace(text, "[" + Regex.Escape(
-																			 new string(Path.GetInvalidFileNameChars())) + "]", " ");
+				                           new string(Path.GetInvalidFileNameChars())) + "]", " ");
 		}
 	}
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Backend.Models
+﻿namespace Backend.Models
 {
 	public class Form
 	{
@@ -16,6 +10,6 @@ namespace Backend.Models
 	public enum FormMode
 	{
 		Bug = 0,
-		Feature = 1,
+		Feature = 1
 	}
 }

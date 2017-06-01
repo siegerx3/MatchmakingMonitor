@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -15,7 +13,8 @@ namespace Backend.Controllers
 		private static readonly string CacheKeyLatest = "latest" + Guid.NewGuid();
 		private static readonly string CacheKeyAll = "all" + Guid.NewGuid();
 
-		[Route("latest"), HttpGet]
+		[Route("latest")]
+		[HttpGet]
 		public async Task<string> GetLatest()
 		{
 			return (await Latest()).ToString();
@@ -33,7 +32,12 @@ namespace Backend.Controllers
 					return cachedVersion;
 #endif
 				var version = await GetVersion();
-				cache.Add(CacheKeyLatest, version, new CacheItemPolicy() { Priority = CacheItemPriority.Default, AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10) });
+				cache.Add(CacheKeyLatest, version,
+					new CacheItemPolicy
+					{
+						Priority = CacheItemPriority.Default,
+						AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10)
+					});
 				return version;
 			}
 			catch
@@ -49,7 +53,8 @@ namespace Backend.Controllers
 			return new Version(versionString);
 		}
 
-		[Route("all"), HttpGet]
+		[Route("all")]
+		[HttpGet]
 		public async Task<string[]> GetAll()
 		{
 			var cache = MemoryCache.Default;
@@ -61,7 +66,12 @@ namespace Backend.Controllers
 					return cachedArray;
 #endif
 				var versions = await GetVersions();
-				cache.Add(CacheKeyLatest, versions, new CacheItemPolicy() { Priority = CacheItemPriority.Default, AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10) });
+				cache.Add(CacheKeyLatest, versions,
+					new CacheItemPolicy
+					{
+						Priority = CacheItemPriority.Default,
+						AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10)
+					});
 				return versions;
 			}
 			catch
@@ -74,14 +84,14 @@ namespace Backend.Controllers
 		{
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "versions");
 			return await Task.Run(() =>
-				{
-					var versions = Directory.EnumerateFiles(path, "*.zip", SearchOption.TopDirectoryOnly)
-						.Select(Path.GetFileNameWithoutExtension)
-						.Where(fileName => fileName.StartsWith("MatchmakingMonitor-"))
-						.Select(fileName => fileName.Replace("MatchmakingMonitor-", string.Empty))
-						.Select(v => new Version(v)).Sort();
-					return versions.Select(v => v.ToString()).ToArray();
-				});
+			{
+				var versions = Directory.EnumerateFiles(path, "*.zip", SearchOption.TopDirectoryOnly)
+					.Select(Path.GetFileNameWithoutExtension)
+					.Where(fileName => fileName.StartsWith("MatchmakingMonitor-"))
+					.Select(fileName => fileName.Replace("MatchmakingMonitor-", string.Empty))
+					.Select(v => new Version(v)).Sort();
+				return versions.Select(v => v.ToString()).ToArray();
+			});
 		}
 	}
 }

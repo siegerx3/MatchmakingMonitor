@@ -11,14 +11,15 @@ export class ApiService {
 	}
 
 	private _latestVersion: string;
+
 	public get latestVersion(): string {
 		return this._latestVersion;
 	}
 
 	public getLatestVersion(): Observable<string> {
 		return this.http.get('/api/version/latest')
-			.map(response => response.json() as string, err => console.log(err))
-			.do(lv => this._latestVersion = lv);
+			.map(response => response.json(), err => console.log(err))
+			.do(lv => this._latestVersion = (lv as string));
 	}
 
 	public getAllVersions(): Observable<string[]> {
@@ -27,15 +28,17 @@ export class ApiService {
 	}
 
 	public postForm(formValue: {}): Observable<boolean> {
-		return this.http.post('/api/form/submit', JSON.stringify(formValue), { headers: new Headers({ 'content-type': 'application/json' }) })
+		return this.http.post('/api/form/submit',
+				JSON.stringify(formValue),
+				{ headers: new Headers({ 'content-type': 'application/json' }) })
 			.map(response => response.json() as boolean, err => console.log(err));
 	}
 
 	public getChangelogs(): Observable<string[]> {
-		return this.http.get("/api/changelog/list").map(response => response.json() as string[]);
+		return this.http.get('/api/changelog/list').map(response => response.json() as string[]);
 	}
 
 	public getChangelog(changelog: string) {
-		return this.http.get("/api/changelog/detail/" + changelog).map(response => response.json() as string);
+		return this.http.get(`/api/changelog/detail/${changelog}`).map(response => response.json() as string);
 	}
 }
