@@ -43,27 +43,40 @@ export class DownloadComponent {
 	public interval: any;
 
 	public startDownloading() {
-		clearTimeout(this.timeout);
-		clearInterval(this.interval);
+		this.cancelTimer();
 
 		const time = 5;
 		this.downloading = true;
 		this.remaining = time;
 		this.timeout = setTimeout(() => this.downloadLink(), time * 1000);
 		this.interval = setInterval(() => {
-				if (this.remaining > 0) {
-					this.remaining--;
-				} else {
-					clearInterval(this.interval);
-				}
-			},
+			if (this.remaining > 0) {
+				this.remaining--;
+			} else {
+				clearInterval(this.interval);
+			}
+		},
 			1000);
 	}
 
+	public cancelTimer() {
+		clearTimeout(this.timeout);
+		clearInterval(this.interval);
+		this.downloading = false;
+	}
+
 	private downloadLink() {
+		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+			ga('send', 'event', { eventCategory: 'download', eventAction: 'download', eventLabel: this.link });
+		}	
 		window.location.href = this.link;
 	}
 
+	public clickHere(event: MouseEvent) {
+		event.preventDefault();
+		this.cancelTimer();
+		this.downloadLink();
+	}
 
 	public openChangelog(changelog: string) {
 		this.api.getChangelog(changelog).subscribe(c => {
