@@ -102,8 +102,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CentralizedPrefixProvider.cs" />
+    <Compile Include="Controllers\ChangelogController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
+    <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Models\ChangelogListItem.cs" />
+    <Compile Include="Models\Form.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

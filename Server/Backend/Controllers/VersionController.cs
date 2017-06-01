@@ -28,9 +28,10 @@ namespace Backend.Controllers
 			try
 			{
 				var cachedVersion = cache.Get(CacheKeyLatest) as Version;
+#if !DEBUG
 				if (cachedVersion != null)
 					return cachedVersion;
-
+#endif
 				var version = await GetVersion();
 				cache.Add(CacheKeyLatest, version, new CacheItemPolicy() { Priority = CacheItemPriority.Default, AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10) });
 				return version;
@@ -55,9 +56,10 @@ namespace Backend.Controllers
 			try
 			{
 				var cachedArray = cache.Get(CacheKeyAll) as string[];
+#if !DEBUG
 				if (cachedArray != null)
 					return cachedArray;
-
+#endif
 				var versions = await GetVersions();
 				cache.Add(CacheKeyLatest, versions, new CacheItemPolicy() { Priority = CacheItemPriority.Default, AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10) });
 				return versions;
@@ -77,8 +79,7 @@ namespace Backend.Controllers
 						.Select(Path.GetFileNameWithoutExtension)
 						.Where(fileName => fileName.StartsWith("MatchmakingMonitor-"))
 						.Select(fileName => fileName.Replace("MatchmakingMonitor-", string.Empty))
-						.Select(v => new Version(v)).ToList();
-					versions.Sort((x, y) => y.CompareTo(x));
+						.Select(v => new Version(v)).Sort();
 					return versions.Select(v => v.ToString()).ToArray();
 				});
 		}

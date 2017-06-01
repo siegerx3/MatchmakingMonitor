@@ -139,6 +139,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="bugs\" />
+    <Folder Include="changelogs\" />
+    <Folder Include="features\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>

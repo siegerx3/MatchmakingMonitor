@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 import { ApiService } from '../services/api.service';
+
+import { ChangelogDialog } from './changelog.component';
 
 @Component({
 	templateUrl: './download.component.html'
@@ -15,7 +18,9 @@ export class DownloadComponent {
 	public selectedVersion: string;
 	public allVersions: string[];
 
-	constructor(private api: ApiService, private activatedRoute: ActivatedRoute) {
+	public changelogs: string[];
+
+	constructor(private api: ApiService, private dialog: MdDialog, private activatedRoute: ActivatedRoute) {
 		this.activatedRoute.params.filter(p => p['version']).subscribe(p => {
 			this.selectVersion(p['version']);
 			this.api.getLatestVersion().subscribe(v => this.selectedVersion = v);
@@ -23,6 +28,7 @@ export class DownloadComponent {
 		});
 
 		this.api.getAllVersions().subscribe(v => this.allVersions = v);
+		this.api.getChangelogs().subscribe(c => this.changelogs = c);
 	}
 
 	public selectVersion(version: string) {
@@ -56,5 +62,17 @@ export class DownloadComponent {
 
 	private downloadLink() {
 		window.location.href = this.link;
+	}
+
+
+	public openChangelog(changelog: string) {
+		this.api.getChangelog(changelog).subscribe(c => {
+			let dialogRef = this.dialog.open(ChangelogDialog, {
+				data: {
+					text: c,
+					title: `Changelog for version ${changelog}`
+				},
+			});
+		});
 	}
 }
