@@ -180,6 +180,7 @@
     <Compile Include="Services\FileLogger.cs" />
     <Compile Include="Services\SettingsWrapper.cs" />
     <Compile Include="Services\StatsService.cs" />
+    <Compile Include="Services\UpgradeSettings.cs" />
     <Compile Include="Services\WatcherService.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
