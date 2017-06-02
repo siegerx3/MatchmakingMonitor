@@ -94,6 +94,7 @@ namespace MatchMakingMonitor.Services
           else
           {
             UpgradeSettings.Upgrade(CurrentSettings, settingsVersion);
+	          await InternalSave();
           }
         }
       }

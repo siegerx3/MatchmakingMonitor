@@ -22,15 +22,18 @@ body {
 
 h1, h2, h3, p {
 	margin-top: 0;
-	margin-bottom: 2rem;
 }
 
-h1 {
+h1,
+h1.mat-dialog-title {
+	font-size: 2em;
 	font-weight: 400;
+	margin-bottom: 2rem;
 }
 
 h2 {
 	font-weight: 300;
+	margin-bottom: 0.7rem;
 }
 
 p {
@@ -55,10 +58,13 @@ a {
 ul {
 	margin: 0;
 	padding: 0;
+	margin-bottom: 20px;
 
 	li {
 		margin: 0;
 		padding: 0;
+		margin-left: 20px;
+		margin-bottom: 5px;
 	}
 }
 
@@ -126,4 +132,7 @@ form {
 	.form-error {
 		color: #f44336;
 	}
+}
+
+markdown {
 }
