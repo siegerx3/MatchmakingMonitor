@@ -27,7 +27,10 @@ export class DownloadComponent {
 			this.startDownloading();
 		});
 
-		this.api.getAllVersions().subscribe(v => this.allVersions = v);
+		this.api.getAllVersions().subscribe(v => {
+			this.allVersions = v;
+			this.selectedVersion = this.allVersions[0];
+		});
 		this.api.getChangelogs().subscribe(c => this.changelogs = c);
 	}
 
@@ -68,7 +71,7 @@ export class DownloadComponent {
 	private downloadLink() {
 		if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
 			ga('send', 'event', { eventCategory: 'download', eventAction: 'download', eventLabel: this.link });
-		}	
+		}
 		window.location.href = this.link;
 	}
 

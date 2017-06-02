@@ -87,7 +87,7 @@ namespace Backend.Controllers
 			{
 				var versions = Directory.EnumerateFiles(path, "*.zip", SearchOption.TopDirectoryOnly)
 					.Select(Path.GetFileNameWithoutExtension)
-					.Where(fileName => fileName.StartsWith("MatchmakingMonitor-"))
+					.Where(fileName => fileName.StartsWith("MatchmakingMonitor-", StringComparison.InvariantCultureIgnoreCase))
 					.Select(fileName => fileName.Replace("MatchmakingMonitor-", string.Empty))
 					.Select(v => new Version(v)).Sort();
 				return versions.Select(v => v.ToString()).ToArray();

@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="versions\MatchmakingMonitor-1.0.0.0.zip" />
+    <Content Include="versions\MatchmakingMonitor-1.0.1.0.zip" />
     <Content Include="changelogs\1.0.1.0.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

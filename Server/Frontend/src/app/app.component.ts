@@ -15,5 +15,18 @@ export class AppComponent {
 				ga('send', 'pageview');
 			}
 		});
+
+		if ('Notification' in window) {
+			Notification.requestPermission();
+		}
+
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.getRegistrations().then(() => {
+				navigator
+					.serviceWorker
+					.register('/check-for-update.worker.js', { scope: './' })
+					.catch(err => console.log('Error:', err));
+			});
+		}
 	}
 }
