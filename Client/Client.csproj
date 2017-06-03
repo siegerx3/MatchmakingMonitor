@@ -159,7 +159,6 @@
     <Compile Include="Models\ResponseTypes\ShipTier.cs" />
     <Compile Include="Models\DisplayPlayerStats.cs" />
     <Compile Include="Models\MobileDisplayPlayerStats.cs" />
-    <Compile Include="Models\MobileSettings.cs" />
     <Compile Include="Models\PlayerShip.cs" />
     <Compile Include="Models\Replay\ReplayVehicle.cs" />
     <Compile Include="Models\ResponseTypes\WgPlayerShipsStatsData.cs" />

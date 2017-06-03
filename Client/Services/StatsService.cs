@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MatchMakingMonitor.config;
 using MatchMakingMonitor.Models;
 using MatchMakingMonitor.Models.Replay;
+using MatchMakingMonitor.SocketIO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -19,6 +20,7 @@ namespace MatchMakingMonitor.Services
 
 		private readonly ILogger _logger;
 		private readonly SettingsWrapper _settingsWrapper;
+		private readonly SocketIOService _socketIoService;
 
 		private readonly BehaviorSubject<StatsStatus> _statsStatusChangedSubject;
 
@@ -27,21 +29,42 @@ namespace MatchMakingMonitor.Services
 		private Replay _currentReplay;
 
 		public StatsService(ILogger logger, SettingsWrapper settingsWrapper, WatcherService watcherService,
-			ApiService apiService)
+			ApiService apiService, SocketIOService socketIoService)
 		{
 			_logger = logger;
 			_apiService = apiService;
 			_settingsWrapper = settingsWrapper;
+			_socketIoService = socketIoService;
 
 			_statsStatusChangedSubject = new BehaviorSubject<StatsStatus>(StatsStatus.Waiting);
 			_statsSubject = new BehaviorSubject<List<DisplayPlayerStats>>(null);
 
 			watcherService.MatchFound.Where(path => path != null)
 				.Subscribe(path => { Task.Run(async () => { await StatsFound(path); }); });
+
+			socketIoService.Hub.OnStatsRequested.SelectMany(_statsSubject).Subscribe(stats =>
+			{
+				try
+				{
+					socketIoService.Hub.SendStats(GetMobilePlayerStats(stats));
+				}
+				catch (Exception e)
+				{
+					_logger.Error("Error trying to convert stats to mobile version", e);
+				}
+			});
 		}
 
 		public IObservable<StatsStatus> StatsStatusChanged => _statsStatusChangedSubject.AsObservable();
 		public IObservable<List<DisplayPlayerStats>> Stats => _statsSubject.Where(s => s != null).AsObservable();
+
+		private List<MobileDisplayPlayerStats> GetMobilePlayerStats(IReadOnlyCollection<DisplayPlayerStats> stats)
+		{
+			var mobileStats = new List<MobileDisplayPlayerStats>(stats.Count);
+			foreach (var stat in stats)
+				mobileStats.Add(stat.ToMobile());
+			return mobileStats;
+		}
 
 		private async Task StatsFound(string path)
 		{
@@ -77,6 +100,7 @@ namespace MatchMakingMonitor.Services
 						{
 							var stats = await ComputeDisplayPlayer(players);
 							_statsStatusChangedSubject.OnNext(StatsStatus.Fetched);
+							_socketIoService.Hub.SendStats(GetMobilePlayerStats(stats));
 							_statsSubject.OnNext(stats);
 						}
 						catch (Exception e)

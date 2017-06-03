@@ -50,10 +50,13 @@ namespace MatchMakingMonitor.Services
 				}
 			});
 
-			settingsWrapper.SettingChanged(nameof(SettingsJson.Region), false).Subscribe(key => { CheckStatic(); });
+			settingsWrapper.SettingChanged(nameof(SettingsJson.Region), false).Subscribe(key =>
+			{
+				CheckStatic();
+			});
 		}
 
-		public IObservable<string> MatchFound => _matchFoundSubject.AsObservable();
+		public IObservable<string> MatchFound => _matchFoundSubject.Throttle(TimeSpan.FromMilliseconds(150)).AsObservable();
 
 		private void CheckStatic()
 		{
