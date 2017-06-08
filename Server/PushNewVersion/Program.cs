@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using WebPush;
+
+namespace PushNewVersion
+{
+	class Program
+	{
+		static void Main(string[] args)
+		{
+
+#if !DEBUG
+			var path = "../registrations.json";
+#endif
+#if DEBUG
+			var path = "../../../Backend.Test/registrations.json";
+#endif
+			var registrations = JsonConvert.DeserializeObject<List<Registration>>(File.ReadAllText(path));
+
+			var vapidJson = File.ReadAllText("vapidDetails.json");
+			var vapidDetails = JsonConvert.DeserializeObject<VapidDetails>(vapidJson);
+
+			var webPushClient = new WebPushClient();
+
+			var successList = new List<Registration>(5);
+			foreach (var r in registrations)
+			{
+				try
+				{
+					webPushClient.SendNotification(new PushSubscription(r.Endpoint, r.Key, r.AuthSecret), File.ReadAllText("notification.json"), vapidDetails);
+					successList.Add(r);
+				}
+				catch
+				{
+					Console.WriteLine("Error at registration with key: " + r.Key);
+				}
+			}
+			File.WriteAllText(path, JsonConvert.SerializeObject(successList));
+		}
+	}
+
+	public class Registration
+	{
+		public string Key { get; set; }
+		public string AuthSecret { get; set; }
+		public string Endpoint { get; set; }
+	}
+}
