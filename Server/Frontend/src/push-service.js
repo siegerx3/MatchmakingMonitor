@@ -7,7 +7,7 @@ self.addEventListener('activate', event => {
 	//self.skipWaiting();
 });
 
-
+var mode = '';
 self.addEventListener('push', event => {
 	event.waitUntil(self.skipWaiting());
 	console.log('[Service Worker] Push Received.');
@@ -21,7 +21,11 @@ self.addEventListener('notificationclick', function (event) {
 			if (clientList.length > 0) {
 				return clientList[0].focus();
 			}
-			return self.clients.openWindow('/download/latest');
+			if (mode == 'newVersion') {
+				return self.clients.openWindow('/download/latest');
+			} else {
+				return self.clients.openWindow('/');
+			}
 		})
 	);
 });
@@ -62,6 +66,7 @@ self.addEventListener('pushsubscriptionchange', function (event) {
 });
 
 function ShowNotification(data) {
+	mode = data.type;
 	var options = {
 		body: data.body,
 		icon: 'favicon.ico'

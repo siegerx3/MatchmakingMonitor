@@ -58,6 +58,10 @@ export class AppComponent {
 									'Content-type': 'application/json'
 								},
 								body: JSON.stringify(postData)
+							}).then(r => {
+								if (r.ok) {
+									ga('send', 'event', { eventCategory: 'push', eventAction: 'subscribe', eventLabel: postData['key'] });
+								}
 							});
 					});
 			});

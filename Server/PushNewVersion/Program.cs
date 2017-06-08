@@ -35,12 +35,18 @@ namespace PushNewVersion
 					webPushClient.SendNotification(new PushSubscription(r.Endpoint, r.Key, r.AuthSecret), File.ReadAllText("notification.json"), vapidDetails);
 					successList.Add(r);
 				}
-				catch
+				catch (Exception e)
 				{
 					Console.WriteLine("Error at registration with key: " + r.Key);
+					Console.WriteLine(e.Message);
+					Console.WriteLine(e.InnerException?.Message);
+					Console.WriteLine(e.InnerException?.InnerException?.Message);
 				}
 			}
+#if !DEBUG
 			File.WriteAllText(path, JsonConvert.SerializeObject(successList));
+#endif
+			Console.ReadLine();
 		}
 	}
 
