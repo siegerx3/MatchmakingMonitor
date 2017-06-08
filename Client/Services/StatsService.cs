@@ -42,11 +42,12 @@ namespace MatchMakingMonitor.Services
 			watcherService.MatchFound.Where(path => path != null)
 				.Subscribe(path => { Task.Run(async () => { await StatsFound(path); }); });
 
-			socketIoService.Hub.OnStatsRequested.SelectMany(_statsSubject).Subscribe(stats =>
+			socketIoService.Hub.OnPlayersRequested.SelectMany(_statsSubject).Subscribe(players =>
 			{
 				try
 				{
-					socketIoService.Hub.SendStats(GetMobilePlayerStats(stats));
+					socketIoService.Hub.SendColorKeys(players.Select(p => p.GetColorKeys()).ToList());
+					socketIoService.Hub.SendPlayers(players.Select(p => p.ToMobile()).ToList());	
 				}
 				catch (Exception e)
 				{
@@ -57,14 +58,6 @@ namespace MatchMakingMonitor.Services
 
 		public IObservable<StatsStatus> StatsStatusChanged => _statsStatusChangedSubject.AsObservable();
 		public IObservable<List<DisplayPlayerStats>> Stats => _statsSubject.Where(s => s != null).AsObservable();
-
-		private List<MobileDisplayPlayerStats> GetMobilePlayerStats(IReadOnlyCollection<DisplayPlayerStats> stats)
-		{
-			var mobileStats = new List<MobileDisplayPlayerStats>(stats.Count);
-			foreach (var stat in stats)
-				mobileStats.Add(stat.ToMobile());
-			return mobileStats;
-		}
 
 		private async Task StatsFound(string path)
 		{
@@ -100,7 +93,8 @@ namespace MatchMakingMonitor.Services
 						{
 							var stats = await ComputeDisplayPlayer(players);
 							_statsStatusChangedSubject.OnNext(StatsStatus.Fetched);
-							_socketIoService.Hub.SendStats(GetMobilePlayerStats(stats));
+							_socketIoService.Hub.SendColorKeys(stats.Select(p => p.GetColorKeys()).ToList());
+							_socketIoService.Hub.SendPlayers(stats.Select(p => p.ToMobile()).ToList());
 							_statsSubject.OnNext(stats);
 						}
 						catch (Exception e)

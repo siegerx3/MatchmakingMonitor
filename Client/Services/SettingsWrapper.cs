@@ -66,6 +66,7 @@ namespace MatchMakingMonitor.Services
 			uiSettingsChangedInternal.Subscribe(changedSetting =>
 			{
 				SetBrushes();
+				SettingsRequested();
 				_uiSettingsChangedSubject.OnNext(changedSetting);
 			});
 			SetBrushes();
@@ -82,8 +83,12 @@ namespace MatchMakingMonitor.Services
 
 		private void SettingsRequested()
 		{
-			var export = GetExportSettings();
-			export.Add(FirstLetterToLower(nameof(SettingsJson.Region)), CurrentSettings.Region);
+			var export = new Dictionary<string, object>
+			{
+				{FirstLetterToLower(nameof(SettingsJson.Colors)), CurrentSettings.Colors},
+				{FirstLetterToLower(nameof(SettingsJson.HideLowBattles)), CurrentSettings.HideLowBattles},
+				{FirstLetterToLower(nameof(SettingsJson.Region)), CurrentSettings.Region}
+			};
 			_socketIoService.Hub.SendSettings(export);
 		}
 
