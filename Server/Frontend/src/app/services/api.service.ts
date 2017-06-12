@@ -32,8 +32,8 @@ export class ApiService {
 
 	public postForm(formValue: {}): Observable<boolean> {
 		return this.http.post('/api/form/submit',
-			JSON.stringify(formValue),
-			{ headers: new Headers({ 'content-type': 'application/json' }) })
+				JSON.stringify(formValue),
+				{ headers: new Headers({ 'content-type': 'application/json' }) })
 			.map(response => response.json() as boolean, err => console.log(err));
 	}
 

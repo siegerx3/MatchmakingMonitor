@@ -10,7 +10,9 @@ import { ApiService } from './services/api.service';
 export class AppComponent {
 	constructor(public api: ApiService, public router: Router) {
 		this.router.events.subscribe(event => {
-			if (event instanceof NavigationEnd && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+			if (event instanceof NavigationEnd &&
+				window.location.hostname !== 'localhost' &&
+				window.location.hostname !== '127.0.0.1') {
 				ga('set', 'page', event.urlAfterRedirects);
 				ga('send', 'pageview');
 			}
@@ -21,7 +23,8 @@ export class AppComponent {
 				Notification.requestPermission();
 			}
 
-			navigator.serviceWorker.getRegistration('./check-for-update.worker.js').then(r => { if (r != null) r.unregister(); });
+			navigator.serviceWorker.getRegistration('./check-for-update.worker.js')
+				.then(r => { if (r != null) r.unregister(); });
 			navigator.serviceWorker.getRegistration('./push').then(r => { if (r != null) r.unregister(); });
 
 			navigator.serviceWorker.getRegistrations().then(() => {
@@ -34,20 +37,19 @@ export class AppComponent {
 
 								return registration.pushManager.subscribe({
 									userVisibleOnly: true,
-									applicationServerKey: urlB64ToUint8Array('BHPsziID1JZJtR8zHEgMWiaogmV9xT_U0grDDQUAB06MzaKrL1nBB9P2ifOu1qsNNThgk19l3K5x8Wh3doB3A44')
+									applicationServerKey: urlB64ToUint8Array(
+										'BHPsziID1JZJtR8zHEgMWiaogmV9xT_U0grDDQUAB06MzaKrL1nBB9P2ifOu1qsNNThgk19l3K5x8Wh3doB3A44')
 								});
 							});
 					})
 					.then(subscription => {
 						var postData = {};
 						var rawKey = subscription.getKey ? subscription.getKey('p256dh') : '';
-						postData['key'] = rawKey ?
-							btoa(String.fromCharCode.apply(null, new Uint8Array(rawKey as ArrayBuffer))) :
-							'';
+						postData['key'] = rawKey ? btoa(String.fromCharCode.apply(null, new Uint8Array(rawKey as ArrayBuffer))) : '';
 						var rawAuthSecret = subscription.getKey ? subscription.getKey('auth') : '';
-						postData['authSecret'] = rawAuthSecret ?
-							btoa(String.fromCharCode.apply(null, new Uint8Array(rawAuthSecret as ArrayBuffer))) :
-							'';
+						postData['authSecret'] = rawAuthSecret
+							? btoa(String.fromCharCode.apply(null, new Uint8Array(rawAuthSecret as ArrayBuffer)))
+							: '';
 
 						postData['endpoint'] = subscription.endpoint;
 
@@ -59,14 +61,14 @@ export class AppComponent {
 								},
 								body: JSON.stringify(postData)
 							}).then(r => {
-								if (r.ok) {
-									ga('send', 'event', { eventCategory: 'push', eventAction: 'subscribe', eventLabel: postData['key'] });
-								}
-							});
+							if (r.ok) {
+								ga('send', 'event', { eventCategory: 'push', eventAction: 'subscribe', eventLabel: postData['key'] });
+							}
+						});
 					});
 			});
 		} catch (err) {
-			console.log("Error when trying to register push service: " + err);
+			console.log(`Error when trying to register push service: ${err}`);
 		}
 	}
 

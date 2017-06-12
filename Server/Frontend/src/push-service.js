@@ -1,53 +1,56 @@
-﻿self.addEventListener('install', event => {
-	//self.skipWaiting();
-});
+﻿self.addEventListener('install',
+	() => {
+		//self.skipWaiting();
+	});
 
 // The activate handler takes care of cleaning up old caches.
-self.addEventListener('activate', event => {
-	//self.skipWaiting();
-});
+self.addEventListener('activate',
+	() => {
+		//self.skipWaiting();
+	});
 
+// ReSharper disable once InconsistentNaming
 var mode = '';
-self.addEventListener('push', event => {
-	event.waitUntil(self.skipWaiting());
-	console.log('[Service Worker] Push Received.');
-	ShowNotification(event.data.json());
-});
+self.addEventListener('push',
+	event => {
+		event.waitUntil(self.skipWaiting());
+		console.log('[Service Worker] Push Received.');
+		ShowNotification(event.data.json());
+	});
 
-self.addEventListener('notificationclick', function (event) {
-	event.waitUntil(
-		self.clients.matchAll().then(function (clientList) {
-			event.notification.close();
-			if (clientList.length > 0) {
-				return clientList[0].focus();
-			}
-			if (mode == 'newVersion') {
-				return self.clients.openWindow('/download/latest');
-			} else {
-				return self.clients.openWindow('/');
-			}
-		})
-	);
-});
+self.addEventListener('notificationclick',
+	function(event) {
+		event.waitUntil(
+			self.clients.matchAll().then(function(clientList) {
+				event.notification.close();
+				if (clientList.length > 0) {
+					return clientList[0].focus();
+				}
+				if (mode === 'newVersion') {
+					return self.clients.openWindow('/download/latest');
+				} else {
+					return self.clients.openWindow('/');
+				}
+			})
+		);
+	});
 
-self.addEventListener('pushsubscriptionchange', function (event) {
-	console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
-	var applicationServerKey = UrlB64ToUint8Array('BHPsziID1JZJtR8zHEgMWiaogmV9xT_U0grDDQUAB06MzaKrL1nBB9P2ifOu1qsNNThgk19l3K5x8Wh3doB3A44');
-	event.waitUntil(
-		self.registration.pushManager.subscribe({
-			userVisibleOnly: true,
-			applicationServerKey: applicationServerKey
-		})
-			.then(function (newSubscription) {
+self.addEventListener('pushsubscriptionchange',
+	function(event) {
+		console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
+		var applicationServerKey =
+			UrlB64ToUint8Array('BHPsziID1JZJtR8zHEgMWiaogmV9xT_U0grDDQUAB06MzaKrL1nBB9P2ifOu1qsNNThgk19l3K5x8Wh3doB3A44');
+		event.waitUntil(
+			self.registration.pushManager.subscribe({
+				userVisibleOnly: true,
+				applicationServerKey: applicationServerKey
+			})
+			.then(function(newSubscription) {
 				var postData = {};
 				var rawKey = newSubscription.getKey ? newSubscription.getKey('p256dh') : '';
-				postData['key'] = rawKey ?
-					btoa(String.fromCharCode.apply(null, new Uint8Array(rawKey))) :
-					'';
+				postData['key'] = rawKey ? btoa(String.fromCharCode.apply(null, new Uint8Array(rawKey))) : '';
 				var rawAuthSecret = newSubscription.getKey ? newSubscription.getKey('auth') : '';
-				postData['authSecret'] = rawAuthSecret ?
-					btoa(String.fromCharCode.apply(null, new Uint8Array(rawAuthSecret))) :
-					'';
+				postData['authSecret'] = rawAuthSecret ? btoa(String.fromCharCode.apply(null, new Uint8Array(rawAuthSecret))) : '';
 
 				postData['endpoint'] = newSubscription.endpoint;
 
@@ -62,8 +65,8 @@ self.addEventListener('pushsubscriptionchange', function (event) {
 
 				console.log('[Service Worker] New subscription: ', newSubscription);
 			})
-	);
-});
+		);
+	});
 
 function ShowNotification(data) {
 	mode = data.type;

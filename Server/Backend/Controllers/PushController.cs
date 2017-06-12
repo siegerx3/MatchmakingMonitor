@@ -12,14 +12,17 @@ namespace Backend.Controllers
 	[RoutePrefix("push")]
 	public class PushController : ApiController
 	{
-		[HttpPost, Route("register")]
+		[HttpPost]
+		[Route("register")]
 		public async Task<bool> Register(Registration registration)
 		{
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "registrations.json");
 			if (!File.Exists(path))
 				File.Create(path).Close();
 
-			var registrations = await Task.Run(() => JsonConvert.DeserializeObject<List<Registration>>(File.ReadAllText(path))) ?? new List<Registration>(1);
+			var registrations =
+				await Task.Run(() => JsonConvert.DeserializeObject<List<Registration>>(File.ReadAllText(path))) ??
+				new List<Registration>(1);
 			if (registrations.All(r => r.Key != registration.Key))
 				registrations.Add(registration);
 

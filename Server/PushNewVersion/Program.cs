@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WebPush;
 
 namespace PushNewVersion
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main()
 		{
-
 #if !DEBUG
 			var path = "../registrations.json";
 #endif
@@ -29,10 +25,10 @@ namespace PushNewVersion
 
 			var successList = new List<Registration>(5);
 			foreach (var r in registrations)
-			{
 				try
 				{
-					webPushClient.SendNotification(new PushSubscription(r.Endpoint, r.Key, r.AuthSecret), File.ReadAllText("notification.json"), vapidDetails);
+					webPushClient.SendNotification(new PushSubscription(r.Endpoint, r.Key, r.AuthSecret),
+						File.ReadAllText("notification.json"), vapidDetails);
 					successList.Add(r);
 				}
 				catch (Exception e)
@@ -42,7 +38,6 @@ namespace PushNewVersion
 					Console.WriteLine(e.InnerException?.Message);
 					Console.WriteLine(e.InnerException?.InnerException?.Message);
 				}
-			}
 #if !DEBUG
 			File.WriteAllText(path, JsonConvert.SerializeObject(successList));
 #endif
