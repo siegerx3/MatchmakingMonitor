@@ -45,7 +45,7 @@ namespace MatchMakingMonitor.View
 		{
 			try
 			{
-				Process.Start("https://monitor.pepespub.de");
+				Process.Start("https://wowreplays.com");
 			}
 			catch (Exception e)
 			{

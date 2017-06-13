@@ -2,6 +2,7 @@
 	"version": "{{versionPlaceholder}}",
 	"installDirectory": "C:\\Games\\World_of_Warships",
 	"automaticLimitsSync": true,
+	"automaticAppUpdate": true,
 	"region": 1,
 	"appIds": [
 		{
