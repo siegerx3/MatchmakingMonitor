@@ -32,13 +32,20 @@
 				</Button>
 
 				<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-					<!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
 						<Image Margin="0,0,0,0" Source="Images/connectionIcon.png" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
 						<Label Content="{Binding ConnectionState}" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="13"  VerticalAlignment="Center" Height="32" Foreground="White" />
-					</StackPanel>-->
+					</StackPanel>
 
 					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-						<!--<Image x:Name="QrCode" Margin="0,0,10,0" Source="Images/qrcodeIcon.png" MouseDown="OpenQrCodeWindow" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Cursor="Hand"/>-->
+						<Button Command="{Binding QrCodeClickCommand}" Margin="0,0,10,0">
+							<Button.Template>
+								<ControlTemplate>
+									<Image  Source="Images/qrcodeIcon.png" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right"
+									       Width="30" Cursor="Hand" />
+								</ControlTemplate>
+							</Button.Template>
+						</Button>
 						<Button Command="{Binding SettingsCommand}">
 							<Button.Template>
 								<ControlTemplate>
