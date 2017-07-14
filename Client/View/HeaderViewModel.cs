@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using MatchmakingMonitor.Models;
 using MatchMakingMonitor.Services;
 using MatchMakingMonitor.SocketIO;
 using MatchMakingMonitor.View.Util;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace MatchMakingMonitor.View
 {
@@ -11,6 +18,7 @@ namespace MatchMakingMonitor.View
 		private readonly ILogger _logger;
 
 		private string _connectionState;
+		private Visibility _canExport;
 
 		private SettingsWindow _settingsWindow;
 		private QrCodeWindow _qrCodeWindow;
@@ -19,20 +27,36 @@ namespace MatchMakingMonitor.View
 		{
 		}
 
-		public HeaderViewModel(ILogger logger, SocketIoService socketIoService)
+		public HeaderViewModel(ILogger logger, SocketIoService socketIoService, StatsService statsService)
 		{
 			_logger = logger;
 
 			LogoClickCommand = new RelayCommand(LogoClick);
 			SettingsCommand = new RelayCommand(SettingsClick);
 			QrCodeClickCommand = new RelayCommand(QrCodeClick);
+			ExportStatsCommand = new RelayCommand(async _ => await ExportStatsAsync());
 
 			socketIoService.StateChanged.Subscribe(state => { ConnectionState = state.ToString(); });
+			statsService.StatsStatusChanged.Subscribe(status =>
+				{
+					CanExport = status == StatsStatus.Fetched ? Visibility.Visible : Visibility.Collapsed;
+				});
 		}
 
 		public RelayCommand LogoClickCommand { get; set; }
 		public RelayCommand SettingsCommand { get; set; }
 		public RelayCommand QrCodeClickCommand { get; set; }
+		public RelayCommand ExportStatsCommand { get; set; }
+
+		public Visibility CanExport
+		{
+			get => _canExport;
+			set
+			{
+				_canExport = value;
+				FirePropertyChanged();
+			}
+		}
 
 		public string ConnectionState
 		{
@@ -48,7 +72,7 @@ namespace MatchMakingMonitor.View
 		{
 			try
 			{
-				Process.Start("https://wowreplays.com");
+				Process.Start("https://monitor.pepespub.de");
 			}
 			catch (Exception e)
 			{
@@ -70,6 +94,26 @@ namespace MatchMakingMonitor.View
 			_qrCodeWindow = IoCKernel.Get<QrCodeWindow>();
 			_qrCodeWindow.Show();
 			_qrCodeWindow.Closed += (sender, args) => { _qrCodeWindow = null; };
+		}
+
+		private static async Task ExportStatsAsync()
+		{
+			if (IoCKernel.Get<StatsService>().CurrentStats == null) return;
+			var sfd = new SaveFileDialog
+			{
+				FileName = $"stats_{DateTime.Now.ToFileTimeUtc()}.export",
+				DefaultExt = ".json",
+				Filter = "JSON Documents (.json)|*.json"
+			};
+			if (sfd.ShowDialog() == true)
+			{
+				var exportJson = await Task.Run(() => JsonConvert.SerializeObject(IoCKernel.Get<StatsService>().CurrentStats.Select(ExportPlayerStats.FromPlayerStats).ToArray(), JsonSerializerSettings));
+
+				using (var f = File.CreateText(sfd.FileName))
+				{
+					await f.WriteAsync(exportJson);
+				}
+			}
 		}
 	}
 }

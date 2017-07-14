@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:MatchMakingMonitor.Models"
         mc:Ignorable="d"
-        Title="WoWReplays Matchmaking Monitor"
+        Title="Matchmaking Monitor"
         WindowStartupLocation="Manual"
         WindowState="Normal"
         Icon="Images/favicon.ico"
@@ -25,23 +25,31 @@
 								<Image HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="10,0,0,0" Width="32"
 								       Source="Images/32x32Icon.png" RenderTransformOrigin="1,0.094" />
 								<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,-2,0,0" TextWrapping="Wrap"
-								           Text="WoWReplays.com" Foreground="White" FontSize="18" />
+								           Text="Matchmaking Monitor" Foreground="White" FontSize="18" />
 							</StackPanel>
 						</ControlTemplate>
 					</Button.Template>
 				</Button>
 
 				<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-					<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
+					<!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="32" Width="150">
 						<Image Margin="0,0,0,0" Source="Images/connectionIcon.png" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
 						<Label Content="{Binding ConnectionState}" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="13"  VerticalAlignment="Center" Height="32" Foreground="White" />
-					</StackPanel>
+					</StackPanel>-->
 
 					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-						<Button Command="{Binding QrCodeClickCommand}" Margin="0,0,10,0">
+						<!--<Button Command="{Binding QrCodeClickCommand}" Margin="0,0,10,0">
 							<Button.Template>
 								<ControlTemplate>
 									<Image  Source="Images/qrcodeIcon.png" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right"
+									       Width="30" Cursor="Hand" />
+								</ControlTemplate>
+							</Button.Template>
+						</Button>-->
+						<Button Visibility="{Binding CanExport}" Command="{Binding ExportStatsCommand}" Margin="0,0,10,0">
+							<Button.Template>
+								<ControlTemplate>
+									<Image Source="Images/file-export.png" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right"
 									       Width="30" Cursor="Hand" />
 								</ControlTemplate>
 							</Button.Template>

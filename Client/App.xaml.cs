@@ -36,7 +36,7 @@ namespace MatchMakingMonitor
 
 			CheckForUpdate(IoCKernel.Get<SettingsWrapper>());
 			_socketIoService = IoCKernel.Get<SocketIoService>();
-			_socketIoService.Connect();
+			//_socketIoService.Connect();
 			base.OnStartup(e);
 		}
 

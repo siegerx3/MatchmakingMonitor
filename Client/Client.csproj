@@ -161,6 +161,7 @@
     <Compile Include="config\warshipsToday\WarshipsTodayStats.cs" />
     <Compile Include="config\warshipsToday\WarshipsTodayEntry.cs" />
     <Compile Include="config\warshipsToday\WarshipsTodayVehicle.cs" />
+    <Compile Include="Models\ExportPlayerStats.cs" />
     <Compile Include="Models\MobileColorKeys.cs" />
     <Compile Include="Models\ResponseTypes\ShipType.cs" />
     <Compile Include="Models\ResponseTypes\ShipTier.cs" />
@@ -277,7 +278,9 @@
     <Resource Include="Images\96x96Icon.png" />
     <Resource Include="Images\favicon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\file-export.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\connectionIcon.png" />
     <Resource Include="Images\qrcodeIcon.png" />
