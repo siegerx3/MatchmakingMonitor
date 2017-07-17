@@ -115,7 +115,7 @@ namespace MatchMakingMonitor.Models.ResponseTypes
 			{
 				Battles = rankedShip.Battles,
 				Wins = rankedShip.Wins,
-				DamageDealt = rankedShip.MaxDamageDealt,
+				DamageDealt = rankedShip.DamageDealt,
 				Frags = rankedShip.Frags,
 				Xp = rankedShip.Xp
 			};
