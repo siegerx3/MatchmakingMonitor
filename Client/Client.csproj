@@ -198,6 +198,7 @@
     <Compile Include="UpdateWindow.xaml.cs">
       <DependentUpon>UpdateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ColorHelper.cs" />
     <Compile Include="View\Settings\ColorsEditor.cs" />
     <Compile Include="View\Settings\ColorsViewModel.cs" />
     <Compile Include="View\Settings\ILimitsEditor.cs" />

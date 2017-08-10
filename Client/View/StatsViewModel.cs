@@ -52,12 +52,12 @@ namespace MatchMakingMonitor.View
 					_stats = stats;
 					FriendlyPlayers = new ObservableCollection<DisplayPlayerStats>(stats.Where(p => p.Player.Relation != 2));
 					EnemyPlayers = new ObservableCollection<DisplayPlayerStats>(stats.Where(p => p.Player.Relation == 2));
-          AvgXpFriendly = TeamAvgXp(FriendlyPlayers);
-          AvgXpEnemy =TeamAvgXp(EnemyPlayers);
-          AvgWinrateFriendly = TeamAvgWinRate(FriendlyPlayers);
-          AvgWinrateEnemy = TeamAvgWinRate(EnemyPlayers);
-          AvgBattlesFriendly = TeamAvgBattles(FriendlyPlayers);
-          AvgBattlesEnemy = TeamAvgBattles(EnemyPlayers);
+					AvgXpFriendly = TeamAvgXp(FriendlyPlayers);
+					AvgXpEnemy = TeamAvgXp(EnemyPlayers);
+					AvgWinrateFriendly = TeamAvgWinRate(FriendlyPlayers);
+					AvgWinrateEnemy = TeamAvgWinRate(EnemyPlayers);
+					AvgBattlesFriendly = TeamAvgBattles(FriendlyPlayers);
+					AvgBattlesEnemy = TeamAvgBattles(EnemyPlayers);
           ListVisibility = Visibility.Visible;
 				});
 			});
