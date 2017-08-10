@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using MatchMakingMonitor.Services;
 
@@ -10,7 +7,8 @@ namespace MatchmakingMonitor.View
 {
 	public static class ColorHelper
 	{
-		public static SolidColorBrush GetColor(SettingsWrapper settingsWrapper, double value, IEnumerable<double> limits, double oldTotal, double multiplier,
+		public static SolidColorBrush GetColor(SettingsWrapper settingsWrapper, double value, IEnumerable<double> limits,
+			double oldTotal, double multiplier,
 			out double total, out int key)
 		{
 			var limitsList = limits.ToArray();

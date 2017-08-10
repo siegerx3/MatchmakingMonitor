@@ -286,5 +286,8 @@
     <Resource Include="Images\connectionIcon.png" />
     <Resource Include="Images\qrcodeIcon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\record-rec.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
