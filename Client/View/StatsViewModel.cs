@@ -20,7 +20,19 @@ namespace MatchMakingMonitor.View
 
 		private int _fontSize;
 
-		private ObservableCollection<DisplayPlayerStats> _friendlyPlayers;
+    private double _avgXpFriendly;
+
+    private double _avgWinrateFriendly;
+
+    private double _avgXpEnemy;
+
+    private double _avgWinrateEnemy;
+
+    private double _avgBattlesFriendly;
+
+    private double _avgBattlesEnemy;
+
+    private ObservableCollection<DisplayPlayerStats> _friendlyPlayers;
 
 
 		private Visibility _listVisibility = Visibility.Collapsed;
@@ -40,7 +52,13 @@ namespace MatchMakingMonitor.View
 					_stats = stats;
 					FriendlyPlayers = new ObservableCollection<DisplayPlayerStats>(stats.Where(p => p.Player.Relation != 2));
 					EnemyPlayers = new ObservableCollection<DisplayPlayerStats>(stats.Where(p => p.Player.Relation == 2));
-					ListVisibility = Visibility.Visible;
+          AvgXpFriendly = TeamAvgXp(FriendlyPlayers);
+          AvgXpEnemy =TeamAvgXp(EnemyPlayers);
+          AvgWinrateFriendly = TeamAvgWinRate(FriendlyPlayers);
+          AvgWinrateEnemy = TeamAvgWinRate(EnemyPlayers);
+          AvgBattlesFriendly = TeamAvgBattles(FriendlyPlayers);
+          AvgBattlesEnemy = TeamAvgBattles(EnemyPlayers);
+          ListVisibility = Visibility.Visible;
 				});
 			});
 
@@ -55,7 +73,22 @@ namespace MatchMakingMonitor.View
 			});
 		}
 
-		public StatsViewModel()
+    private double TeamAvgXp(ObservableCollection<DisplayPlayerStats> players)
+    {
+      return Math.Round(players.Where(p => !Double.IsNaN(p.AvgXp)).Select(p => p.AvgXp).Sum() / players.Where(p => !Double.IsNaN(p.AvgXp)).Count(), 0);
+    }
+
+    private double TeamAvgWinRate(ObservableCollection<DisplayPlayerStats> players)
+    {
+      return Math.Round(players.Where(p => !Double.IsNaN(p.WinRate)).Select(p => p.WinRate).Sum() / players.Where(p => !Double.IsNaN(p.WinRate)).Count(), 2);
+    }
+
+    private double TeamAvgBattles(ObservableCollection<DisplayPlayerStats> players)
+    {
+      return Math.Round(players.Where(p => !Double.IsNaN(p.Player.Battles)).Select(p => p.Player.Battles).Sum() / players.Where(p => !Double.IsNaN(p.Player.Battles)).Count(), 0);
+    }
+
+    public StatsViewModel()
 		{
 			FriendlyPlayers =
 				new ObservableCollection<DisplayPlayerStats>(
@@ -98,7 +131,67 @@ namespace MatchMakingMonitor.View
 			}
 		}
 
-		public Visibility ListVisibility
+    public double AvgXpFriendly
+    {
+      get => _avgXpFriendly;
+      set
+      {
+        _avgXpFriendly = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public double AvgWinrateFriendly
+    {
+      get => _avgWinrateFriendly;
+      set
+      {
+        _avgWinrateFriendly = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public double AvgXpEnemy
+    {
+      get => _avgXpEnemy;
+      set
+      {
+        _avgXpEnemy = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public double AvgWinrateEnemy
+    {
+      get => _avgWinrateEnemy;
+      set
+      {
+        _avgWinrateEnemy = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public double AvgBattlesFriendly
+    {
+      get => _avgBattlesFriendly;
+      set
+      {
+        _avgBattlesFriendly = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public double AvgBattlesEnemy
+    {
+      get => _avgBattlesEnemy;
+      set
+      {
+        _avgBattlesEnemy = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public Visibility ListVisibility
 		{
 			get => _listVisibility;
 			set

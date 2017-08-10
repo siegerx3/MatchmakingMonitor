@@ -156,12 +156,30 @@
 						<ColumnDefinition Width="50*" />
 					</Grid.ColumnDefinitions>
 					<StackPanel Grid.Column="0">
-						<TextBlock FontSize="15" FontWeight="Bold" Foreground="Green">Friendly team</TextBlock>
-						<ItemsControl ItemsSource="{Binding FriendlyPlayers}" ItemTemplate="{StaticResource PlayerTemplate}" />
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontSize="15" FontWeight="Bold" Foreground="Green">Friendly team</TextBlock>
+              <TextBlock FontSize="15" Margin="10,0,0,0"  Foreground="Green">Avg XP:</TextBlock>
+              <TextBlock FontSize="15" Margin="5,0,0,0" Foreground="Green" Text="{Binding AvgXpFriendly}"></TextBlock>
+              <TextBlock FontSize="15" Margin="10,0,0,0"  Foreground="Green">Avg Winrate:</TextBlock>
+              <TextBlock FontSize="15" Margin="5,0,0,0" Foreground="Green" Text="{Binding AvgWinrateFriendly}"></TextBlock>
+              <TextBlock FontSize="15" Foreground="Green">%</TextBlock>
+              <TextBlock FontSize="15" Margin="10,0,0,0"  Foreground="Green">Avg Battles:</TextBlock>
+              <TextBlock FontSize="15" Margin="5,0,0,0" Foreground="Green" Text="{Binding AvgBattlesFriendly}"></TextBlock>
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding FriendlyPlayers}" ItemTemplate="{StaticResource PlayerTemplate}" />
 					</StackPanel>
 					<StackPanel Grid.Column="1">
-						<TextBlock FontSize="15" FontWeight="Bold" Foreground="OrangeRed">Enemy team</TextBlock>
-						<ItemsControl ItemsSource="{Binding EnemyPlayers}" ItemTemplate="{StaticResource PlayerTemplate}" />
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontSize="15" FontWeight="Bold" Foreground="OrangeRed">Enemy team</TextBlock>
+              <TextBlock FontSize="15" Margin="10,0,0,0"  Foreground="OrangeRed">Avg XP:</TextBlock>
+              <TextBlock FontSize="15" Margin="5,0,0,0" Foreground="OrangeRed" Text="{Binding AvgXpEnemy}"></TextBlock>
+              <TextBlock FontSize="15" Margin="10,0,0,0"  Foreground="OrangeRed">Avg Winrate:</TextBlock>
+              <TextBlock FontSize="15" Margin="5,0,0,0" Foreground="OrangeRed" Text="{Binding AvgWinrateEnemy}"></TextBlock>
+              <TextBlock FontSize="15" Foreground="OrangeRed">%</TextBlock>
+              <TextBlock FontSize="15" Margin="10,0,0,0"  Foreground="OrangeRed">Avg Battles:</TextBlock>
+              <TextBlock FontSize="15" Margin="5,0,0,0" Foreground="OrangeRed" Text="{Binding AvgBattlesEnemy}"></TextBlock>
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding EnemyPlayers}" ItemTemplate="{StaticResource PlayerTemplate}" />
 					</StackPanel>
 				</Grid>
 			</ScrollViewer>
