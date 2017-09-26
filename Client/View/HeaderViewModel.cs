@@ -33,7 +33,7 @@ namespace MatchMakingMonitor.View
     }
 
     public HeaderViewModel(ILogger logger, SocketIoService socketIoService, StatsService statsService,
-        SettingsWrapper settingsWrapper)
+      SettingsWrapper settingsWrapper)
     {
       _logger = logger;
       _settingsWrapper = settingsWrapper;
@@ -129,7 +129,7 @@ namespace MatchMakingMonitor.View
       if (!new Regex("<isReplayEnabled>(\\s*)true(\\s*)<\\/isReplayEnabled>").IsMatch(fileContent))
       {
         if (MessageBox.Show(Application.Current.MainWindow, "Do you want to enable replays?", "Enable replays",
-                MessageBoxButton.YesNo) ==
+              MessageBoxButton.YesNo) ==
             MessageBoxResult.Yes)
         {
           var falseRegex = new Regex("<isReplayEnabled>(\\s*)false(\\s*)<\\/isReplayEnabled>");
@@ -137,7 +137,7 @@ namespace MatchMakingMonitor.View
             fileContent = falseRegex.Replace(fileContent, "<isReplayEnabled>true</isReplayEnabled>");
           else
             fileContent = fileContent.Replace("<scriptsPreferences>",
-                "<scriptsPreferences><isReplayEnabled>true</isReplayEnabled>");
+              "<scriptsPreferences><isReplayEnabled>true</isReplayEnabled>");
 
           File.WriteAllText(path, fileContent);
 
@@ -168,9 +168,9 @@ namespace MatchMakingMonitor.View
       if (sfd.ShowDialog() == true)
       {
         var exportJson =
-            await Task.Run(() => JsonConvert.SerializeObject(
-                IoCKernel.Get<StatsService>().CurrentStats.Select(ExportPlayerStats.FromPlayerStats).ToArray(),
-                JsonSerializerSettings));
+          await Task.Run(() => JsonConvert.SerializeObject(
+            IoCKernel.Get<StatsService>().CurrentStats.Select(ExportPlayerStats.FromPlayerStats).ToArray(),
+            JsonSerializerSettings));
 
         using (var f = File.CreateText(sfd.FileName))
         {

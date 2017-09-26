@@ -49,7 +49,8 @@ namespace MatchMakingMonitor.Services
 
       SettingChangedSubject = new Subject<ChangedSetting>();
       SettingChangedSubject.Where(setting => setting?.Key != null && setting.HasChanged)
-        .Do(setting => _logger.Info($"Setting ({setting.Key}) changed from '{setting.OldValue}' to '{setting.NewValue}'"))
+        .Do(setting =>
+          _logger.Info($"Setting ({setting.Key}) changed from '{setting.OldValue}' to '{setting.NewValue}'"))
         .Throttle(TimeSpan.FromSeconds(2))
         .Subscribe(key => Save());
 
@@ -189,7 +190,8 @@ namespace MatchMakingMonitor.Services
         try
         {
           var importJson = File.ReadAllText(path);
-          var import = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(importJson, JsonSerializerSettings));
+          var import = await Task.Run(() =>
+            JsonConvert.DeserializeObject<SettingsJson>(importJson, JsonSerializerSettings));
           await Task.Run(() => CopyUiSettings(CurrentSettings, import));
           await InternalSaveAsync();
         }
@@ -230,14 +232,16 @@ namespace MatchMakingMonitor.Services
 
     public void TriggerInstallDirectoryChanged()
     {
-      SettingChangedSubject.OnNext(new ChangedSetting(null, null, nameof(SettingsJson.InstallDirectory)) { Initial = true });
+      SettingChangedSubject.OnNext(
+        new ChangedSetting(null, null, nameof(SettingsJson.InstallDirectory)) {Initial = true});
     }
 
     public IObservable<ChangedSetting> SettingChanged(string key, bool initial = true)
     {
-      var obs = SettingChangedSubject.AsObservable().Where(s => s != null && (s.Key == key && s.HasChanged || s.Initial));
+      var obs = SettingChangedSubject.AsObservable()
+        .Where(s => s != null && (s.Key == key && s.HasChanged || s.Initial));
       if (initial)
-        SettingChangedSubject.OnNext(new ChangedSetting(null, null, key) { Initial = true });
+        SettingChangedSubject.OnNext(new ChangedSetting(null, null, key) {Initial = true});
       return obs;
     }
 
@@ -264,21 +268,21 @@ namespace MatchMakingMonitor.Services
         targetSettings.WinRateLimits[i] = sourceSettings.WinRateLimits[i];
 
       for (var i = 0; i < sourceSettings.AvgXpLimits.Length; i++)
-        for (var x = 0; x < sourceSettings.AvgXpLimits[i].Values.Length; x++)
-          targetSettings.AvgXpLimits[i].Values[x] = sourceSettings.AvgXpLimits[i].Values[x];
+      for (var x = 0; x < sourceSettings.AvgXpLimits[i].Values.Length; x++)
+        targetSettings.AvgXpLimits[i].Values[x] = sourceSettings.AvgXpLimits[i].Values[x];
 
       for (var i = 0; i < sourceSettings.AvgDmgLimits.Battleship.Length; i++)
-        for (var x = 0; x < sourceSettings.AvgDmgLimits.Battleship[i].Values.Length; x++)
-          targetSettings.AvgDmgLimits.Battleship[i].Values[x] = sourceSettings.AvgDmgLimits.Battleship[i].Values[x];
+      for (var x = 0; x < sourceSettings.AvgDmgLimits.Battleship[i].Values.Length; x++)
+        targetSettings.AvgDmgLimits.Battleship[i].Values[x] = sourceSettings.AvgDmgLimits.Battleship[i].Values[x];
       for (var i = 0; i < sourceSettings.AvgDmgLimits.Cruiser.Length; i++)
-        for (var x = 0; x < sourceSettings.AvgDmgLimits.Cruiser[i].Values.Length; x++)
-          targetSettings.AvgDmgLimits.Cruiser[i].Values[x] = sourceSettings.AvgDmgLimits.Cruiser[i].Values[x];
+      for (var x = 0; x < sourceSettings.AvgDmgLimits.Cruiser[i].Values.Length; x++)
+        targetSettings.AvgDmgLimits.Cruiser[i].Values[x] = sourceSettings.AvgDmgLimits.Cruiser[i].Values[x];
       for (var i = 0; i < sourceSettings.AvgDmgLimits.Destroyer.Length; i++)
-        for (var x = 0; x < sourceSettings.AvgDmgLimits.Destroyer[i].Values.Length; x++)
-          targetSettings.AvgDmgLimits.Destroyer[i].Values[x] = sourceSettings.AvgDmgLimits.Destroyer[i].Values[x];
+      for (var x = 0; x < sourceSettings.AvgDmgLimits.Destroyer[i].Values.Length; x++)
+        targetSettings.AvgDmgLimits.Destroyer[i].Values[x] = sourceSettings.AvgDmgLimits.Destroyer[i].Values[x];
       for (var i = 0; i < sourceSettings.AvgDmgLimits.AirCarrier.Length; i++)
-        for (var x = 0; x < sourceSettings.AvgDmgLimits.AirCarrier[i].Values.Length; x++)
-          targetSettings.AvgDmgLimits.AirCarrier[i].Values[x] = sourceSettings.AvgDmgLimits.AirCarrier[i].Values[x];
+      for (var x = 0; x < sourceSettings.AvgDmgLimits.AirCarrier[i].Values.Length; x++)
+        targetSettings.AvgDmgLimits.AirCarrier[i].Values[x] = sourceSettings.AvgDmgLimits.AirCarrier[i].Values[x];
 
       if (sourceSettings.BattleWeight > 0)
         targetSettings.BattleWeight = sourceSettings.BattleWeight;
@@ -303,7 +307,7 @@ namespace MatchMakingMonitor.Services
       {
         var convertFromString = ColorConverter.ConvertFromString(colorValue);
         if (convertFromString == null) return System.Windows.Media.Brushes.Black;
-        var brush = new SolidColorBrush((Color)convertFromString);
+        var brush = new SolidColorBrush((Color) convertFromString);
         brush.Freeze();
         return brush;
       }).ToArray();

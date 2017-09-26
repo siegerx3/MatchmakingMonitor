@@ -2,7 +2,7 @@
 
 namespace MatchMakingMonitor.View
 {
-	public class MainWindowViewModel : ViewModelBase
-	{
-	}
+  public class MainWindowViewModel : ViewModelBase
+  {
+  }
 }

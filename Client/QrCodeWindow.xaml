@@ -7,11 +7,11 @@
         Title="QrCode" Height="350" Width="350"
         ResizeMode="NoResize"
         DataContext="{Binding QrCodeViewModel, Source={StaticResource ViewModelLocator}}">
-	<StackPanel Orientation="Vertical">
-		<Image Name="QrCode" Source="{Binding QrCode}" VerticalAlignment="Top" Height="280" Width="280" />
-		<!--<TextBox Text="{Binding Token}"></TextBox>-->
-		<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-			<Button Content="Generate" Command="{Binding GenerateCommand}" />
-		</StackPanel>
-	</StackPanel>
+  <StackPanel Orientation="Vertical">
+    <Image Name="QrCode" Source="{Binding QrCode}" VerticalAlignment="Top" Height="280" Width="280" />
+    <!--<TextBox Text="{Binding Token}"></TextBox>-->
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+      <Button Content="Generate" Command="{Binding GenerateCommand}" />
+    </StackPanel>
+  </StackPanel>
 </Window>

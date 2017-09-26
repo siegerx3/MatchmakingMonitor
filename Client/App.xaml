@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:util="clr-namespace:MatchMakingMonitor.View.Util"
              mc:Ignorable="d">
-	<Application.Resources>
-		<util:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
-	</Application.Resources>
+  <Application.Resources>
+    <util:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
+  </Application.Resources>
 </Application>

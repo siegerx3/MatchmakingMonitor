@@ -8,17 +8,17 @@ using MatchMakingMonitor.Services;
 
 namespace MatchMakingMonitor
 {
-	public partial class MainWindow
-	{
-		private readonly SettingsWrapper _settingsWrapper;
+  public partial class MainWindow
+  {
+    private readonly SettingsWrapper _settingsWrapper;
 
-		public MainWindow(SettingsWrapper settingsWrapper)
-		{
-			InitializeComponent();
+    public MainWindow(SettingsWrapper settingsWrapper)
+    {
+      InitializeComponent();
 
-			Title += $" (v{Assembly.GetExecutingAssembly().GetName().Version})";
+      Title += $" (v{Assembly.GetExecutingAssembly().GetName().Version})";
 
-			_settingsWrapper = settingsWrapper;
+      _settingsWrapper = settingsWrapper;
 #if !DEBUG
 			Left = _settingsWrapper.CurrentSettings.LastWindowProperties.Left;
 			Top = _settingsWrapper.CurrentSettings.LastWindowProperties.Top;
@@ -30,28 +30,28 @@ namespace MatchMakingMonitor
 
 			WindowState = _settingsWrapper.CurrentSettings.LastWindowProperties.WindowState;
 #endif
-		}
+    }
 
-		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
-		{
-			Scroller.Height = e.NewSize.Height - Header.ActualHeight - 40;
-		}
+    private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+      Scroller.Height = e.NewSize.Height - Header.ActualHeight - 40;
+    }
 
-		protected override void OnClosing(CancelEventArgs e)
-		{
-			var lwp = new LastWindowProperties();
-			if (Left > 0)
-				lwp.Left = 0;
-			if (Top > 0)
-				lwp.Top = 0;
-			if (ActualWidth > 0)
-				lwp.Width = 0;
-			if (ActualHeight > 0)
-				lwp.Height = 0;
-			if (WindowState != WindowState.Minimized)
-				lwp.WindowState = 0;
+    protected override void OnClosing(CancelEventArgs e)
+    {
+      var lwp = new LastWindowProperties();
+      if (Left > 0)
+        lwp.Left = 0;
+      if (Top > 0)
+        lwp.Top = 0;
+      if (ActualWidth > 0)
+        lwp.Width = 0;
+      if (ActualHeight > 0)
+        lwp.Height = 0;
+      if (WindowState != WindowState.Minimized)
+        lwp.WindowState = 0;
 
-			_settingsWrapper.SetLastWindowProperties(lwp);
-		}
-	}
+      _settingsWrapper.SetLastWindowProperties(lwp);
+    }
+  }
 }
