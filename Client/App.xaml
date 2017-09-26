@@ -8,6 +8,18 @@
              xmlns:util="clr-namespace:MatchMakingMonitor.View.Util"
              mc:Ignorable="d">
   <Application.Resources>
-    <util:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
+    <ResourceDictionary>
+
+      <util:ViewModelLocator x:Key="ViewModelLocator" d:IsDataSource="true" />
+
+      <ResourceDictionary.MergedDictionaries>
+
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Indigo.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Amber.xaml" />
+
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
   </Application.Resources>
 </Application>

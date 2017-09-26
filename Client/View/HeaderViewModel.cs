@@ -19,8 +19,8 @@ namespace MatchMakingMonitor.View
   {
     private readonly ILogger _logger;
     private readonly SettingsWrapper _settingsWrapper;
-    private Visibility _canEnableReplays;
-    private Visibility _canExport;
+    private bool _canEnableReplays;
+    private bool _canExport;
 
     private string _connectionState;
     private QrCodeWindow _qrCodeWindow;
@@ -38,32 +38,34 @@ namespace MatchMakingMonitor.View
       _logger = logger;
       _settingsWrapper = settingsWrapper;
 
-      LogoClickCommand = new RelayCommand(LogoClick);
+      OpenWebsiteCommand = new RelayCommand(LogoClick);
       SettingsCommand = new RelayCommand(SettingsClick);
       QrCodeClickCommand = new RelayCommand(QrCodeClick);
       ExportStatsCommand = new RelayCommand(async _ => await ExportStatsAsync());
-      EnableReplayCommand = new RelayCommand(EnableReplaysAsync);
+      EnableReplayCommand = new RelayCommand(EnableReplays);
+      SwitchThemeCommand = new RelayCommand(SwitchTheme);
 
       socketIoService.StateChanged.Subscribe(state => { ConnectionState = state.ToString(); });
       statsService.StatsStatusChanged.Subscribe(status =>
       {
-        CanExport = status == StatsStatus.Fetched ? Visibility.Visible : Visibility.Collapsed;
+        CanExport = status == StatsStatus.Fetched;
       });
 
       _settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(s =>
       {
         var path = Path.Combine(_settingsWrapper.CurrentSettings.InstallDirectory, "preferences.xml");
-        CanEnableReplays = File.Exists(path) ? Visibility.Visible : Visibility.Collapsed;
+        CanEnableReplays = File.Exists(path);
       });
     }
 
-    public RelayCommand LogoClickCommand { get; set; }
+    public RelayCommand OpenWebsiteCommand { get; set; }
     public RelayCommand SettingsCommand { get; set; }
     public RelayCommand QrCodeClickCommand { get; set; }
     public RelayCommand ExportStatsCommand { get; set; }
     public RelayCommand EnableReplayCommand { get; set; }
+    public RelayCommand SwitchThemeCommand { get; set; }
 
-    public Visibility CanExport
+    public bool CanExport
     {
       get => _canExport;
       set
@@ -73,7 +75,7 @@ namespace MatchMakingMonitor.View
       }
     }
 
-    public Visibility CanEnableReplays
+    public bool CanEnableReplays
     {
       get => _canEnableReplays;
       set
@@ -121,7 +123,7 @@ namespace MatchMakingMonitor.View
       _qrCodeWindow.Closed += (sender, args) => { _qrCodeWindow = null; };
     }
 
-    private void EnableReplaysAsync()
+    private void EnableReplays()
     {
       var path = Path.Combine(_settingsWrapper.CurrentSettings.InstallDirectory, "preferences.xml");
       if (!File.Exists(path)) return;
@@ -177,6 +179,24 @@ namespace MatchMakingMonitor.View
           await f.WriteAsync(exportJson);
         }
       }
+    }
+
+    private static void SwitchTheme()
+    {
+      var existingResourceDictionary = Application.Current.Resources.MergedDictionaries
+        .Where(rd => rd.Source != null)
+        .SingleOrDefault(rd => Regex.Match(rd.Source.OriginalString, @"(\/MaterialDesignThemes.Wpf;component\/Themes\/MaterialDesignTheme\.)((Light)|(Dark))").Success);
+      if (existingResourceDictionary == null)
+        throw new ApplicationException("Unable to find Light/Dark base theme in Application resources.");
+
+      var isLight = existingResourceDictionary.Source.OriginalString.Contains("Light");
+
+      var source =
+        $"pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.{(isLight ? "Dark" : "Light")}.xaml";
+      var newResourceDictionary = new ResourceDictionary() { Source = new Uri(source) };
+
+      Application.Current.Resources.MergedDictionaries.Remove(existingResourceDictionary);
+      Application.Current.Resources.MergedDictionaries.Add(newResourceDictionary);
     }
   }
 }

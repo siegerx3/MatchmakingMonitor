@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
@@ -85,7 +86,7 @@ namespace MatchMakingMonitor.View.Settings
     public RelayCommand ExportCommand { get; set; }
     public RelayCommand ImportCommand { get; set; }
 
-    public ObservableCollection<int> FontSizes { get; } = new ObservableCollection<int> {8, 9, 10, 11, 12, 13, 14};
+    public List<int> FontSizes { get; } = new List<int> {8, 9, 10, 11, 12, 13, 14};
 
     public ColorsViewModel ColorsViewModel { get; }
     public ObservableCollection<LimitsViewModel> StaticViewModels { get; }

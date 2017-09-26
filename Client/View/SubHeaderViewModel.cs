@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -8,6 +9,7 @@ using MatchMakingMonitor.config;
 using MatchMakingMonitor.config.Reflection;
 using MatchMakingMonitor.Services;
 using MatchMakingMonitor.View.Util;
+using MaterialDesignThemes.Wpf;
 
 namespace MatchMakingMonitor.View
 {
@@ -25,6 +27,8 @@ namespace MatchMakingMonitor.View
     private Region _region;
 
     private Visibility _showProgress = Visibility.Collapsed;
+    private Visibility _showIcon = Visibility.Visible;
+    private PackIconKind _iconKind = PackIconKind.Check;
 
     private SolidColorBrush _statusColor = Brushes.Black;
 
@@ -39,18 +43,20 @@ namespace MatchMakingMonitor.View
       _region = _settingsWrapper.CurrentSettings.Region;
 
       _settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(s => { InitPath(); });
-      statsService.StatsStatusChanged.Subscribe(status =>
+      statsService.StatsStatusChanged.Skip(1).Subscribe(status =>
       {
-        SetStatusText(status);
+        SetStatusChip(status);
         if (status == StatsStatus.Fetching)
         {
           EnableUi = false;
           ShowProgress = Visibility.Visible;
+          ShowIcon = Visibility.Collapsed;
         }
         else
         {
           EnableUi = true;
           ShowProgress = Visibility.Collapsed;
+          ShowIcon = Visibility.Visible;
         }
       });
 
@@ -140,6 +146,26 @@ namespace MatchMakingMonitor.View
       }
     }
 
+    public Visibility ShowIcon
+    {
+      get => _showIcon;
+      set
+      {
+        _showIcon = value;
+        FirePropertyChanged();
+      }
+    }
+
+    public PackIconKind IconKind
+    {
+      get => _iconKind;
+      set
+      {
+        _iconKind = value;
+        FirePropertyChanged();
+      }
+    }
+
     private void InitPath()
     {
       var directory = _settingsWrapper.CurrentSettings.InstallDirectory;
@@ -169,7 +195,7 @@ namespace MatchMakingMonitor.View
       }
     }
 
-    private void SetStatusText(StatsStatus status)
+    private void SetStatusChip(StatsStatus status)
     {
       switch (status)
       {
@@ -180,18 +206,22 @@ namespace MatchMakingMonitor.View
         case StatsStatus.Fetched:
           StatusText = "Player Stats Succesfully Updated";
           StatusColor = Brushes.Green;
+          IconKind = PackIconKind.Check;
           break;
         case StatsStatus.WrongRegion:
           StatusText = "Found a battle but no stats. Wrong region?";
           StatusColor = Brushes.Red;
+          IconKind = PackIconKind.Alert;
           break;
         case StatsStatus.Waiting:
           StatusText = "Not Currently in Battle - Stats are from Last Battle";
           StatusColor = Brushes.Black;
+          IconKind = PackIconKind.Check;
           break;
         default:
           StatusText = string.Empty;
           StatusColor = Brushes.Black;
+          IconKind = PackIconKind.TimerSand;
           break;
       }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -179,13 +180,13 @@ namespace MatchMakingMonitor.Models
     }
 
 
-    public string TextBattles => $"Battles: {Player.Battles}";
-    public string TextWins => $"Wins: {Player.Wins}";
-    public string TextWinRate => $"WinRate: {WinRate}%";
-    public string TextAvgXp => $"Avg XP: {AvgXp}";
-    public string TextAvgFrags => $"Avg Frags: {AvgFrags}";
-    public string TextAvgDamage => $"Avg Damage: {AvgDamage}";
-    public string TextName => $"{Player?.Nickname} | {AccountId}";
+    public string TextBattles => Player.Battles.ToString(CultureInfo.InvariantCulture);
+    public string TextWins => Player.Wins.ToString(CultureInfo.InvariantCulture);
+    public string TextWinRate => $"{WinRate}%";
+    public string TextAvgXp => AvgXp.ToString(CultureInfo.InvariantCulture);
+    public string TextAvgFrags => AvgFrags.ToString(CultureInfo.InvariantCulture);
+    public string TextAvgDamage => AvgDamage.ToString(CultureInfo.InvariantCulture);
+    public string TextName => Player?.Nickname;
 
     public string TextShipName => $"{ShipName} (Tier {Player.ShipTier})";
 
@@ -204,13 +205,14 @@ namespace MatchMakingMonitor.Models
     {
       try
       {
+        FontSize = _settingsWrapper.CurrentSettings.FontSize;
+
         if (Player.IsPrivateOrHidden)
         {
           IsPrivateProfile();
           return;
         }
 
-        FontSize = _settingsWrapper.CurrentSettings.FontSize;
         if (_settingsWrapper.CurrentSettings.HideLowBattles && Player.Battles <= 10)
         {
           IsLowBattles();
@@ -257,7 +259,7 @@ namespace MatchMakingMonitor.Models
       color.Freeze();
       Background = color;
 
-      ColorBorder = Player.Relation == 0 ? Color : Brushes.Transparent;
+      ColorBorder = Player.Relation == 0 ? Color : Background;
     }
 
 
