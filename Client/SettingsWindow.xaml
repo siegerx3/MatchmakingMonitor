@@ -7,7 +7,7 @@
         xmlns:settings="clr-namespace:MatchMakingMonitor.View.Settings"
         mc:Ignorable="d"
         Icon="Images/favicon.ico"
-        Title="UI Settings" MinHeight="720" MinWidth="700" Height="720" Width="800"
+        Title="UI Settings" MinHeight="800" MinWidth="700" Height="800" Width="800"
         DataContext="{Binding SettingsViewModel, Source={StaticResource ViewModelLocator}}">
   <Window.Resources>
     <ResourceDictionary>
@@ -71,7 +71,7 @@
         <CheckBox IsChecked="{Binding HideLowBattles}" Margin="0,0,0,2"
                   Content="Hide players that have less than 10 battles in the current ship" />
         <CheckBox IsChecked="{Binding AutomaticLimitsSync}" Margin="0,0,0,2"
-                  Content="Synchronize limits from warships.today on app start" />
+                  Content="Synchronize limits from wows-numbers on app start" />
       </StackPanel>
 
     </StackPanel>

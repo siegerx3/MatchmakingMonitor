@@ -177,7 +177,7 @@ namespace MatchMakingMonitor.View
       }
       else
       {
-        InstallDirectoryColor = Brushes.OrangeRed;
+        InstallDirectoryColor = Brushes.Red;
         InstallDirectoryText = directory + " - Invalid Path or Replays not enabled! - Click here to update!";
       }
     }

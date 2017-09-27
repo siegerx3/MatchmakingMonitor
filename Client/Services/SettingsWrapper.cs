@@ -204,7 +204,7 @@ namespace MatchMakingMonitor.Services
     public async Task SyncWithRemoteSettings()
     {
       var sourceSettings = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(Defaults()));
-      if (await RemoteStats.Get(sourceSettings, _logger))
+      if (await config.wowsNumbers.RemoteStats.Get(sourceSettings, _logger))
         CopyUiSettings(CurrentSettings, sourceSettings);
     }
 

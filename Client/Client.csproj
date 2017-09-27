@@ -170,6 +170,10 @@
     <Compile Include="config\warshipsToday\WarshipsTodayStats.cs" />
     <Compile Include="config\warshipsToday\WarshipsTodayEntry.cs" />
     <Compile Include="config\warshipsToday\WarshipsTodayVehicle.cs" />
+    <Compile Include="config\wowsNumbers\Extensions.cs" />
+    <Compile Include="config\wowsNumbers\RemoteStats.cs" />
+    <Compile Include="config\wowsNumbers\WowsNumbersShipEntry.cs" />
+    <Compile Include="config\wowsNumbers\WowsNumbersShipType.cs" />
     <Compile Include="Models\ExportPlayerStats.cs" />
     <Compile Include="Models\MobileColorKeys.cs" />
     <Compile Include="Models\ResponseTypes\ShipType.cs" />
