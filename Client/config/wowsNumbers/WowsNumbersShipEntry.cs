@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace MatchmakingMonitor.config.wowsNumbers
 {
@@ -17,7 +12,7 @@ namespace MatchmakingMonitor.config.wowsNumbers
 
     [JsonProperty(PropertyName = "average_frags")]
     public double AvgFrags { get; set; }
-    
+
     [JsonProperty(PropertyName = "win_rate")]
     public double WinRate { get; set; }
 

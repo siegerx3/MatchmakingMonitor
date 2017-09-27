@@ -20,15 +20,15 @@ namespace MatchmakingMonitor
 
       _settingsWrapper = settingsWrapper;
 #if !DEBUG
-			Left = _settingsWrapper.CurrentSettings.LastWindowProperties.Left;
-			Top = _settingsWrapper.CurrentSettings.LastWindowProperties.Top;
-			if (_settingsWrapper.CurrentSettings.LastWindowProperties.Width > 0)
-				Width = _settingsWrapper.CurrentSettings.LastWindowProperties.Width;
+      Left = _settingsWrapper.CurrentSettings.LastWindowProperties.Left;
+      Top = _settingsWrapper.CurrentSettings.LastWindowProperties.Top;
+      if (_settingsWrapper.CurrentSettings.LastWindowProperties.Width > 0)
+        Width = _settingsWrapper.CurrentSettings.LastWindowProperties.Width;
 
-			if (_settingsWrapper.CurrentSettings.LastWindowProperties.Height > 0)
-				Height = _settingsWrapper.CurrentSettings.LastWindowProperties.Height;
+      if (_settingsWrapper.CurrentSettings.LastWindowProperties.Height > 0)
+        Height = _settingsWrapper.CurrentSettings.LastWindowProperties.Height;
 
-			WindowState = _settingsWrapper.CurrentSettings.LastWindowProperties.WindowState;
+      WindowState = _settingsWrapper.CurrentSettings.LastWindowProperties.WindowState;
 #endif
     }
 

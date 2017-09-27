@@ -1,5 +1,4 @@
-﻿using MatchmakingMonitor.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace MatchmakingMonitor.Models
 {

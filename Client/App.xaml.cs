@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
 using System.Windows;
-using MatchmakingMonitor;
+using System.Windows.Threading;
 using MatchmakingMonitor.Services;
 using MatchmakingMonitor.SocketIO;
 
@@ -17,7 +17,7 @@ namespace MatchmakingMonitor
     public static bool IsDebug;
     private SocketIoService _socketIoService;
 #if !DEBUG
-		private static readonly Uri BaseUri = new Uri("https://monitor.pepespub.de");
+    private static readonly Uri BaseUri = new Uri("https://monitor.pepespub.de");
 #endif
 #if DEBUG
     private static readonly Uri BaseUri = new Uri("http://monitor.local");
@@ -42,12 +42,10 @@ namespace MatchmakingMonitor
     }
 
     private static void App_DispatcherUnhandledException(object sender,
-      System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+      DispatcherUnhandledExceptionEventArgs e)
     {
       if (!e.Handled)
-      {
         IoCKernel.Get<ILogger>().Error("Error occured", e.Exception);
-      }
     }
 
     protected override void OnExit(ExitEventArgs e)

@@ -10,12 +10,7 @@ namespace MatchmakingMonitor.View.Settings
     private readonly Subject<ChangedSetting> _changedSubject;
     private readonly bool _initial;
     private readonly SettingsJson _settings;
-    private double _avgDmgWeight;
-    private double _avgFragsWeight;
-    private double _avgXpWeight;
-    private double _battleWeight;
     private Action _valuesChanged;
-    private double _winRateWeight;
 
     public WeightsEditor(Subject<ChangedSetting> changedSubject, SettingsJson settings)
     {
@@ -26,11 +21,15 @@ namespace MatchmakingMonitor.View.Settings
       _initial = false;
     }
 
-    public double BattleWeight => _battleWeight;
-    public double AvgFragsWeight => _avgFragsWeight;
-    public double AvgXpWeight => _avgXpWeight;
-    public double AvgDmgWeight => _avgDmgWeight;
-    public double WinRateWeight => _winRateWeight;
+    public double BattleWeight { get; private set; }
+
+    public double AvgFragsWeight { get; private set; }
+
+    public double AvgXpWeight { get; private set; }
+
+    public double AvgDmgWeight { get; private set; }
+
+    public double WinRateWeight { get; private set; }
 
     public void RegisterValuesChanged(Action action)
     {
@@ -39,11 +38,11 @@ namespace MatchmakingMonitor.View.Settings
 
     public void LoadValues()
     {
-      _battleWeight = _settings.BattleWeight;
-      _avgFragsWeight = _settings.AvgFragsWeight;
-      _avgXpWeight = _settings.AvgXpWeight;
-      _avgDmgWeight = _settings.AvgDmgWeight;
-      _winRateWeight = _settings.WinRateWeight;
+      BattleWeight = _settings.BattleWeight;
+      AvgFragsWeight = _settings.AvgFragsWeight;
+      AvgXpWeight = _settings.AvgXpWeight;
+      AvgDmgWeight = _settings.AvgDmgWeight;
+      WinRateWeight = _settings.WinRateWeight;
       _valuesChanged?.Invoke();
       if (!_initial)
         _changedSubject.OnNext(new ChangedSetting(true, false));
@@ -68,80 +67,80 @@ namespace MatchmakingMonitor.View.Settings
 
     private void SetSettings()
     {
-      _settings.BattleWeight = _battleWeight;
-      _settings.AvgFragsWeight = _avgFragsWeight;
-      _settings.AvgXpWeight = _avgXpWeight;
-      _settings.AvgDmgWeight = _avgDmgWeight;
-      _settings.WinRateWeight = _winRateWeight;
+      _settings.BattleWeight = BattleWeight;
+      _settings.AvgFragsWeight = AvgFragsWeight;
+      _settings.AvgXpWeight = AvgXpWeight;
+      _settings.AvgDmgWeight = AvgDmgWeight;
+      _settings.WinRateWeight = WinRateWeight;
     }
 
     public bool UpdateBattleWeight(string value, out double actualSum)
     {
-      var oldValue = _battleWeight;
+      var oldValue = BattleWeight;
       double newValue;
       actualSum = 0;
       if (!double.TryParse(value, out newValue)) return false;
-      _battleWeight = newValue;
-      if (!ValidateWeights(_winRateWeight, newValue, _avgFragsWeight, _avgXpWeight, _avgDmgWeight,
+      BattleWeight = newValue;
+      if (!ValidateWeights(WinRateWeight, newValue, AvgFragsWeight, AvgXpWeight, AvgDmgWeight,
         out actualSum)) return false;
       SetSettings();
-      _changedSubject.OnNext(new ChangedSetting(oldValue, _battleWeight));
+      _changedSubject.OnNext(new ChangedSetting(oldValue, BattleWeight));
       return true;
     }
 
     public bool UpdateAvgFragsWeight(string value, out double actualSum)
     {
-      var oldValue = _avgFragsWeight;
+      var oldValue = AvgFragsWeight;
       double newValue;
       actualSum = 0;
       if (!double.TryParse(value, out newValue)) return false;
-      _avgFragsWeight = newValue;
-      if (!ValidateWeights(_winRateWeight, _battleWeight, newValue, _avgXpWeight, _avgDmgWeight,
+      AvgFragsWeight = newValue;
+      if (!ValidateWeights(WinRateWeight, BattleWeight, newValue, AvgXpWeight, AvgDmgWeight,
         out actualSum)) return false;
       SetSettings();
-      _changedSubject.OnNext(new ChangedSetting(oldValue, _avgFragsWeight));
+      _changedSubject.OnNext(new ChangedSetting(oldValue, AvgFragsWeight));
       return true;
     }
 
     public bool UpdateAvgXpWeight(string value, out double actualSum)
     {
-      var oldValue = _avgXpWeight;
+      var oldValue = AvgXpWeight;
       double newValue;
       actualSum = 0;
       if (!double.TryParse(value, out newValue)) return false;
-      _avgXpWeight = newValue;
-      if (!ValidateWeights(_winRateWeight, _battleWeight, _avgFragsWeight, newValue, _avgDmgWeight,
+      AvgXpWeight = newValue;
+      if (!ValidateWeights(WinRateWeight, BattleWeight, AvgFragsWeight, newValue, AvgDmgWeight,
         out actualSum)) return false;
       SetSettings();
-      _changedSubject.OnNext(new ChangedSetting(oldValue, _avgXpWeight));
+      _changedSubject.OnNext(new ChangedSetting(oldValue, AvgXpWeight));
       return true;
     }
 
     public bool UpdateAvgDmgWeight(string value, out double actualSum)
     {
-      var oldValue = _avgDmgWeight;
+      var oldValue = AvgDmgWeight;
       double newValue;
       actualSum = 0;
       if (!double.TryParse(value, out newValue)) return false;
-      _avgDmgWeight = newValue;
-      if (!ValidateWeights(_winRateWeight, _battleWeight, _avgFragsWeight, _avgXpWeight, newValue,
+      AvgDmgWeight = newValue;
+      if (!ValidateWeights(WinRateWeight, BattleWeight, AvgFragsWeight, AvgXpWeight, newValue,
         out actualSum)) return false;
       SetSettings();
-      _changedSubject.OnNext(new ChangedSetting(oldValue, _avgDmgWeight));
+      _changedSubject.OnNext(new ChangedSetting(oldValue, AvgDmgWeight));
       return true;
     }
 
     public bool UpdateWinRateWeight(string value, out double actualSum)
     {
-      var oldValue = _winRateWeight;
+      var oldValue = WinRateWeight;
       double newValue;
       actualSum = 0;
       if (!double.TryParse(value, out newValue)) return false;
-      _winRateWeight = newValue;
-      if (!ValidateWeights(newValue, _battleWeight, _avgFragsWeight, _avgXpWeight, _avgDmgWeight,
+      WinRateWeight = newValue;
+      if (!ValidateWeights(newValue, BattleWeight, AvgFragsWeight, AvgXpWeight, AvgDmgWeight,
         out actualSum)) return false;
       SetSettings();
-      _changedSubject.OnNext(new ChangedSetting(oldValue, _winRateWeight));
+      _changedSubject.OnNext(new ChangedSetting(oldValue, WinRateWeight));
       return true;
     }
   }

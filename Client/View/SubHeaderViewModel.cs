@@ -18,6 +18,7 @@ namespace MatchmakingMonitor.View
     private readonly SettingsWrapper _settingsWrapper;
 
     private bool _enableUi = true;
+    private PackIconKind _iconKind = PackIconKind.Check;
 
     private SolidColorBrush _installDirectoryColor;
 
@@ -25,10 +26,9 @@ namespace MatchmakingMonitor.View
     private string _installDirectoryText = "Check install directory";
 
     private Region _region;
+    private Visibility _showIcon = Visibility.Visible;
 
     private Visibility _showProgress = Visibility.Collapsed;
-    private Visibility _showIcon = Visibility.Visible;
-    private PackIconKind _iconKind = PackIconKind.Check;
 
     private SolidColorBrush _statusColor = Brushes.Black;
 

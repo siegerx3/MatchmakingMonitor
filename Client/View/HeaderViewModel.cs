@@ -46,10 +46,7 @@ namespace MatchmakingMonitor.View
       SwitchThemeCommand = new RelayCommand(SwitchTheme);
 
       socketIoService.StateChanged.Subscribe(state => { ConnectionState = state.ToString(); });
-      statsService.StatsStatusChanged.Subscribe(status =>
-      {
-        CanExport = status == StatsStatus.Fetched;
-      });
+      statsService.StatsStatusChanged.Subscribe(status => { CanExport = status == StatsStatus.Fetched; });
 
       _settingsWrapper.SettingChanged(nameof(SettingsJson.InstallDirectory)).Subscribe(s =>
       {
@@ -185,7 +182,8 @@ namespace MatchmakingMonitor.View
     {
       var existingResourceDictionary = Application.Current.Resources.MergedDictionaries
         .Where(rd => rd.Source != null)
-        .SingleOrDefault(rd => Regex.Match(rd.Source.OriginalString, @"(\/MaterialDesignThemes.Wpf;component\/Themes\/MaterialDesignTheme\.)((Light)|(Dark))").Success);
+        .SingleOrDefault(rd => Regex.Match(rd.Source.OriginalString,
+          @"(\/MaterialDesignThemes.Wpf;component\/Themes\/MaterialDesignTheme\.)((Light)|(Dark))").Success);
       if (existingResourceDictionary == null)
         throw new ApplicationException("Unable to find Light/Dark base theme in Application resources.");
 
@@ -193,7 +191,7 @@ namespace MatchmakingMonitor.View
 
       var source =
         $"pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.{(isLight ? "Dark" : "Light")}.xaml";
-      var newResourceDictionary = new ResourceDictionary() { Source = new Uri(source) };
+      var newResourceDictionary = new ResourceDictionary {Source = new Uri(source)};
 
       Application.Current.Resources.MergedDictionaries.Remove(existingResourceDictionary);
       Application.Current.Resources.MergedDictionaries.Add(newResourceDictionary);

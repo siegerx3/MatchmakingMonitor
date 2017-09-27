@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MatchmakingMonitor.config.wowsNumbers;
 using MatchmakingMonitor.Models.ResponseTypes;
 
 namespace MatchmakingMonitor.config.wowsNumbers
@@ -13,7 +12,8 @@ namespace MatchmakingMonitor.config.wowsNumbers
       return entries.Where(s => s.Tier == tier);
     }
 
-    public static IEnumerable<WowsNumbersShipEntry> Type(this IEnumerable<WowsNumbersShipEntry> entries, WowsNumbersShipType type)
+    public static IEnumerable<WowsNumbersShipEntry> Type(this IEnumerable<WowsNumbersShipEntry> entries,
+      WowsNumbersShipType type)
     {
       return entries.Where(s => s.Type == type);
     }

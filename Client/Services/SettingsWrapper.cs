@@ -10,10 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using MatchmakingMonitor.config;
 using MatchmakingMonitor.config.Reflection;
-using MatchmakingMonitor.Services;
+using MatchmakingMonitor.config.wowsNumbers;
 using MatchmakingMonitor.SocketIO;
 using MatchmakingMonitor.View.Util;
-using MatchmakingMonitor.config.warshipsToday;
 using Newtonsoft.Json;
 
 namespace MatchmakingMonitor.Services
@@ -203,7 +202,7 @@ namespace MatchmakingMonitor.Services
     public async Task SyncWithRemoteSettings()
     {
       var sourceSettings = await Task.Run(() => JsonConvert.DeserializeObject<SettingsJson>(Defaults()));
-      if (await config.wowsNumbers.RemoteStats.Get(sourceSettings, _logger))
+      if (await RemoteStats.Get(sourceSettings, _logger))
         CopyUiSettings(CurrentSettings, sourceSettings);
     }
 

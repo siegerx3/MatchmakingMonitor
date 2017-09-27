@@ -1,5 +1,4 @@
-﻿using MatchmakingMonitor.config;
-using MatchmakingMonitor.config.Reflection;
+﻿using MatchmakingMonitor.config.Reflection;
 using Newtonsoft.Json;
 
 namespace MatchmakingMonitor.config

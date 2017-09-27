@@ -61,7 +61,7 @@ namespace MatchmakingMonitor.View
 
     private async void Generate(string token = null)
     {
-      if (!Guid.TryParse(token, out Guid guid) || guid.Equals(Guid.Empty))
+      if (!Guid.TryParse(token, out var guid) || guid.Equals(Guid.Empty))
         guid = Guid.NewGuid();
       Token = guid.ToString();
       _socketIoService.Hub.SetToken(Token);
