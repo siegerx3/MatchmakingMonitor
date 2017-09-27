@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Windows;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.View.Util;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public class WeightsViewModel : ViewModelBase
   {

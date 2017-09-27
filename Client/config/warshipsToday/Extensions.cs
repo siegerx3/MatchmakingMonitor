@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MatchMakingMonitor.Models.ResponseTypes;
+using MatchmakingMonitor.Models.ResponseTypes;
 
-namespace MatchMakingMonitor.config.warshipsToday
+namespace MatchmakingMonitor.config.warshipsToday
 {
   public static class Extensions
   {

@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.View.Util;
 
-namespace MatchMakingMonitor.Models
+namespace MatchmakingMonitor.Models
 {
   public class DisplayPlayerStats : ViewModelBase
   {

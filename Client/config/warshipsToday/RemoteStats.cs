@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using MatchMakingMonitor.Models.ResponseTypes;
-using MatchMakingMonitor.Services;
+using MatchmakingMonitor.Models.ResponseTypes;
+using MatchmakingMonitor.Services;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.config.warshipsToday
+namespace MatchmakingMonitor.config.warshipsToday
 {
   internal static class RemoteStats
   {

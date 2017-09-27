@@ -2,9 +2,9 @@
 using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using MatchMakingMonitor.config;
+using MatchmakingMonitor.config;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public class WatcherService
   {

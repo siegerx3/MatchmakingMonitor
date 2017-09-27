@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Reflection;
 using System.Windows;
 using MatchmakingMonitor;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.SocketIO;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.SocketIO;
 
-namespace MatchMakingMonitor
+namespace MatchmakingMonitor
 {
   /// <summary>
   ///   Interaction logic for App.xaml

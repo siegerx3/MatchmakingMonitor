@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using MatchMakingMonitor.Models.ResponseTypes;
+using MatchmakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.config
+namespace MatchmakingMonitor.config
 {
   public class LimitsType
   {

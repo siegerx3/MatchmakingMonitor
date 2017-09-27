@@ -2,11 +2,11 @@
 using System.Reflection;
 using System.Windows;
 using MatchmakingMonitor.config;
-using MatchMakingMonitor.Services;
+using MatchmakingMonitor.Services;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace MatchMakingMonitor
+namespace MatchmakingMonitor
 {
   public partial class MainWindow
   {

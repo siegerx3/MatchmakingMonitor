@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.Models.ResponseTypes
+namespace MatchmakingMonitor.Models.ResponseTypes
 {
   public class WgStatsRamming
   {

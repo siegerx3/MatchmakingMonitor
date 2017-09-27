@@ -5,13 +5,13 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
-using MatchMakingMonitor.config;
-using MatchMakingMonitor.config.Reflection;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.config;
+using MatchmakingMonitor.config.Reflection;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.View.Util;
 using MaterialDesignThemes.Wpf;
 
-namespace MatchMakingMonitor.View
+namespace MatchmakingMonitor.View
 {
   public class SubHeaderViewModel : ViewModelBase
   {

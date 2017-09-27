@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public interface ILimitsEditor
   {

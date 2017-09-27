@@ -1,4 +1,4 @@
-﻿namespace MatchMakingMonitor.config.Reflection
+﻿namespace MatchmakingMonitor.config.Reflection
 {
   public class ChangedSetting
   {

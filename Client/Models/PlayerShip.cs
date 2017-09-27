@@ -1,6 +1,6 @@
-﻿using MatchMakingMonitor.Models.ResponseTypes;
+﻿using MatchmakingMonitor.Models.ResponseTypes;
 
-namespace MatchMakingMonitor.Models
+namespace MatchmakingMonitor.Models
 {
   public class PlayerShip
   {

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.View.Util
+namespace MatchmakingMonitor.View.Util
 {
   public class ViewModelBase : INotifyPropertyChanged
   {

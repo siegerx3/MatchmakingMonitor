@@ -1,6 +1,5 @@
 ﻿using System;
 using MatchmakingMonitor.config;
-using MatchMakingMonitor.config;
 
 namespace MatchmakingMonitor.Services
 {

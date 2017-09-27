@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using MatchmakingMonitor.config;
 using MatchmakingMonitor.Models;
-using MatchMakingMonitor.config;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.SocketIO;
+using MatchmakingMonitor.View.Util;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.View
+namespace MatchmakingMonitor.View
 {
   public class HeaderViewModel : ViewModelBase
   {

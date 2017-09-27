@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public interface ILogger
   {

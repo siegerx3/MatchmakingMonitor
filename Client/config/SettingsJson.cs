@@ -1,8 +1,8 @@
 ﻿using MatchmakingMonitor.config;
-using MatchMakingMonitor.config.Reflection;
+using MatchmakingMonitor.config.Reflection;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.config
+namespace MatchmakingMonitor.config
 {
   public class SettingsJson
   {

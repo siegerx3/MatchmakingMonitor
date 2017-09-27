@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using MatchMakingMonitor.Models;
+using MatchmakingMonitor.Models;
 using Newtonsoft.Json;
 using Quobject.SocketIoClientDotNet.Client;
 
-namespace MatchMakingMonitor.SocketIO
+namespace MatchmakingMonitor.SocketIO
 {
   public class LiveMatchSocket
   {

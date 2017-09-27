@@ -5,14 +5,14 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using MatchMakingMonitor.config;
-using MatchMakingMonitor.Models;
-using MatchMakingMonitor.Models.Replay;
-using MatchMakingMonitor.SocketIO;
+using MatchmakingMonitor.config;
+using MatchmakingMonitor.Models;
+using MatchmakingMonitor.Models.Replay;
+using MatchmakingMonitor.SocketIO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public class StatsService
   {

@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Quobject.SocketIoClientDotNet.Client;
 
-namespace MatchMakingMonitor.SocketIO
+namespace MatchmakingMonitor.SocketIO
 {
   public class SocketIoService
   {

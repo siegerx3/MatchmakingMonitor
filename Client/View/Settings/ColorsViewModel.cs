@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.View.Util;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public class ColorsViewModel : ViewModelBase
   {

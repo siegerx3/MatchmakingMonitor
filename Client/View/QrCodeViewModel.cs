@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Gma.QrCodeNet.Encoding;
 using Gma.QrCodeNet.Encoding.Windows.Render;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.SocketIO;
+using MatchmakingMonitor.View.Util;
 
-namespace MatchMakingMonitor.View
+namespace MatchmakingMonitor.View
 {
   public class QrCodeViewModel : ViewModelBase
   {

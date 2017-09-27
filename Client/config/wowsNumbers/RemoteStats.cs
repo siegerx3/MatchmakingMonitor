@@ -4,11 +4,11 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MatchmakingMonitor.config.wowsNumbers;
-using MatchMakingMonitor.Models.ResponseTypes;
-using MatchMakingMonitor.Services;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.config.wowsNumbers
+namespace MatchmakingMonitor.config.wowsNumbers
 {
   internal static class RemoteStats
   {

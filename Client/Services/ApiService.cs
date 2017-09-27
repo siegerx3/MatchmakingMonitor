@@ -6,12 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MatchMakingMonitor.Models;
-using MatchMakingMonitor.Models.Replay;
-using MatchMakingMonitor.Models.ResponseTypes;
+using MatchmakingMonitor.Models;
+using MatchmakingMonitor.Models.Replay;
+using MatchmakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public class ApiService
   {

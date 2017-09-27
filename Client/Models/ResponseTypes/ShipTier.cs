@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace MatchMakingMonitor.Models.ResponseTypes
+namespace MatchmakingMonitor.Models.ResponseTypes
 {
   [SuppressMessage("ReSharper", "InconsistentNaming")]
   public enum ShipTier

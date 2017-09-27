@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Subjects;
-using MatchMakingMonitor.config;
-using MatchMakingMonitor.config.Reflection;
+using MatchmakingMonitor.config;
+using MatchmakingMonitor.config.Reflection;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public class WeightsEditor
   {

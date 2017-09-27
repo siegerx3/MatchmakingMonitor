@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MatchMakingMonitor.Models.ResponseTypes
+namespace MatchmakingMonitor.Models.ResponseTypes
 {
   public class WgShip
   {

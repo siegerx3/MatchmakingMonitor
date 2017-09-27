@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.View.Settings;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.View.Settings;
 
-namespace MatchMakingMonitor.View.Util
+namespace MatchmakingMonitor.View.Util
 {
   public class ViewModelLocator
   {

@@ -1,6 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace MatchMakingMonitor.config
+namespace MatchmakingMonitor.config
 {
   public enum Region
   {

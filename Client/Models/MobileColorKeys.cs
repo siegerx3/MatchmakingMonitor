@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.Models
+namespace MatchmakingMonitor.Models
 {
   public class MobileColorKeys
   {

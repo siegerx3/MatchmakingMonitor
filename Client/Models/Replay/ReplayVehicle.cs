@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.Models.Replay
+namespace MatchmakingMonitor.Models.Replay
 {
   public class ReplayVehicle
   {

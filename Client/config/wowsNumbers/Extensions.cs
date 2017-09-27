@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using MatchmakingMonitor.config.wowsNumbers;
-using MatchMakingMonitor.Models.ResponseTypes;
+using MatchmakingMonitor.Models.ResponseTypes;
 
-namespace MatchMakingMonitor.config.wowsNumbers
+namespace MatchmakingMonitor.config.wowsNumbers
 {
   public static class Extensions
   {

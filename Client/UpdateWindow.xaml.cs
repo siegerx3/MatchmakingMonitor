@@ -6,7 +6,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
-using MatchMakingMonitor.Services;
+using MatchmakingMonitor.Services;
 
 namespace MatchmakingMonitor
 {

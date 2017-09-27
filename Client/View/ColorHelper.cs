@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using MatchMakingMonitor.Services;
+using MatchmakingMonitor.Services;
 
 namespace MatchmakingMonitor.View
 {

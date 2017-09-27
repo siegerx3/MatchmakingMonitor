@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Input;
 
-namespace MatchMakingMonitor
+namespace MatchmakingMonitor
 {
   public partial class SettingsWindow
   {

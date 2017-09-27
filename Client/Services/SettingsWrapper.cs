@@ -9,15 +9,14 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using MatchmakingMonitor.config;
+using MatchmakingMonitor.config.Reflection;
 using MatchmakingMonitor.Services;
-using MatchMakingMonitor.config;
-using MatchMakingMonitor.config.Reflection;
-using MatchMakingMonitor.config.warshipsToday;
-using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.SocketIO;
+using MatchmakingMonitor.View.Util;
+using MatchmakingMonitor.config.warshipsToday;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public class SettingsWrapper : ViewModelBase
   {

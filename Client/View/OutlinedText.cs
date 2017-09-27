@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 
-namespace MatchMakingMonitor.View
+namespace MatchmakingMonitor.View
 {
   public class TextPath : Shape
   {

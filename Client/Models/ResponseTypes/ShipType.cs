@@ -1,4 +1,4 @@
-﻿namespace MatchMakingMonitor.Models.ResponseTypes
+﻿namespace MatchmakingMonitor.Models.ResponseTypes
 {
   public enum ShipType
   {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive.Subjects;
-using MatchMakingMonitor.config.Reflection;
+using MatchmakingMonitor.config.Reflection;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public class DoubleLimitsEditor : ILimitsEditor
   {

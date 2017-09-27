@@ -1,6 +1,6 @@
-﻿using MatchMakingMonitor.SocketIO;
+﻿using MatchmakingMonitor.SocketIO;
 
-namespace MatchMakingMonitor
+namespace MatchmakingMonitor
 {
   /// <summary>
   ///   Interaction logic for QrCode.xaml

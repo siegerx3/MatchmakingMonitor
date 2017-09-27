@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
-using MatchMakingMonitor.config;
-using MatchMakingMonitor.config.Reflection;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.config;
+using MatchmakingMonitor.config.Reflection;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.View.Util;
 using Microsoft.Win32;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public class SettingsWindowViewModel : ViewModelBase
   {

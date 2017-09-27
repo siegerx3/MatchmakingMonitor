@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using MatchMakingMonitor.Models;
-using MatchMakingMonitor.Services;
-using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.View.Util;
+using MatchmakingMonitor.Models;
+using MatchmakingMonitor.Services;
+using MatchmakingMonitor.SocketIO;
+using MatchmakingMonitor.View.Util;
 
-namespace MatchMakingMonitor.View
+namespace MatchmakingMonitor.View
 {
   public class StatsViewModel : ViewModelBase
   {

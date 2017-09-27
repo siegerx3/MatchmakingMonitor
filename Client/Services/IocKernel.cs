@@ -1,8 +1,8 @@
-﻿using MatchMakingMonitor.SocketIO;
-using MatchMakingMonitor.View;
+﻿using MatchmakingMonitor.SocketIO;
+using MatchmakingMonitor.View;
 using Ninject;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public static class IoCKernel
   {

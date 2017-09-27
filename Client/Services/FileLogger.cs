@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MatchMakingMonitor.Services
+namespace MatchmakingMonitor.Services
 {
   public class FileLogger : ILogger
   {

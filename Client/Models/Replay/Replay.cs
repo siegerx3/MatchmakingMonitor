@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.Models.Replay
+namespace MatchmakingMonitor.Models.Replay
 {
   public class Replay
   {

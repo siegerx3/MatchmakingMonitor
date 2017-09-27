@@ -2,9 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Subjects;
 using System.Windows.Media;
-using MatchMakingMonitor.config.Reflection;
+using MatchmakingMonitor.config.Reflection;
 
-namespace MatchMakingMonitor.View.Settings
+namespace MatchmakingMonitor.View.Settings
 {
   public class ColorsEditor
   {

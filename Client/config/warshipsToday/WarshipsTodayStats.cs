@@ -1,4 +1,4 @@
-namespace MatchMakingMonitor.config.warshipsToday
+namespace MatchmakingMonitor.config.warshipsToday
 {
   public class WarshipsTodayStats
   {

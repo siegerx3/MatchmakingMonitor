@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MatchMakingMonitor.config.warshipsToday
+namespace MatchmakingMonitor.config.warshipsToday
 {
   public class WarshipsTodayEntry
   {
