@@ -26,11 +26,15 @@ import { ChangelogDialog } from './download/changelog.component';
 
 import { ApiService } from './services/api.service';
 
+import { environment } from 'environments/environment.prod';
+import { PrivacyComponent } from './pricacy/privacy.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     DownloadComponent,
+    PrivacyComponent,
     ChangelogDialog
   ],
   entryComponents: [ChangelogDialog],

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { pipe } from 'rxjs/Rx';
 import { filter } from 'rxjs/operators';
 
 import { ApiService } from '../services/api.service';
