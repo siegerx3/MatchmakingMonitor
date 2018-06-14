@@ -11,7 +11,7 @@ if (environment.production) {
 platformBrowserDynamic().bootstrapModule(AppModule).then(() => {
   window['cookieconsent'].initialise({
     "cookie": {
-      "domain": 'localhost'
+      "domain": environment.domain
     },
     "position": "bottom",
     "theme": "classic",
