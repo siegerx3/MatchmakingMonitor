@@ -138,6 +138,7 @@
     <Content Include="changelogs\1.1.0.4.md" />
     <Content Include="changelogs\1.2.0.0.md" />
     <Content Include="changelogs\1.2.0.1.md" />
+    <Content Include="changelogs\1.2.0.2.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
