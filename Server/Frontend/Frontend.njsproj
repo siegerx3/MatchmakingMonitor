@@ -35,6 +35,10 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release-Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release-Debug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="angular.json" />
     <Content Include="package.json" />

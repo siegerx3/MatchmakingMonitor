@@ -10,6 +10,7 @@ using MatchmakingMonitor.Models;
 using MatchmakingMonitor.Models.Replay;
 using MatchmakingMonitor.Models.ResponseTypes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MatchmakingMonitor.Services
 {
@@ -43,7 +44,7 @@ namespace MatchmakingMonitor.Services
       try
       {
         var baseUrl = _settingsWrapper.BaseUrl;
-        var client = new HttpClient {BaseAddress = new Uri(baseUrl)};
+        var client = new HttpClient { BaseAddress = new Uri(baseUrl) };
         var i = 1;
         List<WgShip> tempList;
         var result = new List<WgShip>();
@@ -83,10 +84,10 @@ namespace MatchmakingMonitor.Services
         while (_wgShips == null)
           await Task.Delay(1000);
         var baseUrl = _settingsWrapper.BaseUrl;
-        _httpClient = new HttpClient {BaseAddress = new Uri(baseUrl)};
-
+        _httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
+        var seasonId = await GetSeasonIdAsync(_httpClient);
         var tasks = replay.Vehicles.Select(replayVehicle => GetAsync(replayVehicle,
-          replay.MatchGroup.Equals("ranked", StringComparison.InvariantCultureIgnoreCase))).ToList();
+          replay.MatchGroup.Equals("ranked", StringComparison.InvariantCultureIgnoreCase), seasonId)).ToList();
         var list = await Task.WhenAll(tasks);
         return list.Where(p => p != null);
       }
@@ -98,7 +99,7 @@ namespace MatchmakingMonitor.Services
     }
 
     [SuppressMessage("ReSharper", "InvertIf")]
-    private async Task<PlayerShip> GetAsync(ReplayVehicle replayVehicle, bool ranked)
+    private async Task<PlayerShip> GetAsync(ReplayVehicle replayVehicle, bool ranked, int seasonId)
     {
       var wgShip = WgShips.SingleOrDefault(s => s.ShipId == replayVehicle.ShipId);
       try
@@ -115,7 +116,7 @@ namespace MatchmakingMonitor.Services
             if (player != null)
             {
               var statsUrl = ranked
-                ? $"wows/seasons/shipstats/?application_id={ApplicationId}&account_id={player.AccountId}&ship_id={replayVehicle.ShipId}&season_id=10"
+                ? $"wows/seasons/shipstats/?application_id={ApplicationId}&account_id={player.AccountId}&ship_id={replayVehicle.ShipId}&season_id={seasonId}"
                 : $"wows/ships/stats/?application_id={ApplicationId}&account_id={player.AccountId}&ship_id={replayVehicle.ShipId}";
               var shipStatsResponse = await _httpClient.GetAsync(statsUrl);
               if (shipStatsResponse.StatusCode == HttpStatusCode.OK)
@@ -123,7 +124,7 @@ namespace MatchmakingMonitor.Services
                 var shipStatsJson = await shipStatsResponse.Content.ReadAsStringAsync();
                 shipStatsJson = ranked
                   ? shipStatsJson.Replace("\"" + player.AccountId + "\":", "\"season_wrapper\":")
-                    .Replace("\"10\":", "\"season_data\":")
+                    .Replace($"\"{seasonId}\":", "\"season_data\":")
                   : shipStatsJson.Replace("\"" + player.AccountId + "\":", "\"Ships\":");
                 var shipStats = await Task.Run(() =>
                   JsonConvert.DeserializeObject<WgPlayerShipsStatsResult>(shipStatsJson));
@@ -165,6 +166,22 @@ namespace MatchmakingMonitor.Services
         Relation = replayVehicle.Relation,
         IsPrivateOrHidden = true
       };
+    }
+
+    private async Task<int> GetSeasonIdAsync(HttpClient client)
+    {
+      var response = await client.GetAsync($"wows/seasons/info/?application_id=0c648fd74e8d4b91f59a3de448885bd2&fields=season_id%2C+season_name%2C+close_at%2C+start_at");
+      var json = await response.Content.ReadAsStringAsync();
+      var jsonObj = await Task.Run(() => JObject.Parse(json));
+
+      return jsonObj["data"].Children().Select(s =>
+     {
+       return new
+       {
+         SeasonId = s.First.Value<int>("season_id"),
+         Start = new DateTime(1970, 1, 1).AddSeconds(s.First.Value<double>("start_at"))
+       };
+     }).OrderBy(s => s.Start).Where(s => s.Start <= DateTime.UtcNow).Last().SeasonId;
     }
   }
 }
