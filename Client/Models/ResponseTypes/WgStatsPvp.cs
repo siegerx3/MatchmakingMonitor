@@ -109,16 +109,36 @@ namespace MatchmakingMonitor.Models.ResponseTypes
     [JsonProperty("battles_since_512")]
     public int BattlesSince512 { get; set; }
 
-    public static WgStatsPvp FromRanked(WgStatsRankedShip rankedShip)
+    public static WgStatsPvp FromRanked(WgStatsRankedShip rankedShipSolo, WgStatsRankedShip rankedShipDiv2, WgStatsRankedShip rankedShipDiv3)
     {
-      return new WgStatsPvp
+      var stats = new WgStatsPvp();
+
+      if (rankedShipSolo != null)
       {
-        Battles = rankedShip.Battles,
-        Wins = rankedShip.Wins,
-        DamageDealt = rankedShip.DamageDealt,
-        Frags = rankedShip.Frags,
-        Xp = rankedShip.Xp
-      };
+        stats.Battles += rankedShipSolo.Battles;
+        stats.Wins += rankedShipSolo.Wins;
+        stats.DamageDealt += rankedShipSolo.DamageDealt;
+        stats.Frags += rankedShipSolo.Frags;
+        stats.Xp += rankedShipSolo.Xp;
+      }
+      if (rankedShipDiv2 != null)
+      {
+        stats.Battles += rankedShipDiv2.Battles;
+        stats.Wins += rankedShipDiv2.Wins;
+        stats.DamageDealt += rankedShipDiv2.DamageDealt;
+        stats.Frags += rankedShipDiv2.Frags;
+        stats.Xp += rankedShipDiv2.Xp;
+      }
+      if (rankedShipDiv3 != null)
+      {
+        stats.Battles += rankedShipDiv3.Battles;
+        stats.Wins += rankedShipDiv3.Wins;
+        stats.DamageDealt += rankedShipDiv3.DamageDealt;
+        stats.Frags += rankedShipDiv3.Frags;
+        stats.Xp += rankedShipDiv3.Xp;
+      }
+
+      return stats;
     }
   }
 }

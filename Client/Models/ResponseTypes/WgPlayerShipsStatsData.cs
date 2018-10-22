@@ -27,7 +27,13 @@ namespace MatchmakingMonitor.Models.ResponseTypes
   public class WgPlayerShipsStatsSeasonData
   {
     [JsonProperty("rank_solo")]
-    public WgStatsRankedShip Ship { get; set; }
+    public WgStatsRankedShip ShipSolo { get; set; }
+
+    [JsonProperty("rank_div2")]
+    public WgStatsRankedShip ShipDiv2 { get; set; }
+
+    [JsonProperty("rank_div3")]
+    public WgStatsRankedShip ShipDiv3 { get; set; }
   }
 
   public class WgStatsRankedShip

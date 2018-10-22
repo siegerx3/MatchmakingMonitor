@@ -132,8 +132,8 @@ namespace MatchmakingMonitor.Services
                 {
                   if (ranked && shipStats?.Data?.SeasonsWrapper != null && shipStats.Data.SeasonsWrapper.Any())
                   {
-                    var rankedShip = shipStats.Data.SeasonsWrapper.First().Seasons.SeasonData.Ship;
-                    var ship = WgStatsShip.FromRanked(rankedShip, player.AccountId, replayVehicle.ShipId);
+                    var seasonData = shipStats.Data.SeasonsWrapper.First().Seasons.SeasonData;
+                    var ship = WgStatsShip.FromRanked(seasonData.ShipSolo, seasonData.ShipDiv2, seasonData.ShipDiv3, player.AccountId, replayVehicle.ShipId);
                     return new PlayerShip(ship, player, wgShip, replayVehicle.Relation);
                   }
                   if (shipStats?.Data?.Ships != null && shipStats.Data.Ships.Any())
