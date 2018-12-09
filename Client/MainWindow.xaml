@@ -13,7 +13,7 @@
         Icon="Images/favicon.ico"
         Width="1280"
         Height="768"
-        MinWidth="1280"
+        MinWidth="720"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontSize="13"
