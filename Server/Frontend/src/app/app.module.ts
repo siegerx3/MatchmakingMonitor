@@ -15,7 +15,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 
-import { MarkdownModule } from 'angular2-markdown';
+import { NgxMdModule } from 'ngx-md';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -56,7 +56,7 @@ import { PrivacyComponent } from './pricacy/privacy.component';
     MatListModule,
     MatRadioModule,
     MatDialogModule,
-    MarkdownModule.forRoot()
+    NgxMdModule.forRoot()
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
