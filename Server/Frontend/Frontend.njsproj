@@ -75,6 +75,7 @@
     <TypeScriptCompile Include="src\app\download\changelog.component.ts" />
     <TypeScriptCompile Include="src\app\download\download.component.ts" />
     <TypeScriptCompile Include="src\app\home\home.component.ts" />
+    <TypeScriptCompile Include="src\app\home\version-info-dialog.ts" />
     <TypeScriptCompile Include="src\app\pricacy\privacy.component.ts" />
     <TypeScriptCompile Include="src\app\services\api.service.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />

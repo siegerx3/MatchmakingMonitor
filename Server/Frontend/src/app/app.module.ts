@@ -28,6 +28,7 @@ import { ApiService } from './services/api.service';
 
 import { environment } from 'environments/environment.prod';
 import { PrivacyComponent } from './pricacy/privacy.component';
+import { VersionInfoDialog } from './home/version-info-dialog';
 
 @NgModule({
   declarations: [
@@ -35,9 +36,10 @@ import { PrivacyComponent } from './pricacy/privacy.component';
     HomeComponent,
     DownloadComponent,
     PrivacyComponent,
-    ChangelogDialog
+    ChangelogDialog,
+    VersionInfoDialog
   ],
-  entryComponents: [ChangelogDialog],
+  entryComponents: [ChangelogDialog, VersionInfoDialog],
   imports: [
     BrowserModule,
     HttpClientModule,

@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { ApiService } from '../services/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ChangelogDialog } from '../download/changelog.component';
+import { VersionInfoDialog } from './version-info-dialog';
 
 @Component({
   templateUrl: './home.component.html'
@@ -12,7 +15,7 @@ export class HomeComponent {
   public formError: string;
   public formSend: boolean;
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private dialog: MatDialog) {
     this.form = new FormGroup({
       'mode': new FormControl('0'),
       'title': new FormControl('', Validators.compose([Validators.required, Validators.maxLength(70)])),
@@ -21,6 +24,15 @@ export class HomeComponent {
     });
 
     //this.http.get('https://api.github.com/repos/jammin411/MatchmakingMonitor/issues?state=open').subscribe(r => console.log(r.json()));
+  }
+
+  ngOnInit() {
+    this.dialog.open(VersionInfoDialog,
+      {
+        data: {
+          title: `Important information`
+        }
+      });
   }
 
   public submit(formValue: {}) {
